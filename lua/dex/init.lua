@@ -10,7 +10,7 @@ local yank_group = augroup("HighlightYank", {})
 
 local markdown_augroup = vim.api.nvim_create_augroup("MarkdownSettings", { clear = true })
 
-vim.api.nvim_create_autocmd("FileType", {
+autocmd("FileType", {
 	group = markdown_augroup,
 	pattern = "markdown",
 	callback = function()
@@ -92,6 +92,17 @@ autocmd("LspAttach", {
 			vim.diagnostic.goto_prev()
 		end, opts)
 	end,
+})
+
+
+-- Enable relative line numbers in netrw file explorer
+autocmd("FileType", {
+  pattern = "netrw",
+  callback = function()
+    vim.opt_local.relativenumber = true
+    vim.opt_local.number = true
+  end,
+  desc = "Enable relative line numbers in netrw",
 })
 
 vim.g.netrw_browse_split = 0

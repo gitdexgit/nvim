@@ -14,7 +14,7 @@ return {
 		require("telescope").setup({})
 
 		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
+		vim.keymap.set("n", "<leader>tf", builtin.find_files, {})
 		vim.keymap.set("n", "<C-p>", builtin.git_files, {})
 		vim.keymap.set("n", "<leader>pws", function()
 			local word = vim.fn.expand("<cword>")
@@ -32,15 +32,15 @@ return {
 		vim.keymap.set("n", "<leader>g/", function()
 			require("telescope.builtin").grep_string({ search = "" })
 		end, { desc = "Telescope Grep all lines (press Enter)" })
-		vim.keymap.set("n", "<leader>/", builtin.current_buffer_fuzzy_find, { desc = "Telescope Fuzzy find in buffer" })
-		vim.keymap.set("n", "<leader>r", builtin.registers, { desc = "Telescope Paste from register" })
+		vim.keymap.set("n", "<leader>t/", builtin.current_buffer_fuzzy_find, { desc = "Telescope Fuzzy find in buffer" })
+		vim.keymap.set("n", "<leader>tr", builtin.registers, { desc = "Telescope Paste from register" })
 
-		vim.keymap.set("n", "<leader>j", builtin.jumplist, { desc = "Telescope Jumplist" })
-		vim.keymap.set("n", "<leader>m", builtin.marks, { desc = "Telescope Find marks" })
+		vim.keymap.set("n", "<leader>tj", builtin.jumplist, { desc = "Telescope Jumplist" })
+		vim.keymap.set("n", "<leader>tm", builtin.marks, { desc = "Telescope Find marks" })
 
 		vim.keymap.set("n", "<A-p>", builtin.resume, { desc = "Telescope Resume" })
-		vim.keymap.set("n", "<leader>;", builtin.resume, { desc = "Telescope Resume" })
+		vim.keymap.set("n", "<leader>t;", builtin.resume, { desc = "Telescope Resume" })
 
-        vim.keymap.set("n", "<leader>?", builtin.builtin, { desc = "Telescope Command Palette (All Commands)" })
+        vim.keymap.set("n", "<leader>t?", builtin.builtin, { desc = "Telescope Command Palette (All Commands)" })
 	end,
 }
