@@ -68,6 +68,24 @@ return {
 			)
 			vim.keymap.set(
 				"n",
+				"<leader>gp",
+				require("fzf-lua").grep_project,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>g/",
+				require("fzf-lua").grep_project,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>m",
+				require("fzf-lua").marks,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
+			)
+			vim.keymap.set(
+				"n",
 				"<leader>?",
 				require("fzf-lua").builtin,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }

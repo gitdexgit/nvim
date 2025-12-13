@@ -29,7 +29,10 @@ return {
 		end)
 		vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
 
-		vim.keymap.set("n", "<leader>g/", function()
+		vim.keymap.set("n", "<leader>tg/", function()
+			require("telescope.builtin").grep_string({ search = "" })
+		end, { desc = "Telescope Grep all lines (press Enter)" })
+		vim.keymap.set("n", "<leader>tgp", function()
 			require("telescope.builtin").grep_string({ search = "" })
 		end, { desc = "Telescope Grep all lines (press Enter)" })
 		vim.keymap.set("n", "<leader>t/", builtin.current_buffer_fuzzy_find, { desc = "Telescope Fuzzy find in buffer" })
