@@ -46,19 +46,31 @@ return {
 				"n",
 				"<leader>pq",
 				require("fzf-lua").quickfix,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Find Files" }
+				{ noremap = true, silent = true, desc = "FZF-Lua: Quickfix" }
 			)
 			vim.keymap.set(
 				"n",
 				"<leader>/",
 				require("fzf-lua").grep_curbuf,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Find Files" }
+				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current Buffer" }
 			)
 			vim.keymap.set(
 				"n",
-				"<leader>g",
+				"<leader>lg",
 				require("fzf-lua").live_grep,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Live Grep" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>gp",
+				require("fzf-lua").live_grep,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Live Grep" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>r",
+				require("fzf-lua").registers,
+				{ noremap = true, silent = true, desc = "FZF-Lua: registers" }
 			)
 			vim.keymap.set(
 				"n",
@@ -68,21 +80,21 @@ return {
 			)
 			vim.keymap.set(
 				"n",
-				"<leader>gp",
+				"<leader>g/",
 				require("fzf-lua").grep_project,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+				{ noremap = true, silent = true, desc = "FZF-Lua: Grep Current CWD Projects" }
 			)
 			vim.keymap.set(
 				"n",
-				"<leader>g/",
-				require("fzf-lua").grep_project,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+				"<leader>;",
+				require("fzf-lua").resume,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Resume" }
 			)
 			vim.keymap.set(
 				"n",
 				"<leader>m",
 				require("fzf-lua").marks,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
 			)
 			vim.keymap.set(
 				"n",
