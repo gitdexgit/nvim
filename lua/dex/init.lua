@@ -1,5 +1,6 @@
 require("dex.set")
 require("dex.remap")
+require("dex.clipboard")
 require("dex.lazy_init")
 
 local augroup = vim.api.nvim_create_augroup
