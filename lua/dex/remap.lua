@@ -86,9 +86,13 @@ vim.keymap.set("n", "Q", "<nop>")
 -- because they keep you in normal mode and also they make a new line like actual new line which is good
 -- but I just want a line bellow the comment or above the comment that is not commented that's all, but
 -- also have the advantage of autocommenting. So gotta sacrifice A-o and A-O
-vim.keymap.set("n", "<A-o>", "o<Esc>S", { desc = "Open new blank line below (Insert Mode)" })
+-- Below
+vim.keymap.set("n", "<A-o>", "o<Esc>S", { desc = "Open new blank line below" })
+vim.keymap.set("i", "<A-o>", "<C-o>o<Esc>S", { desc = "Open new blank line below" })
 
-vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above (Insert Mode)" })
+-- Above
+vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above" })
+vim.keymap.set("i", "<A-O>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
 
 -- Remap Ctrl+f to scroll up
 -- vim.keymap.set("n", "<C-f>", "<C-f>zz")
@@ -348,3 +352,12 @@ vim.keymap.set('n', '<leader>wn', function()
     vim.opt.number = true
   end
 end, { desc = "Toggle absolute line numbers" })
+
+
+-- This is for keyd my capslock setup
+
+-- Normal mode: Delete to the end of the word
+vim.keymap.set("n", "<C-Delete>", "dw", { noremap = true, silent = true })
+
+-- Insert mode: Delete to the end of the word and stay in insert mode
+vim.keymap.set("i", "<C-Delete>", "<C-o>dw", { noremap = true, silent = true })
