@@ -4,8 +4,6 @@ vim.keymap.set('n', '<Space>', '<Nop>', { noremap = true, silent = true })
 -- Map Backspace to do nothing
 vim.keymap.set('n', '<BS>', '<Nop>', { noremap = true, silent = true })
 
-
-
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
@@ -96,14 +94,16 @@ vim.keymap.set("i", "<A-O>", "<C-o>O<Esc>S", { desc = "Open new blank line above
 
 -- Remap Ctrl+f to scroll up
 -- vim.keymap.set("n", "<C-f>", "<C-f>zz")
-vim.keymap.set("n", "<A-j>", "<C-d>zz")
+vim.keymap.set("n", "<A-f>", "<C-d>zz")
 vim.keymap.set("v", "<A-j>", "<C-d>zz")
+vim.keymap.set("v", "<A-f>", "<C-d>zz")
 
 -- Remap Ctrl+b to scroll down
 -- I don't use C-b and C-f just make everything C-u C-d or use defaults man
 -- vim.keymap.set("n", "<C-b>", "<C-b>zz")
-vim.keymap.set("n", "<A-k>", "<C-u>zz")
+vim.keymap.set("n", "<A-b>", "<C-u>zz")
 vim.keymap.set("v", "<A-k>", "<C-u>zz")
+vim.keymap.set("v", "<A-b>", "<C-u>zz")
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
@@ -275,6 +275,8 @@ vim.keymap.set({ "n", "v", "o" }, "$", function()
 	return vim.opt.wrap:get() and "g$" or "$"
 end, { expr = true, silent = true, desc = "Smart $ motion" })
 
+
+
 -- vim.keymap.set("n", "<leader>sh", "<cmd>:sp<cr>", { desc = "Open Quickfix List" })
 -- vim.keymap.set("n", "<leader>sv", "<cmd>:vsp<cr>", { desc = "Open Quickfix List" })
 -- vim.keymap.set('n', ']q', '<cmd>cnext<cr>', { desc = "Next Quickfix Item" })
@@ -290,9 +292,9 @@ vim.keymap.set("i", "<C-b>", "<Left>")
 
 -- Go to the first non-whitespace character of the line (like ^)
 -- Not quite like C-a if I want C-a I just do the like Capslock+a
--- vim.keymap.set("i", "<C-a>", "<C-o>^")
+vim.keymap.set("i", "<C-a>", "<C-o>0")
 -- Go to the end of the line (like Ctrl+e in the terminal)
--- vim.keymap.set("i", "<C-e>", "<End>")
+vim.keymap.set("i", "<C-e>", "<End>")
 
 -- vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { silent = true })
 -- vim.keymap.set("n", "<leader>Q", "<cmd>q!<CR>", { silent = true })

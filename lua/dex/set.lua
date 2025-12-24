@@ -3,6 +3,10 @@ vim.opt.guicursor = ""
 -- idk what this is even for
 -- vim.g.maplocalleader = " "
 
+-- vim.opt.timeoutlen = 500   -- Time to wait for a mapped sequence (e.g. your own shortcuts)
+vim.opt.ttimeoutlen = 0   -- Time to wait for a key code (this fixes the Esc delay)
+
+vim.opt.spelllang = 'en_us'
 vim.opt.spell = true
 
 vim.opt.nu = true
