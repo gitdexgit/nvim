@@ -98,6 +98,12 @@ return {
 			)
 			vim.keymap.set(
 				"n",
+				"<leader>J",
+				require("fzf-lua").jumps,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+			vim.keymap.set(
+				"n",
 				"<leader>?",
 				require("fzf-lua").builtin,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
