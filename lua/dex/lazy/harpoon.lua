@@ -22,37 +22,41 @@ return {
                 harpoon.ui:toggle_quick_menu(harpoon:list())
             end, { desc = "Harpoon: Toggle Quick Menu" })
 
+            vim.keymap.set("n", "<leader>h", function()
+                harpoon.ui:toggle_quick_menu(harpoon:list())
+            end, { desc = "Harpoon: Toggle Quick Menu" })
+
             -- Navigation Keymaps (Select Mark N)
-            vim.keymap.set("n", "<C-h>", function()
+            vim.keymap.set("n", "<C-n>", function()
                 harpoon:list():select(1)
             end, { desc = "Harpoon: Go to Mark 1" })
 
-            vim.keymap.set("n", "<C-t>", function()
+            vim.keymap.set("n", "<C-m>", function()
                 harpoon:list():select(2)
             end, { desc = "Harpoon: Go to Mark 2" })
 
-            vim.keymap.set("n", "<C-n>", function()
+            vim.keymap.set("n", "<C-.>", function()
                 harpoon:list():select(3)
             end, { desc = "Harpoon: Go to Mark 3" })
 
-            vim.keymap.set("n", "<C-s>", function()
+            vim.keymap.set("n", "<C-/>", function()
                 harpoon:list():select(4)
             end, { desc = "Harpoon: Go to Mark 4" })
 
             -- Replace Keymaps (Replace Mark N with Current File)
-            vim.keymap.set("n", "<leader><C-h>", function()
+            vim.keymap.set("n", "<leader><C-n>", function()
                 harpoon:list():replace_at(1)
             end, { desc = "Harpoon: Replace Mark 1" })
 
-            vim.keymap.set("n", "<leader><C-t>", function()
+            vim.keymap.set("n", "<leader><C-m>", function()
                 harpoon:list():replace_at(2)
             end, { desc = "Harpoon: Replace Mark 2" })
 
-            vim.keymap.set("n", "<leader><C-n>", function()
+            vim.keymap.set("n", "<leader><C-.>", function()
                 harpoon:list():replace_at(3)
             end, { desc = "Harpoon: Replace Mark 3" })
 
-            vim.keymap.set("n", "<leader><C-s>", function()
+            vim.keymap.set("n", "<leader><C-/>", function()
                 harpoon:list():replace_at(4)
             end, { desc = "Harpoon: Replace Mark 4" })
         end,

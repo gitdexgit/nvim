@@ -1,0 +1,67 @@
+-- -- 1. Define the colors (Red for Tab, Blue for Windows, Green for Modified)
+-- -- We do this in a function so it reloads if you change color schemes
+-- local function setup_tabline_colors()
+--     vim.api.nvim_set_hl(0, 'TabNumRed', { fg = '#ff5555', bg = '#3b4252', bold = true })
+--     vim.api.nvim_set_hl(0, 'WinNumBlue', { fg = '#8be9fd', bg = '#3b4252' })
+--     vim.api.nvim_set_hl(0, 'ModifiedGreen', { fg = '#50fa7b', bg = '#3b4252' })
+--     -- Active tab versions (usually slightly different background)
+--     vim.api.nvim_set_hl(0, 'TabNumRedSel', { fg = '#ff5555', bg = '#4c566a', bold = true })
+--     vim.api.nvim_set_hl(0, 'WinNumBlueSel', { fg = '#8be9fd', bg = '#4c566a' })
+--     vim.api.nvim_set_hl(0, 'ModifiedGreenSel', { fg = '#50fa7b', bg = '#4c566a' })
+-- end
+-- setup_tabline_colors()
+--
+-- function MyTabLine()
+--   local s = ''
+--   for i = 1, vim.fn.tabpagenr('$') do
+--     local is_selected = (i == vim.fn.tabpagenr())
+--     local hl = is_selected and 'Sel' or ''
+--
+--     -- Set background highlight for the tab slot
+--     s = s .. (is_selected and '%#TabLineSel#' or '%#TabLine#')
+--     s = s .. '%' .. i .. 'T ' -- Start tab click target
+--
+--     -- A. Tab Number in Red with ()
+--     s = s .. '%#TabNumRed' .. hl .. '#(' .. i .. ')%*'
+--     s = s .. (is_selected and '%#TabLineSel#' or '%#TabLine#') -- reset to tabline bg
+--
+--     -- B. Window Number in Blue (on the left of name)
+--     local win_ids = vim.api.nvim_tabpage_list_wins(i)
+--     local normal_win_count = 0
+--     for _, win_id in ipairs(win_ids) do
+--         if vim.api.nvim_win_get_config(win_id).relative == "" then
+--             normal_win_count = normal_win_count + 1
+--         end
+--     end
+--
+--     if normal_win_count > 1 then
+--         s = s .. ' %#WinNumBlue' .. hl .. '#' .. normal_win_count .. '%*'
+--         s = s .. (is_selected and '%#TabLineSel#' or '%#TabLine#') -- reset to tabline bg
+--     end
+--
+--     -- C. Filename
+--     local buflist = vim.fn.tabpagebuflist(i)
+--     local winnr = vim.fn.tabpagewinnr(i)
+--     local bufnr = buflist[winnr]
+--     local bufname = vim.fn.bufname(bufnr)
+--     local filename = (bufname ~= '' and vim.fn.fnamemodify(bufname, ':t') or '[No Name]')
+--     s = s .. ' [' .. filename .. '] '
+--
+--     -- D. Modified Sign in Green
+--     local modified = false
+--     for _, b in ipairs(buflist) do
+--         if vim.fn.getbufvar(b, '&modified') == 1 then
+--             modified = true
+--             break
+--         end
+--     end
+--     if modified then
+--         s = s .. '%#ModifiedGreen' .. hl .. '#+%* '
+--     end
+--   end
+--
+--   s = s .. '%#TabLineFill#%T'
+--   return s
+-- end
+--
+-- vim.opt.tabline = '%!v:lua.MyTabLine()'

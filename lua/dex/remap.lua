@@ -69,7 +69,17 @@ vim.keymap.set({ "n", "v" }, "<leader>d", '"_d')
 --# I could remove it... this will make me one like place to do things
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
+--#idk why this is this
 vim.keymap.set("n", "Q", "<nop>")
+
+vim.keymap.set("n", "<A-Q>", ":tabclose<CR>", { silent = true, desc = "Close current tab" })
+
+-- Move current tab to the left
+vim.keymap.set('n', '<A-C-h>', ':tabmove -1<CR>', { silent = true, desc = 'Move tab left' })
+
+-- Move current tab to the right
+vim.keymap.set('n', '<A-C-l>', ':tabmove +1<CR>', { silent = true, desc = 'Move tab right' })
+
 
 --- !I already have <leader>ttt and <leader>ggg also there is like fugitive learn it so you don't have to do lazygit <leader>ggg
 -- vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
@@ -206,10 +216,40 @@ vim.keymap.set("n", "<A-S-k>", "<c-y>", { desc = "I don't want to hit shift" })
 vim.keymap.set("n", "<A-S-l>", "zl", { desc = "I don't want to hit shift " })
 vim.keymap.set("n", "<A-S-h>", "zh", { desc = "I don't want to hit shift" })
 
+-- Old shit that I never use because I just use like 'home' and 'end' they work
+-- in insert mode too lol. So like why even use this lol. and for M I just hit 0
+-- man no big deal.
+-- vim.keymap.set("n", "H", "0", { desc = "I don't want to hit shift" })
+-- vim.keymap.set("n", "L", "$", { desc = "I don't want to hit shift" })
+-- vim.keymap.set("n", "M", "0", { desc = "I don't want to hit shift" })
 
-vim.keymap.set("n", "H", "0", { desc = "I don't want to hit shift" })
-vim.keymap.set("n", "L", "$", { desc = "I don't want to hit shift" })
-vim.keymap.set("n", "M", "^", { desc = "I don't want to hit shift" })
+-- Cycle through tabs
+vim.keymap.set('n', '<S-l>', 'gt', { desc = 'Next tab' })
+vim.keymap.set('n', '<S-h>', 'gT', { desc = 'Previous tab' })
+
+vim.keymap.set('n', 'M', ':tab split<CR>', { silent = true, desc = 'Zoom window' })
+
+-- Manual tab switching
+vim.keymap.set('n', '<leader>1', '1gt', { desc = 'Tab 1' })
+vim.keymap.set('n', '<leader>+', '1gt', { desc = 'Tab 1' })
+vim.keymap.set('n', '<leader>2', '2gt', { desc = 'Tab 2' })
+vim.keymap.set('n', '<leader>[', '2gt', { desc = 'Tab 2' })
+vim.keymap.set('n', '<leader>3', '3gt', { desc = 'Tab 3' })
+vim.keymap.set('n', '<leader>{', '3gt', { desc = 'Tab 3' })
+vim.keymap.set('n', '<leader>4', '4gt', { desc = 'Tab 4' })
+vim.keymap.set('n', '<leader>(', '4gt', { desc = 'Tab 4' })
+vim.keymap.set('n', '<leader>5', '5gt', { desc = 'Tab 5' })
+vim.keymap.set('n', '<leader>&', '5gt', { desc = 'Tab 5' })
+vim.keymap.set('n', '<leader>6', '6gt', { desc = 'Tab 6' })
+vim.keymap.set('n', '<leader>=', '6gt', { desc = 'Tab 6' })
+vim.keymap.set('n', '<leader>7', '7gt', { desc = 'Tab 7' })
+vim.keymap.set('n', '<leader>)', '7gt', { desc = 'Tab 7' })
+vim.keymap.set('n', '<leader>8', '8gt', { desc = 'Tab 8' })
+vim.keymap.set('n', '<leader>}', '8gt', { desc = 'Tab 8' })
+vim.keymap.set('n', '<leader>9', '9gt', { desc = 'Tab 9' })
+vim.keymap.set('n', '<leader>]', '9gt', { desc = 'Tab 9' })
+
+
 vim.keymap.set("v", "H", "0", { desc = "I don't want to hit shift" })
 vim.keymap.set("v", "L", "$", { desc = "I don't want to hit shift" })
 vim.keymap.set("v", "M", "^", { desc = "I don't want to hit shift" })
@@ -363,3 +403,27 @@ vim.keymap.set("n", "<C-Delete>", "dw", { noremap = true, silent = true })
 
 -- Insert mode: Delete to the end of the word and stay in insert mode
 vim.keymap.set("i", "<C-Delete>", "<C-o>dw", { noremap = true, silent = true })
+
+-- This helps me for the i3 thing where I changed the default position of the split.
+-- I mainly changed the position of the spit so that I can do things with the left hand
+-- This is nice I like it
+vim.keymap.set('n', '<C-w>z', '<C-w>s', { desc = "Horizontal split (replaces close preview)" })
+
+-- Toggle between current and last accessed tab
+vim.keymap.set('n', '<leader>`', function()
+    local last_tab = vim.fn.tabpagenr('#')
+    if last_tab > 0 then
+        vim.cmd(last_tab .. 'tabnext')
+    else
+        print("No last tab to return to!")
+    end
+end, { desc = 'Toggle last tab' })
+
+vim.keymap.set('n', '<leader>$', function()
+    local last_tab = vim.fn.tabpagenr('#')
+    if last_tab > 0 then
+        vim.cmd(last_tab .. 'tabnext')
+    else
+        print("No last tab to return to!")
+    end
+end, { desc = 'Toggle last tab' })

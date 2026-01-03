@@ -56,6 +56,18 @@ return {
 			)
 			vim.keymap.set(
 				"n",
+				"<leader>fiw",
+				require("fzf-lua").grep_cword,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current Buffer" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fiW",
+				require("fzf-lua").grep_cWORD,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current Buffer" }
+			)
+			vim.keymap.set(
+				"n",
 				"<leader>lg",
 				require("fzf-lua").live_grep,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Live Grep" }
@@ -76,6 +88,18 @@ return {
 				"n",
 				"<leader>pb",
 				require("fzf-lua").buffers,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fb",
+				require("fzf-lua").buffers,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fo",
+				require("fzf-lua").oldfiles,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
 			)
 			vim.keymap.set(
