@@ -27,6 +27,8 @@ vim.keymap.set("n", "z.", "zszH")
 --# I don't use this as much but I should try it out it's cool it indents stuff
 vim.keymap.set("n", "=ap", "ma=ap'a")
 
+vim.keymap.set('n', '<CR>', '<CR>', { noremap = true })
+
 --# why not ? I don't need c-y I have capslock and shit lol
 vim.keymap.set("n", "<c-i>", "<C-i>zz")
 vim.keymap.set("n", "<c-o>", "<C-o>zz")
@@ -427,3 +429,17 @@ vim.keymap.set('n', '<leader>$', function()
         print("No last tab to return to!")
     end
 end, { desc = 'Toggle last tab' })
+
+
+-- This is just some quality of life so that the K thing the hover pop up thing
+-- makes it like escape can escape it without moving my cursor.
+vim.keymap.set('n', '<Esc>', function()
+    -- Close all floating windows
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_config(win).relative ~= "" then
+            vim.api.nvim_win_close(win, false)
+        end
+    end
+    -- Clear search highlights (optional, but recommended for Esc)
+    vim.cmd("nohlsearch")
+end, { desc = "Close floating windows and clear search" })
