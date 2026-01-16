@@ -4,6 +4,16 @@ require("dex.remap")
 require("dex.clipboard")
 require("dex.lazy_init")
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.shiftwidth = 3
+    vim.opt_local.tabstop = 3
+    vim.opt_local.softtabstop = 3
+  end,
+})
+
+
 local augroup = vim.api.nvim_create_augroup
 local ThePrimeagenGroup = augroup("ThePrimeagen", {})
 
