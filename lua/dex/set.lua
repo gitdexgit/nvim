@@ -1,4 +1,5 @@
 vim.opt.guicursor = ""
+vim.g.markdown_recommended_style = 0
 
 -- idk what this is even for
 -- vim.g.maplocalleader = " "
@@ -7,7 +8,6 @@ vim.opt.guicursor = ""
 vim.opt.ttimeoutlen = 0   -- Time to wait for a key code (this fixes the Esc delay)
 
 vim.opt.showtabline = 1
-
 
 vim.opt.spelllang = 'en_us'
 vim.opt.spell = true
@@ -32,7 +32,7 @@ vim.opt.undofile = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
-vim.opt.termguicolors = true
+vim.opt.termguicolors = false
 
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"

@@ -27,7 +27,7 @@ return {
 		-- 3. Keybindings (The "Commander" mode)
 		keys = {
 			-- Open Notes (Search everything, similar to 'zk ls')
-			{ "<leader>zls", "<cmd>ZkNotes<cr>", desc = "ZK Open Notes" },
+			{ "<leader>zn", "<cmd>ZkNotes<cr>", desc = "ZK Open Notes" },
 			{ "<leader>zt", "<cmd>ZkTags<cr>", desc = "ZK Open Tags" },
 
 			-- Search text (Grep)
