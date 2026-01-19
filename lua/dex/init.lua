@@ -13,6 +13,15 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- 2. Create an autocommand to turn it ON only for markdown
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "md" }, -- Applies to .md files
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = 'en_us'
+  end,
+})
+
 
 local augroup = vim.api.nvim_create_augroup
 local ThePrimeagenGroup = augroup("ThePrimeagen", {})
