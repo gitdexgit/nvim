@@ -18,9 +18,10 @@ return {
                 harpoon:list():add()
             end, { desc = "Harpoon: Add File to List" })
 
-            vim.keymap.set("n", "<C-e>", function()
-                harpoon.ui:toggle_quick_menu(harpoon:list())
-            end, { desc = "Harpoon: Toggle Quick Menu" })
+            --<C-e> is used to scroll up and down by 1 line.
+            -- vim.keymap.set("n", "<C-e>", function()
+            --     harpoon.ui:toggle_quick_menu(harpoon:list())
+            -- end, { desc = "Harpoon: Toggle Quick Menu" })
 
             vim.keymap.set("n", "<leader>h", function()
                 harpoon.ui:toggle_quick_menu(harpoon:list())
