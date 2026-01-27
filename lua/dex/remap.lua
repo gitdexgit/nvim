@@ -1,8 +1,8 @@
 -- Map Space to do nothing
-vim.keymap.set('n', '<Space>', '<Nop>', { noremap = true, silent = true })
+vim.keymap.set("n", "<Space>", "<Nop>", { noremap = true, silent = true })
 
 -- Map Backspace to do nothing
-vim.keymap.set('n', '<BS>', '<Nop>', { noremap = true, silent = true })
+vim.keymap.set("n", "<BS>", "<Nop>", { noremap = true, silent = true })
 
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
@@ -27,7 +27,7 @@ vim.keymap.set("n", "z.", "zszH")
 --# I don't use this as much but I should try it out it's cool it indents stuff
 vim.keymap.set("n", "=ap", "ma=ap'a")
 
-vim.keymap.set('n', '<CR>', '<CR>', { noremap = true })
+vim.keymap.set("n", "<CR>", "<CR>", { noremap = true })
 
 --# why not ? I don't need c-y I have capslock and shit lol
 vim.keymap.set("n", "<c-i>", "<C-i>zz")
@@ -77,11 +77,10 @@ vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("n", "<A-Q>", ":tabclose<CR>", { silent = true, desc = "Close current tab" })
 
 -- Move current tab to the left
-vim.keymap.set('n', '<A-C-h>', ':tabmove -1<CR>', { silent = true, desc = 'Move tab left' })
+vim.keymap.set("n", "<A-C-h>", ":tabmove -1<CR>", { silent = true, desc = "Move tab left" })
 
 -- Move current tab to the right
-vim.keymap.set('n', '<A-C-l>', ':tabmove +1<CR>', { silent = true, desc = 'Move tab right' })
-
+vim.keymap.set("n", "<A-C-l>", ":tabmove +1<CR>", { silent = true, desc = "Move tab right" })
 
 --- !I already have <leader>ttt and <leader>ggg also there is like fugitive learn it so you don't have to do lazygit <leader>ggg
 -- vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
@@ -226,31 +225,30 @@ vim.keymap.set("n", "<A-S-h>", "zh", { desc = "I don't want to hit shift" })
 -- vim.keymap.set("n", "M", "0", { desc = "I don't want to hit shift" })
 
 -- Cycle through tabs
-vim.keymap.set('n', '<S-l>', 'gt', { desc = 'Next tab' })
-vim.keymap.set('n', '<S-h>', 'gT', { desc = 'Previous tab' })
+vim.keymap.set("n", "<S-l>", "gt", { desc = "Next tab" })
+vim.keymap.set("n", "<S-h>", "gT", { desc = "Previous tab" })
 
-vim.keymap.set('n', 'M', ':tab split<CR>', { silent = true, desc = 'Zoom window' })
+vim.keymap.set("n", "M", ":tab split<CR>", { silent = true, desc = "Zoom window" })
 
 -- Manual tab switching
-vim.keymap.set('n', '<leader>1', '1gt', { desc = 'Tab 1' })
-vim.keymap.set('n', '<leader>+', '1gt', { desc = 'Tab 1' })
-vim.keymap.set('n', '<leader>2', '2gt', { desc = 'Tab 2' })
-vim.keymap.set('n', '<leader>[', '2gt', { desc = 'Tab 2' })
-vim.keymap.set('n', '<leader>3', '3gt', { desc = 'Tab 3' })
-vim.keymap.set('n', '<leader>{', '3gt', { desc = 'Tab 3' })
-vim.keymap.set('n', '<leader>4', '4gt', { desc = 'Tab 4' })
-vim.keymap.set('n', '<leader>(', '4gt', { desc = 'Tab 4' })
-vim.keymap.set('n', '<leader>5', '5gt', { desc = 'Tab 5' })
-vim.keymap.set('n', '<leader>&', '5gt', { desc = 'Tab 5' })
-vim.keymap.set('n', '<leader>6', '6gt', { desc = 'Tab 6' })
-vim.keymap.set('n', '<leader>=', '6gt', { desc = 'Tab 6' })
-vim.keymap.set('n', '<leader>7', '7gt', { desc = 'Tab 7' })
-vim.keymap.set('n', '<leader>)', '7gt', { desc = 'Tab 7' })
-vim.keymap.set('n', '<leader>8', '8gt', { desc = 'Tab 8' })
-vim.keymap.set('n', '<leader>}', '8gt', { desc = 'Tab 8' })
-vim.keymap.set('n', '<leader>9', '9gt', { desc = 'Tab 9' })
-vim.keymap.set('n', '<leader>]', '9gt', { desc = 'Tab 9' })
-
+vim.keymap.set("n", "<leader>1", "1gt", { desc = "Tab 1" })
+vim.keymap.set("n", "<leader>+", "1gt", { desc = "Tab 1" })
+vim.keymap.set("n", "<leader>2", "2gt", { desc = "Tab 2" })
+vim.keymap.set("n", "<leader>[", "2gt", { desc = "Tab 2" })
+vim.keymap.set("n", "<leader>3", "3gt", { desc = "Tab 3" })
+vim.keymap.set("n", "<leader>{", "3gt", { desc = "Tab 3" })
+vim.keymap.set("n", "<leader>4", "4gt", { desc = "Tab 4" })
+vim.keymap.set("n", "<leader>(", "4gt", { desc = "Tab 4" })
+vim.keymap.set("n", "<leader>5", "5gt", { desc = "Tab 5" })
+vim.keymap.set("n", "<leader>&", "5gt", { desc = "Tab 5" })
+vim.keymap.set("n", "<leader>6", "6gt", { desc = "Tab 6" })
+vim.keymap.set("n", "<leader>=", "6gt", { desc = "Tab 6" })
+vim.keymap.set("n", "<leader>7", "7gt", { desc = "Tab 7" })
+vim.keymap.set("n", "<leader>)", "7gt", { desc = "Tab 7" })
+vim.keymap.set("n", "<leader>8", "8gt", { desc = "Tab 8" })
+vim.keymap.set("n", "<leader>}", "8gt", { desc = "Tab 8" })
+vim.keymap.set("n", "<leader>9", "9gt", { desc = "Tab 9" })
+vim.keymap.set("n", "<leader>]", "9gt", { desc = "Tab 9" })
 
 vim.keymap.set("v", "H", "0", { desc = "I don't want to hit shift" })
 vim.keymap.set("v", "L", "$", { desc = "I don't want to hit shift" })
@@ -267,7 +265,6 @@ vim.keymap.set("n", "<A-right>", "20zl", { desc = "I don't want to hit shift " }
 vim.keymap.set("n", "<A-left>", "20zh", { desc = "I don't want to hit shift" })
 vim.keymap.set("n", "<A-down>", "<c-e>", { desc = "I don't want to hit shift" })
 vim.keymap.set("n", "<A-up>", "<c-y>", { desc = "I don't want to hit shift" })
-
 
 --# This thing I added and I'm not sure why... maybe when I'm in wrap mode. but does this even work
 --# I'm not sure to be honest when it's off it's fine
@@ -316,8 +313,6 @@ end, { expr = true, silent = true, desc = "Smart ^ motion" })
 vim.keymap.set({ "n", "v", "o" }, "$", function()
 	return vim.opt.wrap:get() and "g$" or "$"
 end, { expr = true, silent = true, desc = "Smart $ motion" })
-
-
 
 -- vim.keymap.set("n", "<leader>sh", "<cmd>:sp<cr>", { desc = "Open Quickfix List" })
 -- vim.keymap.set("n", "<leader>sv", "<cmd>:vsp<cr>", { desc = "Open Quickfix List" })
@@ -371,32 +366,29 @@ vim.keymap.set("i", "<End>", "<C-o>$", { desc = "Go to end of line" })
 -- -- Remaps <C-v> to paste over the selected text.
 -- vim.keymap.set('v', '<C-v>', '"+p', { desc = "Paste over selection from system clipboard" })
 
-
-vim.keymap.set('n', '<leader>wp', function()
-  if vim.opt.wrap:get() then
-    vim.opt.wrap = false
-  else
-    vim.opt.wrap = true
-  end
+vim.keymap.set("n", "<leader>wp", function()
+	if vim.opt.wrap:get() then
+		vim.opt.wrap = false
+	else
+		vim.opt.wrap = true
+	end
 end, { desc = "Toggle word wrap" })
 
-vim.keymap.set('n', '<leader>wr', function()
-  if vim.opt.relativenumber:get() then
-    vim.opt.relativenumber = false
-  else
-    vim.opt.relativenumber = true
-  end
+vim.keymap.set("n", "<leader>wr", function()
+	if vim.opt.relativenumber:get() then
+		vim.opt.relativenumber = false
+	else
+		vim.opt.relativenumber = true
+	end
 end, { desc = "Toggle relative line numbers" })
 
-
-vim.keymap.set('n', '<leader>wn', function()
-  if vim.opt.number:get() then
-    vim.opt.number = false
-  else
-    vim.opt.number = true
-  end
+vim.keymap.set("n", "<leader>wn", function()
+	if vim.opt.number:get() then
+		vim.opt.number = false
+	else
+		vim.opt.number = true
+	end
 end, { desc = "Toggle absolute line numbers" })
-
 
 -- This is for keyd my capslock setup
 
@@ -409,37 +401,52 @@ vim.keymap.set("i", "<C-Delete>", "<C-o>dw", { noremap = true, silent = true })
 -- This helps me for the i3 thing where I changed the default position of the split.
 -- I mainly changed the position of the spit so that I can do things with the left hand
 -- This is nice I like it
-vim.keymap.set('n', '<C-w>z', '<C-w>s', { desc = "Horizontal split (replaces close preview)" })
+vim.keymap.set("n", "<C-w>z", "<C-w>s", { desc = "Horizontal split (replaces close preview)" })
 
 -- Toggle between current and last accessed tab
-vim.keymap.set('n', '<leader>`', function()
-    local last_tab = vim.fn.tabpagenr('#')
-    if last_tab > 0 then
-        vim.cmd(last_tab .. 'tabnext')
-    else
-        print("No last tab to return to!")
-    end
-end, { desc = 'Toggle last tab' })
+vim.keymap.set("n", "<leader>`", function()
+	local last_tab = vim.fn.tabpagenr("#")
+	if last_tab > 0 then
+		vim.cmd(last_tab .. "tabnext")
+	else
+		print("No last tab to return to!")
+	end
+end, { desc = "Toggle last tab" })
 
-vim.keymap.set('n', '<leader>$', function()
-    local last_tab = vim.fn.tabpagenr('#')
-    if last_tab > 0 then
-        vim.cmd(last_tab .. 'tabnext')
-    else
-        print("No last tab to return to!")
-    end
-end, { desc = 'Toggle last tab' })
-
+vim.keymap.set("n", "<leader>$", function()
+	local last_tab = vim.fn.tabpagenr("#")
+	if last_tab > 0 then
+		vim.cmd(last_tab .. "tabnext")
+	else
+		print("No last tab to return to!")
+	end
+end, { desc = "Toggle last tab" })
 
 -- This is just some quality of life so that the K thing the hover pop up thing
 -- makes it like escape can escape it without moving my cursor.
-vim.keymap.set('n', '<Esc>', function()
-    -- Close all floating windows
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-        if vim.api.nvim_win_get_config(win).relative ~= "" then
-            vim.api.nvim_win_close(win, false)
-        end
-    end
-    -- Clear search highlights (optional, but recommended for Esc)
-    vim.cmd("nohlsearch")
-end, { desc = "Close floating windows and clear search" })
+-- vim.keymap.set('n', '<Esc>', function()
+--     -- Close all floating windows
+--     for _, win in ipairs(vim.api.nvim_list_wins()) do
+--         if vim.api.nvim_win_get_config(win).relative ~= "" then
+--             vim.api.nvim_win_close(win, false)
+--         end
+--     end
+--     -- Clear search highlights (optional, but recommended for Esc)
+--     vim.cmd("nohlsearch")
+-- end, { desc = "Close floating windows and clear search" })
+
+vim.keymap.set("n", "<Esc>", function()
+	-- 1. Clear search highlights
+	vim.cmd("nohlsearch")
+	-- 2. Get the current window ID so we don't accidentally close it
+	local current_win = vim.api.nvim_get_current_win()
+	-- 3. Only kill "Focusable" floating windows that are NOT the current window
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		if vim.api.nvim_win_is_valid(win) and win ~= current_win then
+			local config = vim.api.nvim_win_get_config(win)
+			if config.relative ~= "" and config.focusable then
+				vim.api.nvim_win_close(win, false)
+			end
+		end
+	end
+end, { desc = "Clean Escape: Kill hovers and clear highlights" })
