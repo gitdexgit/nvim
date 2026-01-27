@@ -4,23 +4,32 @@ require("dex.remap")
 require("dex.clipboard")
 require("dex.lazy_init")
 
+
+
+-- Consolidated Markdown & Spell Settings
+local markdown_spell_group = vim.api.nvim_create_augroup("MarkdownSpell", { clear = true })
+
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
+  group = markdown_spell_group,
+  pattern = { "markdown", "md", "text" },
   callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = 'en'
     vim.opt_local.shiftwidth = 3
     vim.opt_local.tabstop = 3
-    vim.opt_local.softtabstop = 3
+    vim.opt_local.wrap = true
   end,
 })
 
--- 2. Create an autocommand to turn it ON only for markdown
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "markdown", "md" }, -- Applies to .md files
-  callback = function()
-    vim.opt_local.spell = true
-    vim.opt_local.spelllang = 'en_us'
-  end,
-})
+-- This ensures the red highlight stays even when you switch themes
+-- vim.api.nvim_create_autocmd("ColorScheme", {
+--   group = markdown_spell_group,
+--   pattern = "*",
+--   callback = function()
+--     vim.api.nvim_set_hl(0, "SpellBad", { fg = "#ff5555", sp = "#ff5555", underline = true, bold = true })
+--     vim.api.nvim_set_hl(0, "SpellCap", { fg = "#f1fa8c", sp = "#f1fa8c", underline = true })
+--   end,
+-- })
 
 
 local augroup = vim.api.nvim_create_augroup
@@ -28,17 +37,6 @@ local ThePrimeagenGroup = augroup("ThePrimeagen", {})
 
 local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup("HighlightYank", {})
-
-local markdown_augroup = vim.api.nvim_create_augroup("MarkdownSettings", { clear = true })
-
-autocmd("FileType", {
-	group = markdown_augroup,
-	pattern = "markdown",
-	callback = function()
-		vim.opt_local.wrap = true
-	end,
-	desc = "Enable word wrap for Markdown files",
-})
 
 function R(name)
 	require("plenary.reload").reload_module(name)
@@ -67,16 +65,29 @@ autocmd({ "BufWritePre" }, {
 	command = [[%s/\s\+$//e]],
 })
 
-autocmd("BufEnter", {
-	group = ThePrimeagenGroup,
-	callback = function()
-		if vim.bo.filetype == "zig" then
-			pcall(vim.cmd.colorscheme, "tokyonight-night")
-		else
-			pcall(vim.cmd.colorscheme, "rose-pine-moon")
-		end
-	end,
-})
+-- autocmd("BufEnter", {
+-- 	group = ThePrimeagenGroup,
+-- 	callback = function()
+-- 		if vim.bo.filetype == "zig" then
+-- 			pcall(vim.cmd.colorscheme, "tokyonight-night")
+-- 		else
+-- 			pcall(vim.cmd.colorscheme, "rose-pine-moon")
+-- 		end
+-- 	end,
+-- })
+
+-- NEW VERSION
+-- autocmd("BufEnter", {
+--     group = ThePrimeagenGroup,
+--     callback = function()
+--         if vim.bo.filetype == "zig" then
+--         --     ColorMyPencils("tokyonight-night")
+--         -- else
+--             ColorMyPencils("rose-pine-moon")
+--         end
+--     end,
+-- })
+
 
 autocmd("LspAttach", {
 	group = ThePrimeagenGroup,
@@ -212,5 +223,8 @@ function MyTabLine()
 end
 
 vim.opt.tabline = '%!v:lua.MyTabLine()'
+
+
+
 
 
