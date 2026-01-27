@@ -114,32 +114,57 @@ return {
 			},
 		})
 
-        -- This is for zk so I can scroll down the K heheheh and long functions
-        -- before I hit K again to go inside of the float hehehehehe cool shit.
-        -- Logic to scroll the LSP hover window without jumping into it
-        local function scroll_float(direction)
-            return function()
-                local winid = nil
-                -- Find the floating window (it has a 'relative' config)
-                for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-                    if vim.api.nvim_win_get_config(win).relative ~= "" then
-                        winid = win
-                        break
-                    end
-                end
-                -- If we found it, scroll it using nvim_win_call
-                if winid then
-                    local key = direction == "down" and "\x06" or "\x02" -- \x06 is Ctrl-f, \x02 is Ctrl-b
-                    vim.api.nvim_win_call(winid, function()
-                        vim.cmd("normal! " .. key)
-                    end)
-                end
+
+
+--- > @ai """well heere goes nothing""" START
+
+local api = vim.api
+
+-- The "Smart Redirect" Function
+-- It finds a focusable float (the Hover), scrolls it, or falls back to your code.
+local function scroll_float(key_code)
+    return function()
+        local winid = nil
+        -- 1. Look for the focusable floating window (LSP Documentation)
+        for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
+            local config = api.nvim_win_get_config(win)
+            if config.relative ~= "" and config.focusable then
+                winid = win
+                break
             end
         end
 
-        -- Map the scrolling keys in Normal mode
-        vim.keymap.set("n", "<C-f>", scroll_float("down"), { desc = "Scroll hover down" })
-        vim.keymap.set("n", "<C-b>", scroll_float("up"), { desc = "Scroll hover up" })
+        if winid then
+            -- 2. REDIRECT: Send the scroll command into the Hover window
+            api.nvim_win_call(winid, function()
+                vim.cmd("normal! " .. key_code)
+            end)
+        else
+            -- 3. FALLBACK: No float open? Scroll your main code buffer instead.
+            local codes = api.nvim_replace_termcodes(key_code, true, false, true)
+            api.nvim_feedkeys(codes, "n", true)
+        end
+    end
+end
+
+-- 1. Line-by-Line (Precision)
+vim.keymap.set("n", "<C-e>", scroll_float("\x05"), { desc = "Scroll float/buffer 1 line down" })
+vim.keymap.set("n", "<C-y>", scroll_float("\x19"), { desc = "Scroll float/buffer 1 line up" })
+
+-- 2. Half-Page (Standard Speed)
+vim.keymap.set("n", "<C-d>", scroll_float("\x04"), { desc = "Scroll float/buffer half-page down" })
+vim.keymap.set("n", "<C-u>", scroll_float("\x15"), { desc = "Scroll float/buffer half-page up" })
+
+-- 3. Full-Page (Big Jumps)
+vim.keymap.set("n", "<C-f>", scroll_float("\x06"), { desc = "Scroll float/buffer full-page down" })
+vim.keymap.set("n", "<C-b>", scroll_float("\x02"), { desc = "Scroll float/buffer full-page up" })
+
+
+--- > @ai """well heere goes nothing""" END
+
+        -- -- Map the scrolling keys in Normal mode
+        -- vim.keymap.set("n", "<C-f>", scroll_float("down"), { desc = "Scroll hover down" })
+        -- vim.keymap.set("n", "<C-b>", scroll_float("up"), { desc = "Scroll hover up" })
 
 	end,
 }
