@@ -23,6 +23,7 @@ return {
             highlight = {
                 -- `false` will disable the whole extension
                 enable = true,
+                spell = true,
                 disable = function(lang, buf)
                     if lang == "html" then
                         print("disabled")

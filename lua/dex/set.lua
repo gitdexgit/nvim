@@ -9,7 +9,7 @@ vim.opt.ttimeoutlen = 0   -- Time to wait for a key code (this fixes the Esc del
 
 vim.opt.showtabline = 1
 
-vim.opt.spelllang = 'en_us'
+vim.opt.spelllang = 'en'
 vim.opt.spell = false
 
 vim.opt.nu = true
@@ -32,7 +32,7 @@ vim.opt.undofile = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
-vim.opt.termguicolors = false
+vim.opt.termguicolors = true
 
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
