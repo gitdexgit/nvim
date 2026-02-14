@@ -4,6 +4,9 @@ require("dex.remap")
 require("dex.clipboard")
 require("dex.lazy_init")
 
+-- Force Neovim to prioritize the parsers installed by Lazy
+vim.opt.runtimepath:prepend(vim.fn.stdpath("data") .. "/lazy/nvim-treesitter")
+
 
 
 -- Consolidated Markdown & Spell Settings
