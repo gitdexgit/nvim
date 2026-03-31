@@ -15,6 +15,9 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 --# i don't understand this <Plug>.... thing is this a lazynvim ? or is this in packer or what
 -- vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
 
+vim.keymap.set('n', '<leader>s', '<cmd>setlocal spell!<cr>', { desc = 'Toggle spell check' })
+
+
 vim.keymap.set("n", "<leader>ss", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "J", "mzJ`z")
 ---just use freaking c-f and c-b
@@ -104,7 +107,9 @@ vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above" })
 vim.keymap.set("i", "<A-O>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
 
 -- Remap Ctrl+f to scroll up
--- vim.keymap.set("n", "<C-f>", "<C-f>zz")
+vim.keymap.set("n", "<C-f>", "<C-f>zz")
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<A-f>", "<C-d>zz")
 vim.keymap.set("v", "<A-j>", "<C-d>zz")
 vim.keymap.set("v", "<A-f>", "<C-d>zz")
@@ -322,10 +327,10 @@ end, { expr = true, silent = true, desc = "Smart $ motion" })
 ---# Terminal like in nvim
 
 -- Map Ctrl+f to move the cursor forward (right) in Insert Mode
-vim.keymap.set("i", "<C-f>", "<Right>")
+-- vim.keymap.set("i", "<C-f>", "<Right>")
 
 -- Map Ctrl+b to move the cursor backward (left) in Insert Mode
-vim.keymap.set("i", "<C-b>", "<Left>")
+-- vim.keymap.set("i", "<C-b>", "<Left>")
 
 -- Go to the first non-whitespace character of the line (like ^)
 -- Not quite like C-a if I want C-a I just do the like Capslock+a
