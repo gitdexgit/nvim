@@ -125,7 +125,6 @@ local api = vim.api
 local function scroll_float(key_code)
     return function()
         local winid = nil
-        -- 1. Look for the focusable floating window (LSP Documentation)
         for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
             local config = api.nvim_win_get_config(win)
             if config.relative ~= "" and config.focusable then
@@ -135,17 +134,19 @@ local function scroll_float(key_code)
         end
 
         if winid then
-            -- 2. REDIRECT: Send the scroll command into the Hover window
             api.nvim_win_call(winid, function()
                 vim.cmd("normal! " .. key_code)
             end)
         else
-            -- 3. FALLBACK: No float open? Scroll your main code buffer instead.
-            local codes = api.nvim_replace_termcodes(key_code, true, false, true)
+            -- zz appended here to center after scroll
+            local codes = api.nvim_replace_termcodes(key_code .. "zz", true, false, true)
             api.nvim_feedkeys(codes, "n", true)
         end
     end
 end
+
+
+
 
 -- 1. Line-by-Line (Precision)
 vim.keymap.set("n", "<C-e>", scroll_float("\x05"), { desc = "Scroll float/buffer 1 line down" })
