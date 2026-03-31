@@ -50,9 +50,15 @@ return {
 			)
 			vim.keymap.set(
 				"n",
-				"<leader>/",
+				"<leader>fg",
 				require("fzf-lua").grep_curbuf,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current Buffer" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>/",
+				require("fzf-lua").blines,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current blines" }
 			)
 			vim.keymap.set(
 				"n",
