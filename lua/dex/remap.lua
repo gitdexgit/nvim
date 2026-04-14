@@ -108,6 +108,10 @@ vim.keymap.set("i", "<A-O>", "<C-o>O<Esc>S", { desc = "Open new blank line above
 
 -- Remap Ctrl+f to scroll up
 vim.keymap.set("n", "<C-f>", "<C-f>zz")
+vim.keymap.set("n", "<C-g>", "<C-u>zz")
+vim.keymap.set("v", "<C-f>", "<C-f>zz")
+vim.keymap.set("v", "<C-g>", "<C-u>zz")
+
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<A-f>", "<C-d>zz")
