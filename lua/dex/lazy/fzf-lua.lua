@@ -90,6 +90,13 @@ return {
 				require("fzf-lua").registers,
 				{ noremap = true, silent = true, desc = "FZF-Lua: registers" }
 			)
+
+			vim.keymap.set("v", "<leader>r", function()
+				vim.cmd('normal! "_d')
+				vim.schedule(function()
+					require("fzf-lua").registers()
+				end)
+			end, { noremap = true, silent = true, desc = "Replace selection with register" })
 			vim.keymap.set(
 				"n",
 				"<leader>pb",
