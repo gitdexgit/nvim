@@ -149,8 +149,8 @@ end
 
 
 -- 1. Line-by-Line (Precision)
-vim.keymap.set("n", "<C-e>", scroll_float("\x05"), { desc = "Scroll float/buffer 1 line down" })
-vim.keymap.set("n", "<C-y>", scroll_float("\x19"), { desc = "Scroll float/buffer 1 line up" })
+-- vim.keymap.set("n", "<C-e>", scroll_float("\x05"), { desc = "Scroll float/buffer 1 line down" })
+-- vim.keymap.set("n", "<C-y>", scroll_float("\x19"), { desc = "Scroll float/buffer 1 line up" })
 
 -- 2. Half-Page (Standard Speed)
 vim.keymap.set("n", "<C-d>", scroll_float("\x04"), { desc = "Scroll float/buffer half-page down" })
