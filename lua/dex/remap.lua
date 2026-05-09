@@ -15,8 +15,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 --# i don't understand this <Plug>.... thing is this a lazynvim ? or is this in packer or what
 -- vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
 
-vim.keymap.set('n', '<leader>s', '<cmd>setlocal spell!<cr>', { desc = 'Toggle spell check' })
-
+vim.keymap.set("n", "<leader>s", "<cmd>setlocal spell!<cr>", { desc = "Toggle spell check" })
 
 vim.keymap.set("n", "<leader>ss", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "J", "mzJ`z")
@@ -239,29 +238,40 @@ vim.keymap.set("n", "<S-h>", "gT", { desc = "Previous tab" })
 
 vim.keymap.set("n", "M", ":tab split<CR>", { silent = true, desc = "Zoom window" })
 
+-- Tab Navigation (Moved to Function Keys)
+for i = 1, 9 do
+	vim.keymap.set("n", "<leader><F" .. i .. ">", i .. "gt", { desc = "Tab " .. i })
+end
+
 -- Manual tab switching
-vim.keymap.set("n", "<leader>1", "1gt", { desc = "Tab 1" })
-vim.keymap.set("n", "<leader>+", "1gt", { desc = "Tab 1" })
-vim.keymap.set("n", "<leader>2", "2gt", { desc = "Tab 2" })
-vim.keymap.set("n", "<leader>[", "2gt", { desc = "Tab 2" })
-vim.keymap.set("n", "<leader>3", "3gt", { desc = "Tab 3" })
-vim.keymap.set("n", "<leader>{", "3gt", { desc = "Tab 3" })
-vim.keymap.set("n", "<leader>4", "4gt", { desc = "Tab 4" })
-vim.keymap.set("n", "<leader>(", "4gt", { desc = "Tab 4" })
-vim.keymap.set("n", "<leader>5", "5gt", { desc = "Tab 5" })
-vim.keymap.set("n", "<leader>&", "5gt", { desc = "Tab 5" })
-vim.keymap.set("n", "<leader>6", "6gt", { desc = "Tab 6" })
-vim.keymap.set("n", "<leader>=", "6gt", { desc = "Tab 6" })
-vim.keymap.set("n", "<leader>7", "7gt", { desc = "Tab 7" })
-vim.keymap.set("n", "<leader>)", "7gt", { desc = "Tab 7" })
-vim.keymap.set("n", "<leader>8", "8gt", { desc = "Tab 8" })
-vim.keymap.set("n", "<leader>}", "8gt", { desc = "Tab 8" })
-vim.keymap.set("n", "<leader>9", "9gt", { desc = "Tab 9" })
-vim.keymap.set("n", "<leader>]", "9gt", { desc = "Tab 9" })
+-- vim.keymap.set("n", "<leader>1", "1gt", { desc = "Tab 1" })
+-- vim.keymap.set("n", "<leader>+", "1gt", { desc = "Tab 1" })
+-- vim.keymap.set("n", "<leader>2", "2gt", { desc = "Tab 2" })
+-- vim.keymap.set("n", "<leader>[", "2gt", { desc = "Tab 2" })
+-- vim.keymap.set("n", "<leader>3", "3gt", { desc = "Tab 3" })
+-- vim.keymap.set("n", "<leader>{", "3gt", { desc = "Tab 3" })
+-- vim.keymap.set("n", "<leader>4", "4gt", { desc = "Tab 4" })
+-- vim.keymap.set("n", "<leader>(", "4gt", { desc = "Tab 4" })
+-- vim.keymap.set("n", "<leader>5", "5gt", { desc = "Tab 5" })
+-- vim.keymap.set("n", "<leader>&", "5gt", { desc = "Tab 5" })
+-- vim.keymap.set("n", "<leader>6", "6gt", { desc = "Tab 6" })
+-- vim.keymap.set("n", "<leader>=", "6gt", { desc = "Tab 6" })
+-- vim.keymap.set("n", "<leader>7", "7gt", { desc = "Tab 7" })
+-- vim.keymap.set("n", "<leader>)", "7gt", { desc = "Tab 7" })
+-- vim.keymap.set("n", "<leader>8", "8gt", { desc = "Tab 8" })
+-- vim.keymap.set("n", "<leader>}", "8gt", { desc = "Tab 8" })
+-- vim.keymap.set("n", "<leader>9", "9gt", { desc = "Tab 9" })
+-- vim.keymap.set("n", "<leader>]", "9gt", { desc = "Tab 9" })
+
+vim.keymap.set("n", "H", "0", { desc = "I don't want to hit shift" })
+vim.keymap.set("n", "L", "$", { desc = "I don't want to hit shift" })
+vim.keymap.set("n", "M", "^", { desc = "I don't want to hit shift" })
 
 vim.keymap.set("v", "H", "0", { desc = "I don't want to hit shift" })
 vim.keymap.set("v", "L", "$", { desc = "I don't want to hit shift" })
 vim.keymap.set("v", "M", "^", { desc = "I don't want to hit shift" })
+
+
 -- Easier tab navigation
 -- vim.keymap.set('n', '<Tab>', '<cmd>tabnext<CR>', { desc = 'Go to next tab' })
 -- vim.keymap.set('n', '<S-Tab>', '<cmd>tabprevious<CR>', { desc = 'Go to previous tab' })
