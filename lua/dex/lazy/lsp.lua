@@ -1,14 +1,3 @@
-local root_files = {
-	".luarc.json",
-	".luarc.jsonc",
-	".luacheckrc",
-	".stylua.toml",
-	"stylua.toml",
-	"selene.toml",
-	"selene.yml",
-	".git",
-}
-
 return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
@@ -108,12 +97,11 @@ return {
 				focusable = false,
 				style = "minimal",
 				border = "rounded",
-				source = "always",
+				source = true,
 				header = "",
 				prefix = "",
 			},
 		})
-
 
 
 --- > @ai """well heere goes nothing""" START
