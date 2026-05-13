@@ -1,8 +1,7 @@
 return {
 	"David-Kunz/gen.nvim",
-	-- ... (opts remain the same)
 	opts = {
-		model = "phi4-mini:3.8b",
+		model = "qwen2.5-coder:3b",
 		display_mode = "float",
 		show_prompt = true,
 		show_model = true,
@@ -17,18 +16,15 @@ return {
 				local prompts = vim.tbl_keys(gen.prompts)
 				table.sort(prompts)
 
+				local curr_mode = vim.api.nvim_get_mode().mode
+				local is_visual = curr_mode:find("[vV]") or curr_mode:find("\22")
+
 				local display_list = {}
 				for _, name in ipairs(prompts) do
 					local p = gen.prompts[name]
-					local model = p.model or "phi4-mini:3.8b"
-
+					local model = p.model or "qwen2.5-coder:3b"
 					local raw_prompt = type(p.prompt) == "string" and p.prompt or "Custom logic..."
-
-					local clean_prompt = raw_prompt:gsub("\n", " ")
-						:gsub("%$text", "...")
-						:gsub("%s+", " ")
-						:sub(1, 150)
-
+					local clean_prompt = raw_prompt:gsub("\n", " "):gsub("%$text", "..."):gsub("%s+", " "):sub(1, 100)
 					table.insert(display_list, string.format("%-20s │ %-16s │ %s", name, model, clean_prompt))
 				end
 
@@ -37,125 +33,175 @@ return {
 						["default"] = function(selected)
 							if selected and selected[1] then
 								local prompt_name = selected[1]:match("^(%S+)")
+								local range = is_visual and "'<,'>" or ""
 								vim.schedule(function()
-									vim.cmd("Gen " .. prompt_name)
+									vim.cmd(range .. "Gen " .. prompt_name)
 								end)
 							end
 						end,
 					},
-					winopts = {
-						height = 0.6,
-						width = 0.9,
-						row = 0.4,
-						title = " AI Workstation ",
-						title_pos = "center"
-					},
+					winopts = { height = 0.6, width = 0.9, title = " AI Workstation ", title_pos = "center" },
 					previewer = false,
-					fzf_opts = {
-						["--delimiter"] = "│",
-						["--nth"] = "1",
-					},
+					fzf_opts = { ["--delimiter"] = "│", ["--nth"] = "1" },
 				})
 			end,
 			desc = "AI Search",
 			mode = { "n", "v" },
 		},
-		-- FAST ACCESS KEYS (Commented out)
-		-- { "<leader>gd", ":Gen Duck_Socratic<CR>", mode = { "n", "v" }, desc = "Duck Debug" },
-		-- { "<leader>ga", ":Gen Arch_Expert<CR>",  mode = { "n", "v" }, desc = "Arch Wiki" },
-		-- { "<leader>ge", ":Gen Quick_Fix<CR>",   mode = { "v" },       desc = "Quick Fix" },
-		-- { "<leader>gl", ":Gen ELI5_Drunk<CR>",  mode = { "n", "v" }, desc = "Explain Simply" },
 	},
 	config = function(_, opts)
 		local gen = require("gen")
+		gen.prompts = {} -- Wipe defaults
 		gen.setup(opts)
 
 		-----------------------------------------------------------------------
-		-- THE "DUCK" (SOCRATIC DEBUGGING)
+		-- CAVE-LEARN SYSTEM (7b)
 		-----------------------------------------------------------------------
-		gen.prompts["Duck_Socratic"] = {
-			prompt = "You are a Socratic Rubber Duck. I am explaining my code/problem to you.\n"
-				.. "1. DO NOT give me the answer.\n"
-				.. "2. DO NOT provide fixed code.\n"
-				.. "3. Analyze my 'mumbo jumbo' and ask 2-3 targeted, deep questions that force me to realize the flaw myself.\n"
-				.. "Focus on edge cases, state management, or logic flow. Text:\n$text",
-			model = "deepseek-r1:7b",
-		}
+		gen.prompts["Caveman_Learn"] = {
+			prompt = [=[
+Terse. Technical substance stay. Fluff die. Q&A learning evaluator.
+Rules: User writes BOTH Question and Answer. Goal: Active learning.
+Watchdogs: Atomic Check (Q too broad?), No Hedging (Punish "maybe"), Precision (Judge concept), Pinpoint (Quote wrong part), Socratic Redirect (Ask question, don't give answer).
 
-		-----------------------------------------------------------------------
-		-- TEXT & UTILITY (New Prompt Added Here!)
-		-----------------------------------------------------------------------
-		gen.prompts["ELI5_Drunk"] = {
-			prompt = "Explain this concept or code to me as if I'm a 5-year-old or a very tired, slightly drunk person at a bar. "
-                .. "Use zero technical jargon. Use simple real-world analogies (like pizza, LEGOs, or cars). "
-                .. "Be conversational, funny, and make it impossible to misunderstand. Text:\n$text",
-			model = "phi4-mini:3.8b",
-		}
+[GROUND TRUTH: DO NOT READ]
+<exact_correct_answer: ultra_intensity>
+[/GROUND TRUTH]
 
-		gen.prompts["Explain_This"] = {
-			prompt = "Explain this technical concept or code block like I'm a junior dev. Be concise:\n$text",
-			model = "phi4-mini:3.8b",
-		}
+[LOGIC]
+{A:q_atomic; B:form_clean; C:concept_correct; D:term_correct} | A && B && C;;$intent=evaluate_learning;;$state=[hot|blocked];;$gap=[none|term_only|concept|<description>]
+[/LOGIC]
 
-		gen.prompts["Quick_Fix"] = {
-			prompt = "Fix grammar and spelling only. Output ONLY the result:\n$text",
-			replace = true,
-			model = "qwen2.5:1.5b",
-		}
+[ASM]
+MOV R0, "<q_flaws>"; MOV R1, "<a_form_flaws>"; MOV R2, "<concept_gap>"; MOV R3, "<term_gap>"; MOV R4, "<good_analogy>"; MOV R5, "<socratic_redirect>"; MOV R6, "<model_answer_ultra>"; MOV R7, "<socratic_probes>"
+[/ASM]
 
-		gen.prompts["Rephrase"] = {
-			prompt = "Rewrite this to be clearer and more professional while keeping the same meaning:\n$text",
-			replace = true,
-			model = "gemma2:latest",
-		}
-
-		gen.prompts["Bullet_Points"] = {
-			prompt = "Turn this text/code into a clean markdown bulleted list of key points:\n$text",
-			replace = true,
-			model = "llama3.2:1b",
-		}
-
-		-----------------------------------------------------------------------
-		-- CODING & REFACTORING
-		-----------------------------------------------------------------------
-		gen.prompts["Refactor_Code"] = {
-			prompt = "Refactor the following code to be more idiomatic, efficient, and readable. Maintain the same functionality. Explain briefly what you changed:\n$text",
-			model = "qwen2.5-coder:7b",
-			replace = true,
-		}
-
-		gen.prompts["Unit_Tests"] = {
-			prompt = "Write comprehensive unit tests for the following code snippet using a standard testing framework appropriate for the language:\n$text",
+[ANS]
+Output ONLY the verdict. If fail: Q-Check, Form, Good, Logic (quote error), Socratic Redirect. If term gap: Correct concept + teach term. If match: Correct + Ground Truth (Ultra) + Socratic probes.
+Text: $text
+]=],
 			model = "qwen2.5-coder:7b",
 		}
 
-		gen.prompts["Suggest_Names"] = {
-			prompt = "Give me 5 high-quality, descriptive variable or function names based on this logic/context. Just a list:\n$text",
-			model = "qwen2.5:0.5b",
-		}
+		-----------------------------------------------------------------------
+		-- ATOMIC REFINER (3b)
+		-----------------------------------------------------------------------
+		gen.prompts["Atomic_Refine"] = {
+			prompt = [=[
+Role: Refine questions into atomic form. Match user's technical level.
+Strict Sequence: Always output [LOGIC], then [ANS].
+Rules:
+1. Recall Target First: Extract anchor from 'questions'.
+2. Minimum Questions: N in -> N out. Split only if 2+ recall targets.
+3. Complexity Ceiling: Mirror user's domain terms. No analogies.
+4. Hint, Don't Reveal: Trigger recall of 'answers'. Do not restate them.
+5. Self-Contained: Append domain context (e.g., "in C", "in React").
 
-		gen.prompts["Pseudocode"] = {
-			prompt = "Convert this code into high-level logic steps (pseudocode). No syntax, just logic:\n$text",
-			replace = true,
+[LOGIC]
+{A:raw; B:questions; C:answers; D:complexity} | (A && B && C) => Refine(D);;$intent=atomize_to_user_level;;$recall_target=[extracted];;$state=[hot];;$mode=full
+[/LOGIC]
+
+[ANS]
+- [Atomic Question]
+[/ANS]
+Input: $text
+]=],
 			model = "qwen2.5-coder:3b",
 		}
 
 		-----------------------------------------------------------------------
-		-- SYSTEM & WORKFLOW
+		-- SEARCH ORACLE (3b)
 		-----------------------------------------------------------------------
-		gen.prompts["Arch_Expert"] = {
-			prompt = "You are an Arch Linux expert. Give a concise command or config fix for:\n$text",
-			model = "qwen3.5:4b",
+		gen.prompts["Search_Oracle"] = {
+			prompt = [=[
+Role: Parse intent. Know answer internally. Never reveal. Output queries that lead user there.
+Linguistic Rules: Fragments. No articles/filler. Abbrev. Strip conjunctions.
+Output:
+<logic>
+{A=prop1,B=prop2,...} [C-formula];;$intent=[goal];;$anti_goal=[!goal];;$vars=[entities];;$state=[current];;$unknowns=[what must be found]
+</logic>
+<queries>
+[n]. "[query string]" → [what this finds] :: resolves($prop)
+Rules: Keyword-dense. Cover core, variations, edge cases, inversions. Never write answer.
+</queries>
+Input: $text
+]=],
+			model = "qwen2.5:3b",
 		}
 
-		gen.prompts["Shell_Helper"] = {
-			prompt = "Convert the following natural language request into a precise Arch Linux terminal command. Output ONLY the command:\n$text",
-			model = "qwen3.5:4b",
-		}
-
-		gen.prompts["Git_Commit"] = {
-			prompt = "Review the following diff and write a concise git commit message in conventional commits format (e.g., 'feat: ...' or 'fix: ...'). Output ONLY the message:\n$text",
+		-----------------------------------------------------------------------
+		-- TASK ARCHITECT (1.5b)
+		-----------------------------------------------------------------------
+		gen.prompts["Task_Architect"] = {
+			prompt = [=[
+Act as Taskwarrior architect. Convert brain dump into atomic, actionable tasks.
+Rules:
+1. Each task must be atomic (smallest possible unit).
+2. Output ONLY 'task add project:<name> <description>' commands.
+3. Infer project names from context.
+4. No conversational filler or explanations.
+Dump: $text
+]=],
 			model = "qwen2.5:1.5b",
+		}
+
+		-----------------------------------------------------------------------
+		-- CAVEMAN MASTER (3b)
+		-----------------------------------------------------------------------
+		gen.prompts["Caveman"] = {
+			prompt = [[
+Act as 'caveman'. Terse. Technical substance stay. Fluff die.
+Rules: Drop articles, filler, pleasantries. Fragments OK.
+Guideline: [thing] [action] [reason]. [next step].
+Skills:
+- /review: [Ref]: [🔴 bug|🟡 risk|🔵 nit|❓ q] <problem>. <fix>.
+- /commit: <type>[(<scope>)]: <imperative summary>
+- /task: Output taskwarrior_name + subtasks.
+Internalize [LOGIC] and [ASM] blocks. Output ONLY the final answer in 'caveman' voice. No tags, no headers, no fluff.
+Text: $text]],
+			model = "qwen2.5-coder:3b",
+		}
+
+		-----------------------------------------------------------------------
+		-- UTILITIES
+		-----------------------------------------------------------------------
+		gen.prompts["Quick_Fix"] = {
+			prompt = "Fix grammar and spelling only. Output ONLY result:\n$text",
+			replace = true,
+			model = "qwen2.5:0.5b",
+		}
+		gen.prompts["Suggest_Names"] = {
+			prompt = "Give 5 descriptive variable/function names. List only:\n$text",
+			model = "qwen2.5-coder:0.5b",
+		}
+		gen.prompts["Git_Commit"] = {
+			prompt = "Write concise git commit message. Output ONLY message:\n$text",
+			model = "qwen2.5:1.5b",
+		}
+		gen.prompts["Bullet_Points"] = {
+			prompt = "Turn into clean markdown bullet points:\n$text",
+			model = "llama3.2:1b",
+		}
+		gen.prompts["Refactor_Code"] = {
+			prompt = "Refactor for idiomatic flow. Explain changes briefly:\n$text",
+			model = "qwen2.5-coder:3b",
+			replace = true,
+		}
+		gen.prompts["Pseudocode"] = {
+			prompt = "Convert to high-level logic steps. No syntax:\n$text",
+			model = "qwen2.5-coder:3b",
+			replace = true,
+		}
+		gen.prompts["Duck_Socratic"] = {
+			prompt = "Socratic Rubber Duck. DO NOT give answer. Ask 2-3 deep questions:\n$text",
+			model = "deepseek-r1:7b",
+		}
+		gen.prompts["Unit_Tests"] = {
+			prompt = "Write comprehensive unit tests:\n$text",
+			model = "qwen2.5-coder:7b",
+		}
+		gen.prompts["ELI5_Drunk"] = {
+			prompt = "Explain like I'm 5 and you're slightly drunk. Use analogies. No jargon:\n$text",
+			model = "phi4-mini:3.8b",
 		}
 	end,
 }
