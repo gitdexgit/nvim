@@ -2,45 +2,36 @@ return {
 	{
 		"ThePrimeagen/harpoon",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		branch = "harpoon2", -- IMPORTANT: Install the new version
+		branch = "harpoon2",
 
 		config = function()
-
 			local harpoon = require("harpoon")
 
 			harpoon:setup({
-				-- Make esc which exists harpoon save on toggle so you dont have to :w all the time to apply changes.
 				settings = {
 					save_on_toggle = true,
 				},
 			})
 
-			-- Use empty setup table to prevent conflicts
-			-- harpoon:setup({})
-
 			vim.keymap.set("n", "<leader>A", function()
 				harpoon:list():prepend()
 			end, { desc = "Harpoon: Prepend (Set to Slot 1)" })
 
+            -- append to the lest
 			vim.keymap.set("n", "<leader>a", function()
 				harpoon:list():add()
 			end, { desc = "Harpoon: Add File to List" })
 
 			vim.keymap.set("n", "<C-e>", function()
-				harpoon.ui:toggle_quick_menu(harpoon:list())
+				harpoon.ui:toggle_quick_menu(harpoon:list(), { height_in_lines = 10 })
 			end, { desc = "Harpoon: Toggle Quick Menu" })
 
-			--# an ergonomic way to bring the menu.
 			vim.keymap.set("n", "<leader>h", function()
-				harpoon.ui:toggle_quick_menu(harpoon:list())
+				harpoon.ui:toggle_quick_menu(harpoon:list(), { height_in_lines = 10 })
 			end, { desc = "Harpoon: Toggle Quick Menu" })
 
-			-- Navigation Keymaps (Select Mark N)
 
-            --# If you have more than 5 things inside harpoon... don't even bother remembering... just open harpoon and go to 5th location
-            -- or don't have 5 things maniac.... You can only juggle 2 things or 3 things max... 4 if you stretch your luck. 5 is max sure the limit
-			-- JUMPING (No Shift - Fastest Access)
-			-- Using your layout: + [ { ( &
+            -- programming symbols do the switch.
 			vim.keymap.set("n", "<leader>+", function()
 				harpoon:list():select(1)
 			end, { desc = "Harpoon: Go to 1" })
@@ -56,10 +47,25 @@ return {
 			vim.keymap.set("n", "<leader>&", function()
 				harpoon:list():select(5)
 			end, { desc = "Harpoon: Go to 5" })
+			vim.keymap.set("n", "<leader>=", function()
+				harpoon:list():select(6)
+			end, { desc = "Harpoon: Go tho 6" })
+			vim.keymap.set("n", "<leader>)", function()
+				harpoon:list():select(7)
+			end, { desc = "Harpoon: Go tho 7" })
+			vim.keymap.set("n", "<leader>}", function()
+				harpoon:list():select(8)
+			end, { desc = "Harpoon: Go tho 8" })
+			vim.keymap.set("n", "<leader>]", function()
+				harpoon:list():select(9)
+			end, { desc = "Harpoon: Go tho 9" })
+			vim.keymap.set("n", "<leader>*", function()
+				harpoon:list():select(10)
+			end, { desc = "Harpoon: Go tho 10" })
 
-            -- Replace current file with a harpoon location and remove the old location from the list.
-			-- REPLACING (Requires Shift - Rare Action)
-			-- Using your layout: 1 2 3 4 5
+
+
+            -- leader+shift+programming symbols do the swap
 			vim.keymap.set("n", "<leader>1", function()
 				harpoon:list():replace_at(1)
 			end, { desc = "Harpoon: Replace Slot 1" })
@@ -75,6 +81,21 @@ return {
 			vim.keymap.set("n", "<leader>5", function()
 				harpoon:list():replace_at(5)
 			end, { desc = "Harpoon: Replace Slot 5" })
+			vim.keymap.set("n", "<leader>6", function()
+				harpoon:list():replace_at(6)
+			end, { desc = "Harpoon: Replace Slot 6" })
+			vim.keymap.set("n", "<leader>7", function()
+				harpoon:list():replace_at(7)
+			end, { desc = "Harpoon: Replace Slot 7" })
+			vim.keymap.set("n", "<leader>8", function()
+				harpoon:list():replace_at(8)
+			end, { desc = "Harpoon: Replace Slot 8" })
+			vim.keymap.set("n", "<leader>9", function()
+				harpoon:list():replace_at(9)
+			end, { desc = "Harpoon: Replace Slot 9" })
+			vim.keymap.set("n", "<leader>10", function()
+				harpoon:list():replace_at(10)
+			end, { desc = "Harpoon: Replace Slot 10" })
 		end,
 	},
 }
