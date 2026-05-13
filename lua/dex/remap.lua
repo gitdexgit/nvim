@@ -32,8 +32,8 @@ vim.keymap.set("n", "=ap", "ma=ap'a")
 vim.keymap.set("n", "<CR>", "<CR>", { noremap = true })
 
 --# why not ? I don't need c-y I have capslock and shit lol
-vim.keymap.set("n", "<c-i>", "<C-i>zz")
-vim.keymap.set("n", "<c-o>", "<C-o>zz")
+vim.keymap.set("n", "<C-i>", "<C-i>zz")
+vim.keymap.set("n", "<C-o>", "<C-o>zz")
 
 vim.keymap.set("n", "<A-s>", "<C-i>zz")
 vim.keymap.set("n", "<A-d>", "<C-o>zz")
@@ -346,10 +346,9 @@ end, { expr = true, silent = true, desc = "Smart $ motion" })
 -- Map Ctrl+b to move the cursor backward (left) in Insert Mode
 -- vim.keymap.set("i", "<C-b>", "<Left>")
 
--- Go to the first non-whitespace character of the line (like ^)
--- Not quite like C-a if I want C-a I just do the like Capslock+a
+
+-- Simulate temrinal C-a and C-e to go to end of line and beginning of line in insert mode.
 vim.keymap.set("i", "<C-a>", "<C-o>0")
--- Go to the end of the line (like Ctrl+e in the terminal)
 vim.keymap.set("i", "<C-e>", "<End>")
 
 -- vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { silent = true })
