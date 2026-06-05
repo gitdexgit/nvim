@@ -10,21 +10,65 @@ require("dex.lazy_init")
 -- Consolidated Markdown & Spell Settings
 local markdown_spell_group = vim.api.nvim_create_augroup("MarkdownSpell", { clear = true })
 
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	group = markdown_spell_group,
+-- 	pattern = { "markdown", "md", "text" },
+-- 	callback = function()
+-- 		vim.opt_local.spell = true
+-- 		vim.opt_local.spelllang = "en"
+-- 		vim.opt_local.shiftwidth = 3
+-- 		vim.opt_local.tabstop = 3
+-- 		vim.opt_local.wrap = true
+-- 		-- ADD THESE LINES:
+-- 		vim.opt_local.smartindent = false
+-- 		vim.opt_local.autoindent = false
+-- 		vim.opt_local.indentexpr = ""
+-- 	end,
+-- })
+
+
+-- 1. Add this to top of file (outside any function)
+vim.g.markdown_folding = 1
+
+-- 2. Update your existing group
 vim.api.nvim_create_autocmd("FileType", {
-	group = markdown_spell_group,
-	pattern = { "markdown", "md", "text" },
-	callback = function()
-		vim.opt_local.spell = true
-		vim.opt_local.spelllang = "en"
-		vim.opt_local.shiftwidth = 3
-		vim.opt_local.tabstop = 3
-		vim.opt_local.wrap = true
-		-- ADD THESE LINES:
-		vim.opt_local.smartindent = false
-		vim.opt_local.autoindent = false
-		vim.opt_local.indentexpr = ""
-	end,
+    group = markdown_spell_group,
+    pattern = { "markdown", "md" },
+    callback = function()
+        vim.opt_local.spell = true
+        vim.opt_local.spelllang = "en"
+        vim.opt_local.shiftwidth = 3
+        vim.opt_local.tabstop = 3
+        vim.opt_local.wrap = true
+        vim.opt_local.smartindent = false
+        vim.opt_local.autoindent = false
+        vim.opt_local.indentexpr = ""
+
+        -- FOLDING CONFIG
+        vim.opt_local.foldmethod = "expr"
+        -- Use native TS foldexpr (NVIM 0.10+)
+        vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        vim.opt_local.foldlevel = 99
+
+        -- ORG-STYLE TAB
+        vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
+    end,
 })
+
+
+vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
+    group = markdown_spell_group,
+    pattern = "markdown",
+    callback = function()
+        vim.schedule(function()
+            vim.opt_local.foldmethod = "expr"
+            vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.opt_local.foldlevel = 99
+            vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
+        end)
+    end,
+})
+
 
 -- This ensures the red highlight stays even when you switch themes
 -- vim.api.nvim_create_autocmd("ColorScheme", {
@@ -58,7 +102,7 @@ autocmd("TextYankPost", {
 	callback = function()
 		vim.highlight.on_yank({
 			higroup = "IncSearch",
-			timeout = 40,
+			timeout = 60,
 		})
 	end,
 })
@@ -225,3 +269,5 @@ function MyTabLine()
 end
 
 vim.opt.tabline = "%!v:lua.MyTabLine()"
+
+
