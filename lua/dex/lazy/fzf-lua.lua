@@ -12,20 +12,22 @@ return {
 						vertical = "up:70%",
 					},
 				},
+
 				-- use exact string matching, but only for the files picker
 				files = {
 					fzf_opts = {
-						["--exact"] = "",
-						["--no-sort"] = "",
+						["--exact"] = false,
+						["--no-sort"] = false,
 					},
 				},
 
 				keymap = {
 					builtin = {
 						-- Use your Alt-j / Alt-k scrolling logic
-						["<C-u>"] = "preview-page-up",
-						["<C-d>"] = "preview-page-down",
+						-- ["<C-u>"] = "preview-page-up",
+						-- ["<C-d>"] = "preview-page-down",
 						["<C-g>"] = "preview-page-up",
+						["<C-b>"] = "preview-page-up",
 						["<C-f>"] = "preview-page-down",
 						["<C-e>"] = "preview-down",
 						["<C-y>"] = "preview-up",
@@ -37,12 +39,13 @@ return {
 
 					fzf = {
 						["ctrl-q"] = "select-all+accept",
-						["ctrl-j"] = "down",
-						["ctrl-k"] = "up",
+						-- ["ctrl-j"] = "down",
+						-- ["ctrl-k"] = "up",
 						-- add these:
-						["ctrl-u"] = "preview-page-up",
-						["ctrl-d"] = "preview-page-down",
+						-- ["ctrl-u"] = "preview-page-up",
+						-- ["ctrl-d"] = "preview-page-down",
 						["ctrl-f"] = "preview-page-down",
+						["ctrl-b"] = "preview-page-down",
 						["ctrl-g"] = "preview-page-up",
 						["alt-j"] = "preview-down",
 						["alt-k"] = "preview-up",
@@ -148,47 +151,30 @@ return {
 				{ noremap = true, silent = true, desc = "FZF-Lua: registers" }
 			)
 
-			--- works
-			--- TODO:
-			--- Harppon FZF With numbers. Works and all. But previewer sucks. And fzf builtint keys don't work. only fzf {} keys work.
-			---
-			-- vim.keymap.set("n", "<leader>ph", function()
-			-- 	local harpoon = require("harpoon")
-			-- 	local harpoon_list = harpoon:list()
-			-- 	local raw = harpoon_list:display()
-			-- 	local cwd = vim.fn.getcwd()
-			--
-			-- 	local items = {}
-			-- 	for i, item in ipairs(raw) do
-			-- 		-- "N\trelative\tabsolute"  (tab-delimited, abs path for preview)
-			-- 		table.insert(items, string.format("%d\t%s\t%s/%s", i, item, cwd, item))
-			-- 	end
-			--
-			-- 	require("fzf-lua").fzf_exec(items, {
-			-- 		prompt = "Harpoon> ",
-			-- 		previewer = false,
-			-- 		fzf_opts = {
-			-- 			["--delimiter"] = "\t",
-			-- 			["--with-nth"] = "1,2", -- display: number + filename
-			-- 			["--preview"] = "bat --color=always --style=numbers {3}", -- abs path
-			-- 		},
-			-- 		actions = {
-			-- 			["default"] = function(selected)
-			-- 				local idx = tonumber(selected[1]:match("^(%d+)"))
-			-- 				if idx then
-			-- 					harpoon_list:select(idx)
-			-- 				end
-			-- 			end,
-			-- 		},
-			-- 	})
-			-- end, { desc = "Harpoon: FZF Search" })
-
-			--          works
-			-- feat:
-			-- add lines numbers to previewer
-			--
-			-- harpoon + fzf lua it works fine. But lacks harppon numbers.
+			-- Harpoon + FZF
 			vim.keymap.set("n", "<leader>ph", function()
+				local harpoon = require("harpoon")
+				local harpoon_list = harpoon:list()
+				local items = harpoon_list:display()
+
+				require("fzf-lua").fzf_exec(items, {
+					prompt = "Harpoon> ",
+					cwd = vim.fn.getcwd(),
+					previewer = "builtin",
+					actions = {
+						["default"] = function(selected)
+							for i, item in ipairs(items) do
+								if item == selected[1] then
+									harpoon_list:select(i)
+									break
+								end
+							end
+						end,
+					},
+				})
+			end, { desc = "Harpoon: FZF Search" })
+
+			vim.keymap.set("n", "<leader>fh", function()
 				local harpoon = require("harpoon")
 				local harpoon_list = harpoon:list()
 				local items = harpoon_list:display()
@@ -272,13 +258,6 @@ return {
 				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
 			)
 
-			-- NOTICE:
-			-- fzf-lua jumps... umm don't use <leader>j I think it's default for something in my remap for:
-			--
-			-- vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-			-- vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
-			--
-			-- I never really use this lprev lnext idk what they are used for? but maybe later. Keep it capital 'J'
 			vim.keymap.set(
 				"n",
 				"<leader>J",
