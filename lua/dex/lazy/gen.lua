@@ -1,7 +1,7 @@
 return {
 	"David-Kunz/gen.nvim",
 	opts = {
-		model = "qwen2.5-coder:3b",
+		model = "qwen2.5-coder:3b", -- Fast default
 		display_mode = "float",
 		show_prompt = true,
 		show_model = true,
@@ -55,8 +55,13 @@ return {
 		gen.setup(opts)
 
 		-----------------------------------------------------------------------
-		-- CAVE-LEARN SYSTEM (7b)
+		-- HEAVY LOGIC (7b / 8b / e4b)
 		-----------------------------------------------------------------------
+		gen.prompts["Big_Brain"] = {
+			prompt = "Analyze deeply and provide expert solution:\n$text",
+			model = "gemma4:e4b",
+		}
+
 		gen.prompts["Caveman_Learn"] = {
 			prompt = [=[
 Terse. Technical substance stay. Fluff die. Q&A learning evaluator.
@@ -82,8 +87,38 @@ Text: $text
 			model = "qwen2.5-coder:7b",
 		}
 
+		gen.prompts["Duck_Socratic"] = {
+			prompt = "Socratic Rubber Duck. DO NOT give answer. Ask 2-3 deep questions:\n$text",
+			model = "deepseek-r1:8b",
+		}
+
+		gen.prompts["Unit_Tests"] = {
+			prompt = "Write comprehensive unit tests:\n$text",
+			model = "qwen2.5-coder:7b",
+		}
+
+		gen.prompts["Refactor_Code"] = {
+			prompt = "Refactor for idiomatic flow. Explain changes briefly:\n$text",
+			model = "qwen2.5-coder:7b",
+			replace = true,
+		}
+
 		-----------------------------------------------------------------------
-		-- ATOMIC REFINER (3b)
+		-- MID-SPEED (3b)
+		-----------------------------------------------------------------------
+		gen.prompts["Suggest_Names"] = {
+			prompt = "Give 5 descriptive variable/function names. List only:\n$text",
+			model = "qwen2.5-coder:3b",
+		}
+
+		gen.prompts["Pseudocode"] = {
+			prompt = "Convert to high-level logic steps. No syntax:\n$text",
+			model = "qwen2.5-coder:3b",
+			replace = true,
+		}
+
+		-----------------------------------------------------------------------
+		-- FAST UTILS (llama3.2)
 		-----------------------------------------------------------------------
 		gen.prompts["Atomic_Refine"] = {
 			prompt = [=[
@@ -105,12 +140,9 @@ Rules:
 [/ANS]
 Input: $text
 ]=],
-			model = "qwen2.5-coder:3b",
+			model = "llama3.2:latest",
 		}
 
-		-----------------------------------------------------------------------
-		-- SEARCH ORACLE (3b)
-		-----------------------------------------------------------------------
 		gen.prompts["Search_Oracle"] = {
 			prompt = [=[
 Role: Parse intent. Know answer internally. Never reveal. Output queries that lead user there.
@@ -125,12 +157,9 @@ Rules: Keyword-dense. Cover core, variations, edge cases, inversions. Never writ
 </queries>
 Input: $text
 ]=],
-			model = "qwen2.5:3b",
+			model = "llama3.2:latest",
 		}
 
-		-----------------------------------------------------------------------
-		-- TASK ARCHITECT (1.5b)
-		-----------------------------------------------------------------------
 		gen.prompts["Task_Architect"] = {
 			prompt = [=[
 Act as Taskwarrior architect. Convert brain dump into atomic, actionable tasks.
@@ -141,11 +170,27 @@ Rules:
 4. No conversational filler or explanations.
 Dump: $text
 ]=],
-			model = "qwen2.5:1.5b",
+			model = "llama3.2:latest",
+		}
+
+		gen.prompts["Quick_Fix"] = {
+			prompt = "Fix grammar and spelling only. Output ONLY result:\n$text",
+			replace = true,
+			model = "llama3.2:latest",
+		}
+
+		gen.prompts["Git_Commit"] = {
+			prompt = "Write concise git commit message. Output ONLY message:\n$text",
+			model = "llama3.2:latest",
+		}
+
+		gen.prompts["Bullet_Points"] = {
+			prompt = "Turn into clean markdown bullet points:\n$text",
+			model = "llama3.2:latest",
 		}
 
 		-----------------------------------------------------------------------
-		-- CAVEMAN MASTER (3b)
+		-- SPECIALIZED
 		-----------------------------------------------------------------------
 		gen.prompts["Caveman"] = {
 			prompt = [[
@@ -158,50 +203,12 @@ Skills:
 - /task: Output taskwarrior_name + subtasks.
 Internalize [LOGIC] and [ASM] blocks. Output ONLY the final answer in 'caveman' voice. No tags, no headers, no fluff.
 Text: $text]],
-			model = "qwen2.5-coder:3b",
+			model = "gemma4-e2b-caveman:latest",
 		}
 
-		-----------------------------------------------------------------------
-		-- UTILITIES
-		-----------------------------------------------------------------------
-		gen.prompts["Quick_Fix"] = {
-			prompt = "Fix grammar and spelling only. Output ONLY result:\n$text",
-			replace = true,
-			model = "qwen2.5:0.5b",
-		}
-		gen.prompts["Suggest_Names"] = {
-			prompt = "Give 5 descriptive variable/function names. List only:\n$text",
-			model = "qwen2.5-coder:0.5b",
-		}
-		gen.prompts["Git_Commit"] = {
-			prompt = "Write concise git commit message. Output ONLY message:\n$text",
-			model = "qwen2.5:1.5b",
-		}
-		gen.prompts["Bullet_Points"] = {
-			prompt = "Turn into clean markdown bullet points:\n$text",
-			model = "llama3.2:1b",
-		}
-		gen.prompts["Refactor_Code"] = {
-			prompt = "Refactor for idiomatic flow. Explain changes briefly:\n$text",
-			model = "qwen2.5-coder:3b",
-			replace = true,
-		}
-		gen.prompts["Pseudocode"] = {
-			prompt = "Convert to high-level logic steps. No syntax:\n$text",
-			model = "qwen2.5-coder:3b",
-			replace = true,
-		}
-		gen.prompts["Duck_Socratic"] = {
-			prompt = "Socratic Rubber Duck. DO NOT give answer. Ask 2-3 deep questions:\n$text",
-			model = "deepseek-r1:7b",
-		}
-		gen.prompts["Unit_Tests"] = {
-			prompt = "Write comprehensive unit tests:\n$text",
-			model = "qwen2.5-coder:7b",
-		}
 		gen.prompts["ELI5_Drunk"] = {
 			prompt = "Explain like I'm 5 and you're slightly drunk. Use analogies. No jargon:\n$text",
-			model = "phi4-mini:3.8b",
+			model = "hermes3:latest",
 		}
 	end,
 }
