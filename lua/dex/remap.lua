@@ -1,3 +1,8 @@
+
+
+-- making S-u in normal mode useful.
+vim.keymap.set("n", "U", "<C-r>")
+
 -- Map Space to do nothing
 vim.keymap.set("n", "<Space>", "<Nop>", { noremap = true, silent = true })
 
@@ -11,6 +16,29 @@ vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+
+-- Scroll next window down
+vim.keymap.set('n', '<M-C-d>', function()
+  local next_win = vim.fn.winnr() % vim.fn.winnr('$') + 1
+  vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
+end)
+
+
+vim.keymap.set('n', '<M-C-v>', function()
+  local next_win = vim.fn.winnr() % vim.fn.winnr('$') + 1
+  vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
+end)
+
+---- sadly <M-C-S-v> Doesn't work in the temrinal So it only works on emacs. I guess
+
+
+vim.keymap.set('n', '<M-C-u>', function()
+  local next_win = vim.fn.winnr() % vim.fn.winnr('$') + 1
+  local scroll_up = vim.api.nvim_replace_termcodes("<C-u>", true, false, true)
+  vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! " .. scroll_up)
+end)
+
 
 --# i don't understand this <Plug>.... thing is this a lazynvim ? or is this in packer or what
 -- vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
@@ -31,6 +59,57 @@ vim.keymap.set("n", "=ap", "ma=ap'a")
 
 vim.keymap.set("n", "<CR>", "<CR>", { noremap = true })
 
+vim.keymap.set('i', '<C-^>', '<C-o><C-^>')
+
+
+-- Emacs infection
+
+-- Jump paragraphs in Insert mode
+vim.keymap.set("i", "<C-Down>", "<C-o>}", { desc = "Jump paragraph down" })
+vim.keymap.set("i", "<C-Up>", "<C-o>{", { desc = "Jump paragraph up" })
+
+vim.keymap.set("n", "<C-Down>", "}", { desc = "Jump paragraph down" })
+vim.keymap.set("n", "<C-Up>", "{", { desc = "Jump paragraph up" })
+
+vim.keymap.set("i", "<C-S-Down>", "<C-o>}", { desc = "Jump paragraph down" })
+vim.keymap.set("i", "<C-S-Up>", "<C-o>{", { desc = "Jump paragraph up" })
+
+vim.keymap.set("n", "<C-S-Down>", "}", { desc = "Jump paragraph down" })
+vim.keymap.set("n", "<C-S-Up>", "{", { desc = "Jump paragraph up" })
+
+vim.keymap.set("n", "<S-Up>", "<C-u>zz", { desc = "Jump paragraph up" })
+vim.keymap.set("n", "<S-Down>", "<C-d>zz", { desc = "Jump paragraph down" })
+
+local last_pos = {0, 0}
+local state = 0
+
+vim.keymap.set('n', 'zz', function()
+  local curr_pos = vim.api.nvim_win_get_cursor(0)
+  local old_scrolloff = vim.opt.scrolloff:get() -- Save current (8 or 999)
+
+  if curr_pos[1] ~= last_pos[1] or curr_pos[2] ~= last_pos[2] then
+    state = 0
+  end
+
+  -- Force 0 padding for absolute top/bottom
+  vim.opt.scrolloff = 0
+
+  if state == 0 then
+    vim.cmd("normal! zz")
+    state = 1
+  elseif state == 1 then
+    vim.cmd("normal! zt")
+    state = 2
+  else
+    vim.cmd("normal! zb")
+    state = 0
+  end
+
+  vim.opt.scrolloff = old_scrolloff -- Restore padding
+  last_pos = curr_pos
+end, { desc = "Smart zz (Emacs C-l style) - No Padding" })
+
+
 --# why not ? I don't need c-y I have capslock and shit lol
 vim.keymap.set("n", "<C-i>", "<C-i>zz")
 vim.keymap.set("n", "<C-o>", "<C-o>zz")
@@ -41,7 +120,7 @@ vim.keymap.set("n", "<A-d>", "<C-o>zz")
 vim.keymap.set("n", "<A-i>", "ma=ap'a")
 
 --#Oh this how he restarts the Lsp Ah I see
-vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>")
+vim.keymap.set("n", "<leader>zig", "<cmd>lsp restart<cr>")
 
 --# Mr.Prime has this <leader>vwm but it require("vim-with-me") and I don't know what's this? and
 --# I don't care tbh maybe it's a twitch things ? gotta maybe watch old vids or twitch live stream to know tbh I don't care
@@ -106,23 +185,24 @@ vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above" })
 vim.keymap.set("i", "<A-O>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
 
 -- Remap Ctrl+f to scroll up
-vim.keymap.set("n", "<C-f>", "<C-f>zz")
-vim.keymap.set("n", "<C-g>", "<C-u>zz")
-vim.keymap.set("v", "<C-f>", "<C-f>zz")
-vim.keymap.set("v", "<C-g>", "<C-u>zz")
+-- vim.keymap.set("n", "<C-f>", "<C-f>zz")
+-- vim.keymap.set("n", "<C-g>", "<C-u>zz")
+-- vim.keymap.set("v", "<C-f>", "<C-f>zz")
+-- vim.keymap.set("v", "<C-g>", "<C-u>zz")
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "<A-f>", "<C-d>zz")
-vim.keymap.set("v", "<A-j>", "<C-d>zz")
-vim.keymap.set("v", "<A-f>", "<C-d>zz")
+vim.keymap.set("n", "<PageUp>", "<C-u>zz")
+vim.keymap.set("n", "<PageDown>", "<C-d>zz")
+
+-- vim.keymap.set("n", "<A-f>", "<C-d>zz")
+-- vim.keymap.set("v", "<A-f>", "<C-d>zz")
 
 -- Remap Ctrl+b to scroll down
 -- I don't use C-b and C-f just make everything C-u C-d or use defaults man
 -- vim.keymap.set("n", "<C-b>", "<C-b>zz")
-vim.keymap.set("n", "<A-b>", "<C-u>zz")
-vim.keymap.set("v", "<A-k>", "<C-u>zz")
-vim.keymap.set("v", "<A-b>", "<C-u>zz")
+-- vim.keymap.set("n", "<A-b>", "<C-u>zz")
+-- vim.keymap.set("v", "<A-b>", "<C-u>zz")
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
@@ -220,8 +300,8 @@ vim.keymap.set("n", "<leader>+", "<Cmd>wincmd =<CR>", { desc = "Decrease window 
 -- QoL movements (don't use alt+hjkl in tmux)
 vim.keymap.set("n", "<A-l>", "20zl", { desc = "I don't want to hit shift " })
 vim.keymap.set("n", "<A-h>", "20zh", { desc = "I don't want to hit shift" })
-vim.keymap.set("n", "<A-S-j>", "<c-e>", { desc = "I don't want to hit shift" })
-vim.keymap.set("n", "<A-S-k>", "<c-y>", { desc = "I don't want to hit shift" })
+-- vim.keymap.set("n", "<A-S-j>", "<c-e>", { desc = "I don't want to hit shift" })
+-- vim.keymap.set("n", "<A-S-k>", "<c-y>", { desc = "I don't want to hit shift" })
 vim.keymap.set("n", "<A-S-l>", "zl", { desc = "I don't want to hit shift " })
 vim.keymap.set("n", "<A-S-h>", "zh", { desc = "I don't want to hit shift" })
 
@@ -238,10 +318,17 @@ vim.keymap.set("n", "<S-h>", "gT", { desc = "Previous tab" })
 
 vim.keymap.set("n", "M", ":tab split<CR>", { silent = true, desc = "Zoom window" })
 
+
+-- THIS IS NICE: But I never really use it I like the idea of harpoon better. So if I had tabs I move to the mmanually ok?
 -- Tab Navigation (Moved to Function Keys)
-for i = 1, 9 do
-	vim.keymap.set("n", "<leader><F" .. i .. ">", i .. "gt", { desc = "Tab " .. i })
-end
+-- for i = 1, 9 do
+-- 	vim.keymap.set("n", "<leader><F" .. i .. ">", i .. "gt", { desc = "Tab " .. i })
+-- end
+
+
+
+
+
 
 -- Manual tab switching
 -- vim.keymap.set("n", "<leader>1", "1gt", { desc = "Tab 1" })
