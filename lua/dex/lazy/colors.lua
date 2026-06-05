@@ -1,24 +1,25 @@
 function ColorMyPencils(color)
-    color = color or "rose-pine-moon"
-    vim.cmd.colorscheme(color)
+	color = color or "rose-pine-moon"
+	vim.cmd.colorscheme(color)
+	vim.cmd("doautocmd ColorScheme")
 
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	-- vim.api.nvim_set_hl(0, "@lsp.type.method", { link = "Function" })
+	--    vim.api.nvim_set_hl(0, "pythonAttribute", { link = "Function" })
+	--    vim.api.nvim_set_hl(0, "@function.method.call", { link = "Function" })
+	-- THE ONLY SPELL HIGHLIGHT DEFINITION
+	vim.api.nvim_set_hl(0, "SpellBad", {
+		fg = "#ff5555",
+		bold = true,
+		underline = false,
+		undercurl = false,
+		force = true,
+	})
 
-    -- THE ONLY SPELL HIGHLIGHT DEFINITION
-    vim.api.nvim_set_hl(0, "SpellBad", {
-        fg = "#ff5555",
-        bold = true,
-        underline = false,
-        undercurl = false,
-        force = true
-    })
-
-    -- Keep this for your tabline colors, but make sure
-    -- those autocmds don't touch SpellBad anymore!
-    vim.cmd('doautocmd ColorScheme')
+	-- Keep this for your tabline colors, but make sure
+	-- those autocmds don't touch SpellBad anymore!
 end
-
 
 return {
 
