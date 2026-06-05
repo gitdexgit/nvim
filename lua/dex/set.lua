@@ -1,6 +1,9 @@
 vim.opt.guicursor = ""
 vim.g.markdown_recommended_style = 0
 
+-- This so that espanso can move the cursor to position so espanso snippets work in insert mode
+vim.opt.whichwrap:append("[,]")
+
 -- idk what this is even for
 -- vim.g.maplocalleader = " "
 
@@ -21,6 +24,7 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.opt.smartindent = true
+
 
 vim.opt.wrap = false
 
@@ -44,4 +48,8 @@ vim.opt.colorcolumn = "80"
 
 -- whateven is this
 -- vim.opt.listchars = 'tab:▸\\ ,trail:·,space:·,extends:»,precedes:«'
+
+
+
+--- setting up find command
 
