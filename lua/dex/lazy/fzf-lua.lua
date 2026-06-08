@@ -26,11 +26,11 @@ return {
 						-- Use your Alt-j / Alt-k scrolling logic
 						-- ["<C-u>"] = "preview-page-up",
 						-- ["<C-d>"] = "preview-page-down",
-						["<C-g>"] = "preview-page-up",
-						["<C-b>"] = "preview-page-up",
-						["<C-f>"] = "preview-page-down",
-						["<C-e>"] = "preview-down",
-						["<C-y>"] = "preview-up",
+						-- ["<C-g>"] = "preview-page-up",
+						-- ["<C-b>"] = "preview-page-up",
+						-- ["<C-f>"] = "preview-page-down",
+						-- ["<C-e>"] = "preview-down",
+						-- ["<C-y>"] = "preview-up",
 						["<M-j>"] = "preview-down",
 						["<M-k>"] = "preview-up",
 						["<M-S-j>"] = "preview-page-down",
@@ -44,13 +44,13 @@ return {
 						-- add these:
 						-- ["ctrl-u"] = "preview-page-up",
 						-- ["ctrl-d"] = "preview-page-down",
-						["ctrl-f"] = "preview-page-down",
-						["ctrl-b"] = "preview-page-down",
-						["ctrl-g"] = "preview-page-up",
+						-- ["ctrl-f"] = "preview-page-down",
+						-- ["ctrl-b"] = "preview-page-down",
+						-- ["ctrl-g"] = "preview-page-up",
 						["alt-j"] = "preview-down",
 						["alt-k"] = "preview-up",
-						["alt-n"] = "down",
-						["alt-p"] = "up",
+						-- ["alt-n"] = "down",
+						-- ["alt-p"] = "up",
 					},
 				},
 			})
@@ -271,6 +271,7 @@ return {
 				require("fzf-lua").builtin,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
 			)
+			vim.keymap.set("n", "<leader>fc", "<cmd>FzfLua changes<CR>")
 			vim.keymap.set(
 				"v",
 				"<leader>?",

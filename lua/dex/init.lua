@@ -4,6 +4,13 @@ require("dex.remap")
 require("dex.clipboard")
 require("dex.lazy_init")
 
+
+
+
+
+
+
+
 -- Force Neovim to prioritize the parsers installed by Lazy <--- Remove this test if it makes tresesiter stop the errorr
 -- vim.opt.runtimepath:prepend(vim.fn.stdpath("data") .. "/lazy/nvim-treesitter")
 
@@ -28,7 +35,7 @@ local markdown_spell_group = vim.api.nvim_create_augroup("MarkdownSpell", { clea
 
 
 -- 1. Add this to top of file (outside any function)
-vim.g.markdown_folding = 1
+-- vim.g.markdown_folding = 1
 
 -- 2. Update your existing group
 vim.api.nvim_create_autocmd("FileType", {
@@ -45,13 +52,10 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.indentexpr = ""
 
         -- FOLDING CONFIG
-        vim.opt_local.foldmethod = "expr"
+        -- vim.opt_local.foldmethod = "expr"
         -- Use native TS foldexpr (NVIM 0.10+)
-        vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-        vim.opt_local.foldlevel = 99
-
-        -- ORG-STYLE TAB
-        vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
+        -- vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        -- vim.opt_local.foldlevel = 99
     end,
 })
 
@@ -64,7 +68,7 @@ vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
             vim.opt_local.foldmethod = "expr"
             vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
             vim.opt_local.foldlevel = 99
-            vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
+            -- vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
         end)
     end,
 })
@@ -161,7 +165,7 @@ autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>vrn", function()
 			vim.lsp.buf.rename()
 		end, opts)
-		vim.keymap.set("i", "<C-h>", function()
+		vim.keymap.set("i", "<C-S-h>", function()
 			vim.lsp.buf.signature_help()
 		end, opts)
 

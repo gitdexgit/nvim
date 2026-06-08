@@ -1,5 +1,4 @@
 
-
 -- making S-u in normal mode useful.
 vim.keymap.set("n", "U", "<C-r>")
 
@@ -7,13 +6,25 @@ vim.keymap.set("n", "U", "<C-r>")
 vim.keymap.set("n", "<Space>", "<Nop>", { noremap = true, silent = true })
 
 -- Map Backspace to do nothing
+
 vim.keymap.set("n", "<BS>", "<Nop>", { noremap = true, silent = true })
 
+vim.keymap.set("i", "<C-Space>", "<C-o>v")
+vim.keymap.set("i", "<C-@>", "<C-o>v") -- Fallback for terminal
+
+-- Try this
+-- vim.keymap.set("i", "<C-Space>", "<C-o>v", { silent = true })
+--
+-- vim.keymap.set("i", "<C-@>", "<C-o>v", { silent = true })
+
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+-- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+
 
 --# <leader>pv is in neo-tree it brings a neo-tree float. because :Ex is stupid with jumplist
 
+-- I used to find this cool but it's whatever it's meh I'll keep it for whatever as comment
+-- But for prime I'll keep this for whatever reason why not.
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
@@ -30,7 +41,20 @@ vim.keymap.set('n', '<M-C-v>', function()
   vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
 end)
 
+
+
+
+
+
+
+
+
+
+
 ---- sadly <M-C-S-v> Doesn't work in the temrinal So it only works on emacs. I guess
+
+
+
 
 
 vim.keymap.set('n', '<M-C-u>', function()
@@ -62,52 +86,457 @@ vim.keymap.set("n", "<CR>", "<CR>", { noremap = true })
 vim.keymap.set('i', '<C-^>', '<C-o><C-^>')
 
 
--- Emacs infection
 
--- Jump paragraphs in Insert mode
-vim.keymap.set("i", "<C-Down>", "<C-o>}", { desc = "Jump paragraph down" })
-vim.keymap.set("i", "<C-Up>", "<C-o>{", { desc = "Jump paragraph up" })
 
-vim.keymap.set("n", "<C-Down>", "}", { desc = "Jump paragraph down" })
-vim.keymap.set("n", "<C-Up>", "{", { desc = "Jump paragraph up" })
 
-vim.keymap.set("i", "<C-S-Down>", "<C-o>}", { desc = "Jump paragraph down" })
-vim.keymap.set("i", "<C-S-Up>", "<C-o>{", { desc = "Jump paragraph up" })
 
-vim.keymap.set("n", "<C-S-Down>", "}", { desc = "Jump paragraph down" })
-vim.keymap.set("n", "<C-S-Up>", "{", { desc = "Jump paragraph up" })
 
-vim.keymap.set("n", "<S-Up>", "<C-u>zz", { desc = "Jump paragraph up" })
-vim.keymap.set("n", "<S-Down>", "<C-d>zz", { desc = "Jump paragraph down" })
 
-local last_pos = {0, 0}
-local state = 0
+-- =============================================================
+-- Emacs insert enhancements
+-- =============================================================
 
-vim.keymap.set('n', 'zz', function()
-  local curr_pos = vim.api.nvim_win_get_cursor(0)
-  local old_scrolloff = vim.opt.scrolloff:get() -- Save current (8 or 999)
 
-  if curr_pos[1] ~= last_pos[1] or curr_pos[2] ~= last_pos[2] then
-    state = 0
+--- Window management similar to emacs
+local modes = { "n", "i", "v" }
+
+for _, mode in ipairs(modes) do
+  local cmd_prefix = (mode == "i") and "<C-o>" or ""
+
+  -- C-x 0: Close current window
+  vim.keymap.set(mode, "<C-x>0", cmd_prefix .. "<C-w>c", { desc = "Close window" })
+
+  -- C-x 1: Close all other windows (Only)
+  vim.keymap.set(mode, "<C-x>1", cmd_prefix .. "<C-w>o", { desc = "Only window" })
+
+  -- C-x 2: Split horizontal
+  vim.keymap.set(mode, "<C-x>2", cmd_prefix .. "<C-w>s", { desc = "Split horizontal" })
+
+  -- C-x 3: Split vertical
+  vim.keymap.set(mode, "<C-x>3", cmd_prefix .. "<C-w>v", { desc = "Split vertical" })
+
+  -- C-x o: Jump to other window
+  vim.keymap.set(mode, "<C-x>o", cmd_prefix .. "<C-w>w", { desc = "Other window" })
+end
+
+
+
+
+
+-- M-! : Run + Show (Echo area)
+vim.keymap.set({ "n", "i" }, "<M-!>", function()
+  vim.ui.input({ prompt = "Shell command: " }, function(cmd)
+    if cmd and cmd ~= "" then
+      local out = vim.fn.system(cmd)
+      print(out)
+    end
+  end)
+end, { desc = "Shell command (show)" })
+
+-- M-u M-! : Run + Insert (Emacs C-u M-! style)
+vim.keymap.set({ "n", "i" }, "<M-u><M-!>", function()
+  vim.ui.input({ prompt = "Shell command (insert): " }, function(cmd)
+    if cmd and cmd ~= "" then
+      local out = vim.fn.systemlist(cmd)
+      vim.api.nvim_put(out, "c", true, true)
+    end
+  end)
+end, { desc = "Shell command (insert)" })
+
+-- M-x in insert: enter command mode
+vim.keymap.set("i", "<M-x>", "<C-o>:", { desc = "Emacs M-x" })
+-- M-x in normal: enter command mode
+vim.keymap.set("n", "<M-x>", ":", { desc = "Emacs M-x" })
+
+
+
+
+
+
+
+
+
+-- mimic C-t in emacs
+
+-- mimic C-t in emacs
+-- Swap 1 char
+vim.keymap.set("i", "<C-t>", "<Esc>xpa", { desc = "Transpose chars" })
+vim.keymap.set("n", "<C-t>", "xp", { desc = "Transpose chars" })
+
+-- mimic A-m in emacs
+-- Move to indentation
+vim.keymap.set("n", "<M-m>", "^", { desc = "Back to indentation" })
+vim.keymap.set("i", "<M-m>", "<C-o>^", { desc = "Back to indentation" })
+
+--- requries mini-operators.nvim
+--- This is an attempt to make a less scuffed M-t emacs.
+
+-- need this for M-t
+-- Define better `b` that actuall goes to the previous word and skips whitespace. But put it on a fake key:
+vim.keymap.set('n', '<Plug>(smart-b)', [[col('.') == 1 || col('.') == match(getline('.'), '\S') + 1 ? "?\\S\r" : "b"]], { expr = true })
+
+-- TODO:
+-- It still not the best I would love to make it a 1 to 1 match where it is smart to skip dots and -- and such. but later.
+-- mimic M-t In emacs
+-- Swap 2 words
+vim.keymap.set("i", "<M-t>", function()
+  local col = vim.fn.col('.')
+  local line = vim.api.nvim_get_current_line()
+  local first_char_col = vim.fn.match(line, [[\S]]) + 1
+
+  local keys = "<Esc><Right>bgsiwwgsiwea"
+
+  if col == 1 then
+    keys = "<Esc><Plug>(smart-b)gsiweegsiwe<Plug>(smart-b)<Plug>(smart-b)a"    -- Start of line: swap first two
+  elseif col > #line then
+    keys = "<Esc>bgsiweegsiwea"    -- End of line: swap last two
+  elseif col <= first_char_col then
+    keys = "<Esc>wbgsiwwgsiwea"    -- Before first word: swap first two
   end
 
-  -- Force 0 padding for absolute top/bottom
-  vim.opt.scrolloff = 0
+  return keys
+end, { expr = true, remap = true })
 
-  if state == 0 then
+
+vim.keymap.set("n", "<M-t>", function()
+  local col = vim.fn.col('.')
+  local line = vim.api.nvim_get_current_line()
+  local first_char_col = vim.fn.match(line, [[\S]]) + 1
+
+  local keys = "<Esc>bgsiweegsiwe"
+
+  if col == 1 then
+    keys = "<Esc><Plug>(smart-b)gsiweegsiwe<Plug>(smart-b)<Plug>(smart-b)"    -- Start of line: swap first two
+  elseif col > #line then
+    keys = "<Esc>bgsiweegsiwe"    -- End of line: swap last two
+  elseif col <= first_char_col then
+    keys = "<Esc>wbgsiweegsiwe"    -- Before first word: swap first two
+  end
+
+  return keys
+end, { expr = true, remap = true })
+
+-- mimic C-down left up right in emacs
+vim.keymap.set("i", "<C-Down>", "<C-o>}", { desc = "Jump paragraph down" })
+vim.keymap.set("i", "<C-Up>",   "<C-o>{", { desc = "Jump paragraph up" })
+vim.keymap.set("n", "<C-Down>", "}",       { desc = "Jump paragraph down" })
+vim.keymap.set("n", "<C-Up>",   "{",       { desc = "Jump paragraph up" })
+
+
+-- -------------------------------------------------------------
+-- Smart zz (Emacs C-l style: center → top → bottom)
+-- -------------------------------------------------------------
+-- -------------------------------------------------------------
+-- Smart recenter (Emacs C-l: center → top → bottom)
+-- Shared fn so both zz and insert-mode C-l use same state
+-- -------------------------------------------------------------
+local last_pos  = { 0, 0 }
+local zz_state  = 0
+
+local function smart_recenter()
+  local curr_pos = vim.api.nvim_win_get_cursor(0)
+  if curr_pos[1] ~= last_pos[1] or curr_pos[2] ~= last_pos[2] then
+    zz_state = 0
+  end
+  local old_scrolloff = vim.opt.scrolloff:get()
+  vim.opt.scrolloff = 0
+  if zz_state == 0 then
     vim.cmd("normal! zz")
-    state = 1
-  elseif state == 1 then
+    zz_state = 1
+  elseif zz_state == 1 then
     vim.cmd("normal! zt")
-    state = 2
+    zz_state = 2
   else
     vim.cmd("normal! zb")
-    state = 0
+    zz_state = 0
   end
-
-  vim.opt.scrolloff = old_scrolloff -- Restore padding
+  vim.opt.scrolloff = old_scrolloff
   last_pos = curr_pos
-end, { desc = "Smart zz (Emacs C-l style) - No Padding" })
+end
+
+vim.keymap.set("n", "zz",    smart_recenter, { desc = "Smart zz: center → top → bottom" })
+vim.keymap.set("i", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
+
+
+
+-- -------------------------------------------------------------
+-- Basic Movement (Insert)
+-- -------------------------------------------------------------
+-- NOTE: C-n/C-p shadow nvim-cmp completion nav.
+-- If using a completion plugin, either remove these two or remap
+-- completion to <Down>/<Up>.
+vim.keymap.set("i", "<C-f>", "<Right>", { desc = "Forward char" })
+vim.keymap.set("i", "<C-b>", "<Left>",  { desc = "Backward char" })
+vim.keymap.set("i", "<C-n>", "<Down>",  { desc = "Next line" })
+vim.keymap.set("i", "<C-p>", "<Up>",    { desc = "Previous line" })
+vim.keymap.set("i", "<C-a>", "<Home>",  { desc = "Beginning of line" })
+vim.keymap.set("i", "<C-e>", "<End>",   { desc = "End of line" })
+
+-- M-f/b: word forward/backward
+-- FIX: was <C-o>w (start of next word). M-f in Emacs → end of word → use e
+vim.keymap.set("i", "<M-f>", "<C-o>e", { desc = "Forward word" })
+vim.keymap.set("i", "<M-b>", "<C-o>b", { desc = "Backward word" })
+
+-- keep this
+vim.keymap.set("n", "<C-Right>", "w",   { desc = "End of line" })
+vim.keymap.set("n", "<C-left>", "b",   { desc = "End of line" })
+
+-- I have keyd so this is Capslock-f and A-
+-- keep this
+vim.keymap.set("i", "<C-Right>", "<C-o>e", { desc = "Forward word" })
+vim.keymap.set("i", "<M-Left>", "<C-o>b", { desc = "Backward word" })
+
+-- -------------------------------------------------------------
+-- Deletion (Insert)
+-- -------------------------------------------------------------
+vim.keymap.set("i", "<C-d>",  "<Del>",        { desc = "Delete char forward" })
+
+-- This is not smart... if there is nothing to kill in line it should kill the line itself
+-- vim.keymap.set("i", "<C-k>",  '<C-o>"+D',     { desc = "Kill line (to clipboard)" })
+
+-- vim.keymap.set("i", "<C-k>", function()
+--   local col = vim.fn.col(".")
+--   local line = vim.fn.getline(".")
+--
+--   if col > #line then
+--     -- At end of line: delete newline (join)
+--     return vim.api.nvim_replace_termcodes("<Del>", true, true, true)
+--   else
+--     -- Not at end: kill to end of line
+--     return vim.api.nvim_replace_termcodes('<C-o>"+D', true, true, true)
+--   end
+-- end, { expr = true, desc = "Kill line or join" })
+
+vim.keymap.set("i", "<M-d>",  "<C-o>dw",      { desc = "Kill word forward" })
+vim.keymap.set("i", "<M-BS>", "<C-w>",        { desc = "Kill word backward" })
+
+
+
+
+-- -------------------------------------------------------------
+-- Selection & Mark
+-- -------------------------------------------------------------
+vim.keymap.set("i", "<C-Space>", "<C-o>v", { desc = "Set mark (start selection)" })
+
+-- Exchange point and mark (flip cursor in visual selection)
+vim.keymap.set("v", "<C-x><C-x>", "o", { desc = "Exchange point and mark" })
+
+-- FIX: was v_ (first non-blank of line, wrong). viw = select word under cursor.
+vim.keymap.set("i", "<M-@>", "<C-o>viw", { desc = "Mark word" })
+vim.keymap.set("i", "<M-2>", "<C-o>viw", { desc = "Mark word (terminal fallback for M-@)" })
+
+-- FIX: was v} (only forward). Now selects whole paragraph: jump to start, then select to end.
+vim.keymap.set("i", "<M-h>", "<C-o>{<C-o>v}", { desc = "Mark paragraph" })
+
+-- -------------------------------------------------------------
+-- Search
+-- -------------------------------------------------------------
+vim.keymap.set("i", "<C-s>", "<C-o>/", { desc = "Search forward" })
+vim.keymap.set("i", "<C-r>", "<C-o>?", { desc = "Search backward" })
+
+-- -------------------------------------------------------------
+-- Visual Mode Movement (keeps selection active)
+-- -------------------------------------------------------------
+vim.keymap.set("v", "<C-f>", "l", { desc = "Forward char" })
+vim.keymap.set("v", "<C-b>", "h", { desc = "Backward char" })
+vim.keymap.set("v", "<C-n>", "j", { desc = "Next line" })
+vim.keymap.set("v", "<C-p>", "k", { desc = "Previous line" })
+vim.keymap.set("v", "<C-a>", "0", { desc = "Beginning of line" })
+vim.keymap.set("v", "<C-e>", "$", { desc = "End of line" })
+
+-- FIX: was w (start of next word). Emacs M-f → end of word.
+vim.keymap.set("v", "<M-f>", "e", { desc = "Forward word" })
+vim.keymap.set("v", "<M-b>", "b", { desc = "Backward word" })
+
+-- -------------------------------------------------------------
+-- Quit / Kill / Copy (Visual)
+-- -------------------------------------------------------------
+-- C-g: cancel selection, return to Insert
+-- (Emacs C-g = cancel; returning to Insert fits an insert-centric workflow)
+vim.keymap.set("v", "<C-g>",  "<Esc>i",  { desc = "Cancel selection, back to Insert" })
+vim.keymap.set("v", "<C-w>",  '"+d',     { desc = "Kill region (cut to clipboard)" })
+vim.keymap.set("v", "<M-w>",  '"+y',     { desc = "Copy region (to clipboard)" })
+
+-- Yank (paste from clipboard) in Insert
+vim.keymap.set("i", "<C-y>", "<C-r>+", { desc = "Yank (paste from clipboard)" })
+
+
+vim.keymap.set("i", "<C-h>", "<C-w>", { desc = "Delete word backward" })
+-- If C-BackSpace sends a distinct keycode, keep this.
+-- But your 'cat -v' shows it sends ^H, so this map is likely redundant.ok
+-- vim.keymap.set("i", "<C-BackSpace>", "<C-w>", { desc = "Delete word backward" })
+
+
+
+-- -------------------------------------------------------------
+-- Buffer & File (C-x prefix)
+-- -------------------------------------------------------------
+vim.keymap.set("i", "<C-x>k",     "<C-o>:bd<CR>",    { desc = "Kill buffer" })
+vim.keymap.set("i", "<C-x><C-s>", "<C-o>:w<CR>",     { desc = "Save file" })
+vim.keymap.set("n", "<C-x><C-s>", ":w<CR>",     { desc = "Save file" })
+
+-- FIX: was <C-o>gg<C-o>vG (double C-o, fragile).
+-- Leaves insert, selects all in visual-line mode. Select-all implies leaving insert anyway.
+vim.keymap.set("i", "<C-x>h", "<Esc>ggVG", { desc = "Mark whole buffer (select all)" })
+vim.keymap.set("n", "<C-x>h", "ggVG", { desc = "Mark whole buffer (select all)" })
+
+
+
+---- Ok this scruffed thing actually kinda works but meh but it's fine as a started maybe idk
+
+-- local emacs_mark = nil  -- FIX: declare local
+--
+-- -- C-Space / NUL: Set Mark
+-- local function set_mark()
+--   emacs_mark = vim.api.nvim_win_get_cursor(0)
+--   print("Mark set")
+-- end
+-- vim.keymap.set({ "n", "i" }, "<C-Space>", set_mark, { desc = "Set Emacs mark" })
+-- vim.keymap.set({ "n", "i" }, "<NUL>",     set_mark, { desc = "Set Emacs mark" })  -- FIX: terminal compat
+--
+-- -- C-g: Quit / Clear Mark
+-- vim.keymap.set({ "n", "i" }, "<C-g>", function()
+--   if emacs_mark then  -- FIX: only fire when mark exists
+--     emacs_mark = nil
+--     print("Mark cleared")
+--   end
+--   return "<Esc>"
+-- end, { expr = true })
+--
+-- -- M-w: Copy Region
+-- vim.keymap.set("i", "<M-w>", function()
+--   if not emacs_mark then return end
+--   local cur = vim.api.nvim_win_get_cursor(0)
+--   local s_row, s_col = emacs_mark[1], emacs_mark[2]
+--   local e_row, e_col = cur[1], cur[2]
+--   if s_row > e_row or (s_row == e_row and s_col > e_col) then
+--     s_row, s_col, e_row, e_col = e_row, e_col, s_row, s_col
+--   end
+--   local lines = vim.api.nvim_buf_get_text(0, s_row - 1, s_col, e_row - 1, e_col, {})
+--   vim.fn.setreg("+", table.concat(lines, "\n"))
+--   print("Region copied")
+--   emacs_mark = nil
+-- end)
+--
+-- -- C-w: Kill Region
+-- vim.keymap.set("i", "<C-w>", function()
+--   if not emacs_mark then
+--     -- FIX: proper word-backward delete via reverse-string pattern
+--     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+--     if col == 0 then return end
+--     local before = vim.api.nvim_get_current_line():sub(1, col)
+--     local new_col = #(before:reverse():gsub("^%s*%S+", "", 1):reverse())
+--     vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
+--     vim.api.nvim_win_set_cursor(0, { row, new_col })
+--     return
+--   end
+--   local cur = vim.api.nvim_win_get_cursor(0)
+--   local s_row, s_col = emacs_mark[1], emacs_mark[2]
+--   local e_row, e_col = cur[1], cur[2]
+--   if s_row > e_row or (s_row == e_row and s_col > e_col) then
+--     s_row, s_col, e_row, e_col = e_row, e_col, s_row, s_col
+--   end
+--   vim.api.nvim_buf_set_text(0, s_row - 1, s_col, e_row - 1, e_col, {})
+--   vim.api.nvim_win_set_cursor(0, { s_row, s_col })  -- FIX: reposition cursor
+--   emacs_mark = nil
+-- end)
+--
+-- -- C-x o: Jump window (FIX: no loop, no dead prefix var)
+-- vim.keymap.set({ "n", "i", "v" }, "<C-x>o", function()
+--   vim.cmd("stopinsert")
+--   vim.cmd("wincmd w")
+-- end)
+
+
+local ns = vim.api.nvim_create_namespace("emacs_mark")
+local emacs_mark = nil
+
+local function clear_mark()
+  emacs_mark = nil
+  vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+end
+
+local function update_hl()
+  if not emacs_mark then return end
+  local cur = vim.api.nvim_win_get_cursor(0)
+  local m = emacs_mark
+  local r1, c1, r2, c2 = m[1]-1, m[2], cur[1]-1, cur[2]
+  if r1 > r2 or (r1 == r2 and c1 > c2) then
+    r1, c1, r2, c2 = r2, c2, r1, c1
+  end
+  vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+  vim.api.nvim_buf_set_extmark(0, ns, r1, c1, { end_row = r2, end_col = c2, hl_group = "Visual" })
+end
+
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, { callback = update_hl })
+
+-- C-Space: Set Mark
+local function set_mark()
+  emacs_mark = vim.api.nvim_win_get_cursor(0)
+  update_hl()
+  print("Mark set")
+end
+
+vim.keymap.set("i", "<C-Space>", set_mark)
+vim.keymap.set("i", "<NUL>",     set_mark)
+vim.keymap.set("n", "<C-Space>", "v", { remap = true }) -- Normal mode parity
+
+-- C-g: Quit
+vim.keymap.set({ "n", "i" }, "<C-g>", function()
+  if emacs_mark then clear_mark(); print("Mark cleared"); return "<Ignore>" end
+  return "<Esc>"
+end, { expr = true })
+
+-- Update helper to return 4 nils for LSP clarity
+local function get_region()
+  if not emacs_mark then return nil, nil, nil, nil end
+  local cur = vim.api.nvim_win_get_cursor(0)
+  local s, e = emacs_mark, cur
+  if s[1] > e[1] or (s[1] == e[1] and s[2] > e[2]) then s, e = e, s end
+  return s[1]-1, s[2], e[1]-1, e[2]
+end
+
+-- M-w: Copy Region
+vim.keymap.set("i", "<M-w>", function()
+  local r1, c1, r2, c2 = get_region()
+  -- Check all four to satisfy LSP integer requirement
+  if r1 and c1 and r2 and c2 then
+    local lines = vim.api.nvim_buf_get_text(0, r1, c1, r2, c2, {})
+    vim.fn.setreg("+", table.concat(lines, "\n"))
+    clear_mark()
+    print("Region copied")
+  end
+end)
+
+-- C-w: Kill Region
+vim.keymap.set("i", "<C-w>", function()
+  local r1, c1, r2, c2 = get_region()
+  if r1 and c1 and r2 and c2 then
+    vim.api.nvim_buf_set_text(0, r1, c1, r2, c2, {})
+    vim.api.nvim_win_set_cursor(0, { r1 + 1, c1 })
+    clear_mark()
+  else
+    -- Word-backward logic (fallback when no mark)
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    if col == 0 then return end
+    local line = vim.api.nvim_get_current_line():sub(1, col)
+    local new_col = #(line:reverse():gsub("^%s*%S+", "", 1):reverse())
+    vim.api.nvim_buf_set_text(0, row-1, new_col, row-1, col, {})
+    vim.api.nvim_win_set_cursor(0, { row, new_col })
+  end
+end)
+
+
+-- C-x o: Jump
+vim.keymap.set({ "n", "i", "v" }, "<C-x>o", function()
+  vim.cmd("wincmd w")
+  if vim.api.nvim_get_mode().mode == 'n' then vim.cmd("startinsert") end
+end)
+
+
+
+
+
 
 
 --# why not ? I don't need c-y I have capslock and shit lol
@@ -176,13 +605,25 @@ vim.keymap.set("n", "<A-C-l>", ":tabmove +1<CR>", { silent = true, desc = "Move 
 -- because they keep you in normal mode and also they make a new line like actual new line which is good
 -- but I just want a line bellow the comment or above the comment that is not commented that's all, but
 -- also have the advantage of autocommenting. So gotta sacrifice A-o and A-O
+
+
+------ I can't do C-o that would brick nvim and C-o in nvim the concept of jumps is so nice So we use M-o and M-S-o
 -- Below
 vim.keymap.set("n", "<A-o>", "o<Esc>S", { desc = "Open new blank line below" })
-vim.keymap.set("i", "<A-o>", "<C-o>o<Esc>S", { desc = "Open new blank line below" })
+vim.keymap.set("i", "<A-O>", "<C-o>o<Esc>S", { desc = "Open new blank line below" })
 
 -- Above
+
 vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above" })
-vim.keymap.set("i", "<A-O>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
+vim.keymap.set("i", "<A-o>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
+
+
+
+
+
+
+
+
 
 -- Remap Ctrl+f to scroll up
 -- vim.keymap.set("n", "<C-f>", "<C-f>zz")
@@ -194,6 +635,10 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<PageUp>", "<C-u>zz")
 vim.keymap.set("n", "<PageDown>", "<C-d>zz")
+
+vim.keymap.set("v", "<PageUp>", "<C-u>zz")
+vim.keymap.set("v", "<PageDown>", "<C-d>zz")
+
 
 -- vim.keymap.set("n", "<A-f>", "<C-d>zz")
 -- vim.keymap.set("v", "<A-f>", "<C-d>zz")
@@ -250,12 +695,13 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- ---- these are mine ---
 
+--- This is stupid use redline this sucks btw
 -- In Insert Mode, map <C-k> to delete to the end of the line
-vim.keymap.set("i", "<C-k>", "<C-o>d$", {
-	noremap = true,
-	silent = true,
-	desc = "Delete from cursor to end of line",
-})
+-- vim.keymap.set("i", "<C-k>", "<C-o>d$", {
+-- 	noremap = true,
+-- 	silent = true,
+-- 	desc = "Delete from cursor to end of line",
+-- })
 
 -- END---- these are mind END-----
 
