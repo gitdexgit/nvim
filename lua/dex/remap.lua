@@ -157,18 +157,6 @@ end
 
 
 
-
-
--- M-! : Run + Show (Echo area)
-vim.keymap.set({ "n", "i" }, "<M-!>", function()
-  vim.ui.input({ prompt = "Shell command: " }, function(cmd)
-    if cmd and cmd ~= "" then
-      local out = vim.fn.system(cmd)
-      print(out)
-    end
-  end)
-end, { desc = "Shell command (show)" })
-
 -- M-u M-! : Run + Insert (Emacs C-u M-! style)
 vim.keymap.set({ "n", "i" }, "<M-u><M-!>", function()
   vim.ui.input({ prompt = "Shell command (insert): " }, function(cmd)
@@ -179,10 +167,17 @@ vim.keymap.set({ "n", "i" }, "<M-u><M-!>", function()
   end)
 end, { desc = "Shell command (insert)" })
 
+
+
+
+
+
 -- M-x in insert: enter command mode
 vim.keymap.set("i", "<M-x>", "<C-o>:", { desc = "Emacs M-x" })
 -- M-x in normal: enter command mode
 vim.keymap.set("n", "<M-x>", ":", { desc = "Emacs M-x" })
+
+
 
 
 

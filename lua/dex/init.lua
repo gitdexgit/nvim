@@ -4,6 +4,43 @@ require("dex.remap")
 require("dex.clipboard")
 require("dex.lazy_init")
 
+
+
+local function get_buf_dir()
+    local dir = vim.fn.expand("%:p:h"):gsub("oil://", "")
+    return vim.fn.shellescape(dir)
+end
+
+-- Core: Run shell in buffer dir
+local function run_shell(insert)
+    vim.ui.input({ prompt = "Shell command: " }, function(cmd)
+        if not cmd or cmd == "" then return end
+
+        local dir = get_buf_dir()
+        if insert then
+            -- Run, capture, insert at cursor
+            local full_cmd = string.format("cd %s && %s", dir, cmd)
+            local out = vim.fn.systemlist(full_cmd)
+            vim.api.nvim_put(out, "l", true, true)
+        else
+            -- Run interactive
+            vim.cmd(string.format("!cd %s && %s", dir, cmd))
+        end
+    end)
+end
+
+-- M-! : Run in buffer dir
+vim.keymap.set("n", "<M-!>", function() run_shell(false) end)
+vim.keymap.set("i", "<C-o><M-!>", function() run_shell(false) end)
+
+-- M-u M-! : Run + Insert (Emacs style)
+vim.keymap.set({ "n", "i" }, "<M-u><M-!>", function() run_shell(true) end)
+
+-- Leader variants
+vim.keymap.set("n", "<leader>!", function() run_shell(false) end)
+vim.keymap.set("n", "<leader>u!", function() run_shell(true) end)
+
+-- CWD logic to save recent CWD so <leader>cd is smart
 local hist = vim.fn.stdpath("data") .. "/cwd_history"
 
 -- Log CWD
