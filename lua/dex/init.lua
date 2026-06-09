@@ -4,11 +4,53 @@ require("dex.remap")
 require("dex.clipboard")
 require("dex.lazy_init")
 
+local hist = vim.fn.stdpath("data") .. "/cwd_history"
 
+-- Log CWD
+vim.api.nvim_create_autocmd({"DirChanged", "VimEnter"}, {
+  callback = function()
+    local path = vim.fn.getcwd()
+    local f = io.open(hist, "a")
+    if f then
+      f:write(path .. "\n")
+      f:close()
+    end
+  end,
+})
 
+local hist = vim.fn.stdpath("data") .. "/cwd_history"
 
+-- Log CWD
+vim.api.nvim_create_autocmd({"DirChanged", "VimEnter"}, {
+  callback = function()
+    local path = vim.fn.getcwd()
+    local f = io.open(hist, "a")
+    if f then
+      f:write(path .. "\n")
+      f:close()
+    end
+  end,
+})
 
+-- Map leader zr
+vim.keymap.set('n', '<leader>cd', function()
+  local cmd = string.format("tac %s | awk '!seen[$0]++' | head -n 6", hist)
 
+  require('fzf-lua').fzf_exec(cmd, {
+    winopts = { title = " Recent Dirs " },
+    -- Preview: ls -1 (list), -p (add / to dirs), --color (pretty)
+    preview = "ls -la -1p --color=always --group-directories-first {}",
+    actions = {
+      ['default'] = function(selected)
+        if selected[1] then
+          local path = selected[1]
+          vim.cmd("cd " .. path)
+          require('oil').open(path) -- Open Oil in new CWD
+        end
+      end
+    }
+  })
+end, { desc = "Recent CWD with Oil" })
 
 
 -- Force Neovim to prioritize the parsers installed by Lazy <--- Remove this test if it makes tresesiter stop the errorr
@@ -33,46 +75,43 @@ local markdown_spell_group = vim.api.nvim_create_augroup("MarkdownSpell", { clea
 -- 	end,
 -- })
 
-
 -- 1. Add this to top of file (outside any function)
 -- vim.g.markdown_folding = 1
 
 -- 2. Update your existing group
 vim.api.nvim_create_autocmd("FileType", {
-    group = markdown_spell_group,
-    pattern = { "markdown", "md" },
-    callback = function()
-        vim.opt_local.spell = true
-        vim.opt_local.spelllang = "en"
-        vim.opt_local.shiftwidth = 3
-        vim.opt_local.tabstop = 3
-        vim.opt_local.wrap = true
-        vim.opt_local.smartindent = false
-        vim.opt_local.autoindent = false
-        vim.opt_local.indentexpr = ""
+	group = markdown_spell_group,
+	pattern = { "markdown", "md" },
+	callback = function()
+		vim.opt_local.spell = true
+		vim.opt_local.spelllang = "en"
+		vim.opt_local.shiftwidth = 3
+		vim.opt_local.tabstop = 3
+		vim.opt_local.wrap = true
+		vim.opt_local.smartindent = false
+		vim.opt_local.autoindent = false
+		vim.opt_local.indentexpr = ""
 
-        -- FOLDING CONFIG
-        -- vim.opt_local.foldmethod = "expr"
-        -- Use native TS foldexpr (NVIM 0.10+)
-        -- vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-        -- vim.opt_local.foldlevel = 99
-    end,
+		-- FOLDING CONFIG
+		-- vim.opt_local.foldmethod = "expr"
+		-- Use native TS foldexpr (NVIM 0.10+)
+		-- vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		-- vim.opt_local.foldlevel = 99
+	end,
 })
-
 
 vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
-    group = markdown_spell_group,
-    pattern = "markdown",
-    callback = function()
-        vim.schedule(function()
-            vim.opt_local.foldmethod = "expr"
-            vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-            vim.opt_local.foldlevel = 99
-            -- vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
-        end)
-    end,
+	group = markdown_spell_group,
+	pattern = "markdown",
+	callback = function()
+		vim.schedule(function()
+			vim.opt_local.foldmethod = "expr"
+			vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			vim.opt_local.foldlevel = 99
+			-- vim.keymap.set("n", "<Tab>", "za", { buffer = true, remap = false })
+		end)
+	end,
 })
-
 
 -- This ensures the red highlight stays even when you switch themes
 -- vim.api.nvim_create_autocmd("ColorScheme", {
@@ -273,5 +312,3 @@ function MyTabLine()
 end
 
 vim.opt.tabline = "%!v:lua.MyTabLine()"
-
-

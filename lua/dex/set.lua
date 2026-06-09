@@ -1,7 +1,8 @@
+
 vim.opt.guicursor = ""
 vim.g.markdown_recommended_style = 0
 
--- This so that espanso can move the cursor to position so espanso snippets work in insert mode
+-- -opts- This so that espanso can move the cursor to position so espanso snippets work in insert mode
 vim.opt.whichwrap:append("[,]")
 
 -- idk what this is even for
