@@ -1,4 +1,15 @@
 
+
+vim.api.nvim_set_keymap("c", "<Down>", "<C-n>", { noremap = true })
+
+-- Map window navigation in terminal mode
+vim.keymap.set('t', '<C-w>h', [[<C-\><C-n><C-w>h]])
+vim.keymap.set('t', '<C-w>j', [[<C-\><C-n><C-w>j]])
+vim.keymap.set('t', '<C-w>k', [[<C-\><C-n><C-w>k]])
+vim.keymap.set('t', '<C-w>l', [[<C-\><C-n><C-w>l]])
+vim.keymap.set('t', '<C-w>w', [[<C-\><C-n><C-w>w]])
+vim.keymap.set('t', '<C-w><C-w>', [[<C-\><C-n><C-w><C-w><C-w><C-w>]])
+
 -- making S-u in normal mode useful.
 vim.keymap.set("n", "U", "<C-r>")
 
@@ -19,6 +30,10 @@ vim.keymap.set("i", "<C-@>", "<C-o>v") -- Fallback for terminal
 
 vim.g.mapleader = " "
 -- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+
+
+
+
 
 
 --# <leader>pv is in neo-tree it brings a neo-tree float. because :Ex is stupid with jumplist
@@ -96,6 +111,29 @@ vim.keymap.set('i', '<C-^>', '<C-o><C-^>')
 -- Emacs insert enhancements
 -- =============================================================
 
+
+_G.emacs_find_file = function()
+    local dir = vim.fn.getcwd()
+    local ok, oil = pcall(require, "oil")
+    if ok then
+        local oil_dir = oil.get_current_dir()
+        if oil_dir then
+            dir = oil_dir:gsub("^oil://", "")
+        end
+    end
+    -- Ensure trailing slash
+    dir = dir:gsub("/+$", "") .. "/"
+
+    -- nvim_input simulates raw user keystrokes
+    -- <C-u> clears any existing range/garbage in cmdline
+    vim.api.nvim_input(":e " .. dir)
+end
+
+vim.keymap.set({ "n", "i" }, "<C-x><C-f>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+vim.keymap.set({ "n", "i" }, "<C-x><Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+
+vim.keymap.set({ "i" }, "<C-x>b", "<C-o>:buffer ", { silent = false })
+vim.keymap.set({ "n" }, "<C-x>b", ":buffer ", { silent = false })
 
 --- Window management similar to emacs
 local modes = { "n", "i", "v" }
@@ -371,7 +409,8 @@ vim.keymap.set("i", "<C-h>", "<C-w>", { desc = "Delete word backward" })
 -- -------------------------------------------------------------
 -- Buffer & File (C-x prefix)
 -- -------------------------------------------------------------
-vim.keymap.set("i", "<C-x>k",     "<C-o>:bd<CR>",    { desc = "Kill buffer" })
+vim.keymap.set("i", "<C-x>k",     "<C-o>:bd ",    { desc = "Kill buffer" })
+vim.keymap.set("n", "<C-x>k",     ":bd ",    { desc = "Kill buffer" })
 vim.keymap.set("i", "<C-x><C-s>", "<C-o>:w<CR>",     { desc = "Save file" })
 vim.keymap.set("n", "<C-x><C-s>", ":w<CR>",     { desc = "Save file" })
 
@@ -528,10 +567,10 @@ end)
 
 
 -- C-x o: Jump
-vim.keymap.set({ "n", "i", "v" }, "<C-x>o", function()
-  vim.cmd("wincmd w")
-  if vim.api.nvim_get_mode().mode == 'n' then vim.cmd("startinsert") end
-end)
+-- vim.keymap.set({ "n", "i", "v" }, "<C-x>o", function()
+--   vim.cmd("wincmd w")
+--   if vim.api.nvim_get_mode().mode == 'n' then vim.cmd("startinsert") end
+-- end)
 
 
 
@@ -828,6 +867,9 @@ vim.keymap.set("n", "<leader>Rls", function()
 end, { desc = "Reload Luasnip snippets" })
 
 vim.keymap.set("n", "<leader>cwd", "<Cmd>cd %:h<CR>", { desc = "Decrease window height by 5" })
+vim.keymap.set("n", "<leader>zd", "<cmd>FzfLua zoxide<CR>")
+vim.keymap.set("n", "<leader>cb", "<cmd>cd -<CR>")
+
 
 -- just screwing with this I don't like `X` it makes me hit shift+x and I do mainly use x so you know
 -- trying to be consistent and in terminal backspace in normal mode actually is backspace so i'm liking it
