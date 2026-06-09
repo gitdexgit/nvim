@@ -145,62 +145,70 @@ end
 
 return {
 
-	{
+{
 		"handy-sun/wilder.nvim",
 		dependencies = { "romgrk/fzy-lua-native" },
-		build = ":UpdateRemotePlugins",
 		lazy = false,
+		priority = 1001,
 		config = function()
 			local wilder = require("wilder")
+
+			-- Global state: Is Wilder globally enabled?
+			_G.wilder_globally_awake = false
+
 			wilder.setup({
 				modes = { ":", "/", "?" },
+				enable_cmdline_enter = 0, -- Dormant at boot (No lag)
 				use_python_remote_plugin = 0,
+				num_workers = 0,
 			})
 
 			wilder.set_option("noselect", 0)
 
-			-- Tab: Pick first match
-			vim.api.nvim_set_keymap(
-				"c",
-				"<Tab>",
-				'wilder#in_context() ? wilder#accept_completion() : "\\<Tab>"',
-				{ expr = true, noremap = true }
-			)
+			-- Tab Logic: First press wakes Wilder FOREVER.
+			-- Subsequent presses work normally.
+			_G.wilder_wake_logic = function()
+				if not _G.wilder_globally_awake then
+					-- 1. Enable auto-start for all future sessions
+					vim.fn["wilder#main#enable_cmdline_enter"]()
+					_G.wilder_globally_awake = true
+					-- 2. Start Wilder for this specific session
+					return vim.api.nvim_replace_termcodes("<C-R>=wilder#main#start()<CR>", true, false, true)
+				end
+				-- Normal behavior once awake
+				if vim.fn["wilder#in_context"]() ~= 0 then
+					return vim.fn["wilder#accept_completion"]()
+				end
+				return vim.api.nvim_replace_termcodes("<Tab>", true, false, true)
+			end
 
-			-- Navigation
 			local opts = { expr = true, noremap = true }
+			vim.api.nvim_set_keymap("c", "<Tab>", [[v:lua.wilder_wake_logic()]], opts)
+
+			-- Navigation (Only works if Wilder is awake)
 			vim.api.nvim_set_keymap("c", "<C-f>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
 			vim.api.nvim_set_keymap("c", "<C-b>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
-			vim.api.nvim_set_keymap("c", "<Right>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
-			vim.api.nvim_set_keymap("c", "<Left>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
 
-			-- Improved Pipeline: fzy filtering
+            -- I still want to move left and right... Umm so just like double tap capslock ok or just hold a and f or b
+			-- vim.api.nvim_set_keymap("c", "<Right>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
+			-- vim.api.nvim_set_keymap("c", "<Left>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
+
+			-- Pipeline & Renderer
 			wilder.set_option("pipeline", {
 				wilder.branch(
-					wilder.cmdline_pipeline({
-						fuzzy = 1,
-						set_pcre2_pattern = 1,
-					}),
-					wilder.vim_search_pipeline({
-						-- Fix: use filter, not sorter
-						filter = wilder.lua_fzy_filter(),
-					})
+					wilder.cmdline_pipeline({ fuzzy = 1, set_pcre2_pattern = 1 }),
+					wilder.vim_search_pipeline({ filter = wilder.lua_fzy_filter() })
 				),
 			})
 
-			-- Improved Renderer: fzy highlighting
-			wilder.set_option(
-				"renderer",
-				wilder.wildmenu_renderer({
-					highlighter = wilder.lua_fzy_highlighter(),
-					separator = " | ",
-					left = { " ", wilder.wildmenu_spinner(), " " },
-					right = { " ", wilder.wildmenu_index() },
-				})
-			)
+			wilder.set_option("renderer", wilder.wildmenu_renderer({
+				highlighter = wilder.lua_fzy_highlighter(),
+				separator = " | ",
+				left = { " ", wilder.wildmenu_spinner(), " " },
+				right = { " ", wilder.wildmenu_index() },
+			}))
 		end,
 	},
-
 	{
 		"stevearc/oil.nvim",
 		dependencies = {
