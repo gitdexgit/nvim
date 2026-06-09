@@ -1,5 +1,8 @@
 
 
+
+
+
 vim.api.nvim_set_keymap("c", "<Down>", "<C-n>", { noremap = true })
 
 -- Map window navigation in terminal mode
@@ -763,8 +766,8 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- vim.keymap.set('n', '<C-,>', '<C-w><', { desc = 'Move to right window', remap = true })
 
 -- yeah this fixes it on termux just freaking have this right... and btw hoold space for numbers and it works out lok
-vim.keymap.set("n", "<leader>.", "5<C-w>>", { desc = "Move to right window", remap = true })
-vim.keymap.set("n", "<leader>,", "5<C-w><", { desc = "Move to right window", remap = true })
+-- vim.keymap.set("n", "<leader>.", "5<C-w>>", { desc = "Move to right window", remap = true })
+-- vim.keymap.set("n", "<leader>,", "5<C-w><", { desc = "Move to right window", remap = true })
 
 vim.keymap.set("n", "<A-.>", "5<C-w>>", { desc = "Move to right window", remap = true })
 vim.keymap.set("n", "<A-,>", "5<C-w><", { desc = "Move to right window", remap = true })
@@ -874,8 +877,9 @@ vim.keymap.set("n", "<leader>cb", "<cmd>cd -<CR>")
 
 -- idk for some reason when it's in remap.lua it's not loading well so I'll put it in here
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+
+
 
 -- ==============================================================================
 -- ==                      Smart Word Wrap Motions                           ==

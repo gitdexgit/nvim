@@ -1,8 +1,85 @@
 require("dex.set")
 -- require("dex.tab_line")
-require("dex.remap")
 require("dex.clipboard")
+require("dex.remap")
 require("dex.lazy_init")
+
+
+
+-----------------------------------------------------------------------------------------------------------
+--- Cursor movements - Cursor keep location for Copying stuff and duplicating stuff and yanking stuff
+---
+--- Keep this here if you move to remap they don't work... some hotkey loading is stealing it in lazy_init ok
+-----------------------------------------------------------------------------------------------------------
+local function duplicate_smart()
+  local mode = vim.api.nvim_get_mode().mode
+  local cur = vim.api.nvim_win_get_cursor(0)
+
+  if mode:match("[vV\22]") then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+    vim.schedule(function()
+      local start_line = vim.api.nvim_buf_get_mark(0, "<")[1]
+      local end_line = vim.api.nvim_buf_get_mark(0, ">")[1]
+      local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+      vim.api.nvim_buf_set_lines(0, end_line, end_line, false, lines)
+      pcall(vim.api.nvim_win_set_cursor, 0, {end_line + 1, cur[2]})
+    end)
+  else
+    local line_content = vim.api.nvim_get_current_line()
+    vim.api.nvim_buf_set_lines(0, cur[1], cur[1], false, {line_content})
+    pcall(vim.api.nvim_win_set_cursor, 0, {cur[1] + 1, cur[2]})
+  end
+end
+
+-- Duplicate
+vim.keymap.set('n', '<leader>,', duplicate_smart)
+vim.keymap.set('v', '<leader>,', duplicate_smart)
+vim.keymap.set('i', '<C-x>,', duplicate_smart)
+
+-- Yank no move (Clipboard)
+vim.keymap.set('v', '<leader>y', function()
+  local cur = vim.api.nvim_win_get_cursor(0)
+  vim.cmd('normal! "+y')
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+  vim.schedule(function() pcall(vim.api.nvim_win_set_cursor, 0, cur) end)
+end)
+
+vim.keymap.set('n', '<leader>Y', function()
+  local cur = vim.api.nvim_win_get_cursor(0)
+  vim.cmd('normal! "+Y')
+  pcall(vim.api.nvim_win_set_cursor, 0, cur)
+end)
+
+-- Yank no move (Local)
+vim.keymap.set('v', 'y', function()
+  local cur = vim.api.nvim_win_get_cursor(0)
+  vim.cmd('normal! y')
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+  vim.schedule(function() pcall(vim.api.nvim_win_set_cursor, 0, cur) end)
+end)
+
+-- Comment no move
+vim.keymap.set('n', 'gcc', function()
+  local cur = vim.api.nvim_win_get_cursor(0)
+  require("vim._comment").toggle_lines(cur[1], cur[1])
+  pcall(vim.api.nvim_win_set_cursor, 0, cur)
+end)
+
+vim.keymap.set('x', 'gc', function()
+  local cur = vim.api.nvim_win_get_cursor(0)
+  local s = math.min(vim.fn.line("v"), vim.fn.line("."))
+  local e = math.max(vim.fn.line("v"), vim.fn.line("."))
+  require("vim._comment").toggle_lines(s, e)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
+  pcall(vim.api.nvim_win_set_cursor, 0, cur)
+end)
+------
+--END
+------
+
+
+
+
 
 
 
