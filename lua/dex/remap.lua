@@ -132,8 +132,6 @@ end
 vim.keymap.set({ "n", "i" }, "<C-x><C-f>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
 vim.keymap.set({ "n", "i" }, "<C-x><Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
 
-vim.keymap.set({ "i" }, "<C-x>b", "<C-o>:buffer ", { silent = false })
-vim.keymap.set({ "n" }, "<C-x>b", ":buffer ", { silent = false })
 
 --- Window management similar to emacs
 local modes = { "n", "i", "v" }

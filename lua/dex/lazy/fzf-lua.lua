@@ -208,6 +208,21 @@ return {
 				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
 			)
 
+			-- Normal Mode
+			vim.keymap.set(
+				"n",
+				"<C-x>b",
+				require("fzf-lua").buffers,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+			)
+
+			-- Insert Mode
+			vim.keymap.set("i", "<C-x>b", function()
+				-- Use C-o to trigger from insert
+				vim.cmd("stopinsert")
+				require("fzf-lua").buffers()
+			end, { noremap = true, silent = true, desc = "FZF-Lua: Buffers" })
+
 			vim.keymap.set(
 				"n",
 				"<leader>g/",
@@ -301,7 +316,6 @@ return {
 				require("fzf-lua").builtin,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
 			)
-
 		end,
 	},
 }

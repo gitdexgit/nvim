@@ -171,7 +171,7 @@ return {
 			local opts = { expr = true, noremap = true }
 			vim.api.nvim_set_keymap("c", "<C-f>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
 			vim.api.nvim_set_keymap("c", "<C-b>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
-            vim.api.nvim_set_keymap("c", "<Right>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
+			vim.api.nvim_set_keymap("c", "<Right>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
 			vim.api.nvim_set_keymap("c", "<Left>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
 
 			-- Improved Pipeline: fzy filtering
@@ -200,7 +200,6 @@ return {
 			)
 		end,
 	},
-
 
 	{
 		"stevearc/oil.nvim",
