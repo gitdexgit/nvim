@@ -81,31 +81,6 @@ return {
 				})
 			end, { desc = "FZF-Lua: All Files" })
 
-			vim.keymap.set(
-				"n",
-				"<leader>/",
-				require("fzf-lua").blines,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current blines" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>ch",
-				require("fzf-lua").command_history,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current blines" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>cc",
-				require("fzf-lua").commands,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current blines" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>cd",
-				require("fzf-lua").dap_commands,
-				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current blines" }
-			)
-
 			-- Highlight something it will put it in the buffer search.
 			vim.keymap.set("v", "<leader>/", function()
 				-- 1. Exit visual mode to set '< and '> marks
@@ -126,6 +101,18 @@ return {
 			vim.keymap.set(
 				"n",
 				"<leader>pq",
+				require("fzf-lua").quickfix,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Quickfix" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>/",
+				require("fzf-lua").blines,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Find In Current blines" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fq",
 				require("fzf-lua").quickfix,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Quickfix" }
 			)
@@ -271,13 +258,50 @@ return {
 				require("fzf-lua").builtin,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
 			)
-			vim.keymap.set("n", "<leader>fc", "<cmd>FzfLua changes<CR>")
+			vim.keymap.set(
+				"n",
+				"<leader>ch",
+				require("fzf-lua").command_history,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fdd",
+				require("fzf-lua").diagnostics_document,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fdw",
+				require("fzf-lua").diagnostics_workspace,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>dap",
+				require("fzf-lua").dap_commands,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>cc",
+				require("fzf-lua").commands,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fc",
+				require("fzf-lua").changes,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Marks" }
+			)
+
 			vim.keymap.set(
 				"v",
 				"<leader>?",
 				require("fzf-lua").builtin,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Builtin/Help" }
 			)
+
 		end,
 	},
 }
