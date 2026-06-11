@@ -39,12 +39,22 @@ return {
 				harpoon:list():add()
 			end, { desc = "Harpoon: Add File to List" })
 
+            -- OLD Was stupid:
 			-- I just never use it I prefer <leader>h
 			-- vim.keymap.set("n", "<C-e>", function()
 			-- 	harpoon.ui:toggle_quick_menu(harpoon:list(), { height_in_lines = 10 })
 			-- end, { desc = "Harpoon: Toggle Quick Menu" })
 
-			vim.keymap.set("n", "<leader>h", function()
+            -- Make it C-e man I can hit C-e so fast with capslock
+			-- vim.keymap.set("n", "<leader>h", function()
+			-- 	harpoon.ui:toggle_quick_menu(harpoon:list(), { height_in_lines = 10 })
+			-- end, { desc = "Harpoon: Toggle Quick Menu" })
+
+			vim.keymap.set("n", "<C-e>", function()
+				harpoon.ui:toggle_quick_menu(harpoon:list(), { height_in_lines = 10 })
+			end, { desc = "Harpoon: Toggle Quick Menu" })
+
+			vim.keymap.set("n", "<leader>e", function()
 				harpoon.ui:toggle_quick_menu(harpoon:list(), { height_in_lines = 10 })
 			end, { desc = "Harpoon: Toggle Quick Menu" })
 
