@@ -2,14 +2,13 @@ require("dex.set")
 -- require("dex.tab_line")
 require("dex.clipboard")
 require("dex.remap")
+require("dex.bottom-bar-modes")
 require("dex.lazy_init")
 
 
 
 -----------------------------------------------------------------------------------------------------------
 --- Cursor movements - Cursor keep location for Copying stuff and duplicating stuff and yanking stuff
----
---- Keep this here if you move to remap they don't work... some hotkey loading is stealing it in lazy_init ok
 -----------------------------------------------------------------------------------------------------------
 local function duplicate_smart()
   local mode = vim.api.nvim_get_mode().mode
@@ -32,9 +31,15 @@ local function duplicate_smart()
 end
 
 -- Duplicate
-vim.keymap.set('n', '<leader>,', duplicate_smart)
+vim.keymap.set('n', '<leader>,', duplicate_smart) -- think of leader as onetap(conrol)
 vim.keymap.set('v', '<leader>,', duplicate_smart)
-vim.keymap.set('i', '<C-x>,', duplicate_smart)
+vim.keymap.set('i', '<C-x>,', duplicate_smart) -- can't do <C-,> cuz terminal can't send. terminal dumb
+
+-- Shorcuts for commenting lines
+vim.keymap.set('n', '<leader>;', 'gcc', { remap = true }) -- think of leader as onetap(conrol)
+vim.keymap.set('v', '<leader>;', 'gc', { remap = true })
+vim.keymap.set('i', '<C-x>;', '<C-o>gcc', { remap = true }) -- can't do <C-;> cuz terminal can't send. terminal dumb
+
 
 -- Yank no move (Clipboard)
 vim.keymap.set('v', '<leader>y', function()
@@ -95,6 +100,7 @@ local function run_shell(insert)
 
         local dir = get_buf_dir()
         if insert then
+            -- Run, capture, insert at cursor
             -- Run, capture, insert at cursor
             local full_cmd = string.format("cd %s && %s", dir, cmd)
             local out = vim.fn.systemlist(full_cmd)
@@ -259,7 +265,7 @@ autocmd("TextYankPost", {
 	callback = function()
 		vim.highlight.on_yank({
 			higroup = "IncSearch",
-			timeout = 60,
+			timeout = 65,
 		})
 	end,
 })
