@@ -1,22 +1,27 @@
 return {
-    'mg979/vim-visual-multi',
-    branch = 'master',
-    init = function()
-        vim.g.VM_maps = {
-            ['Find Under']    = '<leader>>',
-            ['Find Prev']     = '<leader><',
-            ['Skip Region']   = '<C-|>',     -- Skip next
-            ['Remove Region'] = '<C-S-q>',   -- VM lacks "skip back", use remove
-        }
-    end,
-    config = function()
-        -- Normal mode
-        vim.keymap.set('n', '<C-S-c><C-S-c>', '<Plug>(VM-Add-Cursor-At-Pos)')
+	"mg979/vim-visual-multi",
+	branch = "master",
+	-- This plugin must be loaded at startup to prevent the E121/E605 errors
+	lazy = false,
+	init = function()
+		-- 1. Disable default mappings
+		vim.g.VM_default_mappings = 0
 
-        -- Insert mode
-        vim.keymap.set('i', '<C-x>>', '<Plug>(VM-Find-Under)')
-        vim.keymap.set('i', '<C-x><', '<Plug>(VM-Find-Prev)')
-        -- Skip in Insert
-        vim.keymap.set('i', '<C-x>|', '<Plug>(VM-Skip-Region)')
-    end
+		-- 2. Define all mappings in the VM_maps table
+		-- Mapping both 'Find Under' and 'Find Subword Under' to the same key
+		-- is a specific fix for the "Undefined variable: s:F" error.
+
+		vim.g.VM_maps = {
+			["Find Under"] = "<leader>nn",
+			["Find Subword Under"] = "<leader>nN",
+			["Find Prev"] = "<leader>N",
+			["Select All"] = "<leader>na",
+			["Add Cursor Down"] = "<leader>>",
+			["Add Cursor Up"] = "<leader><",
+			["Add Cursor At Pos"] = "<leader>np",
+			["Skip Region"] = "<leader><Bar>", -- escape the pipe
+			-- ["Remove Region"] = "<C-x>r",
+			["Remove Region"] = "<leader>nr",
+		}
+	end,
 }
