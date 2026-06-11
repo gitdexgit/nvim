@@ -211,7 +211,13 @@ return {
 			-- Normal Mode
 			vim.keymap.set(
 				"n",
-				"<C-x>b",
+				"<leader>xb",
+				require("fzf-lua").buffers,
+				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+			)
+			vim.keymap.set(
+				"v",
+				"<leader>xb",
 				require("fzf-lua").buffers,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
 			)
@@ -247,7 +253,7 @@ return {
 			-- Open the last fzf-lua thing you did. So you don't lose it. if you exit without meaning it
 			vim.keymap.set(
 				"n",
-				"<leader>;",
+				"<leader>'",
 				require("fzf-lua").resume,
 				{ noremap = true, silent = true, desc = "FZF-Lua: Resume" }
 			)
