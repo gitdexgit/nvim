@@ -12,7 +12,7 @@ vim.opt.whichwrap:append("[,]")
 -- vim.opt.ttimeoutlen = 0   -- Time to wait for a key code (this fixes the Esc delay)
 
 vim.opt.ttimeoutlen = 0
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 375
 
 
 vim.opt.showtabline = 1
