@@ -29,15 +29,13 @@ vim.keymap.set("i", "<C-@>", "<C-o>v") -- Fallback for terminal
 --
 -- vim.keymap.set("i", "<C-@>", "<C-o>v", { silent = true })
 
-vim.g.mapleader = " "
+-- vim.g.mapleader = " "
 -- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 --# <leader>pv is in neo-tree it brings a neo-tree float. because :Ex is stupid with jumplist
 
--- I used to find this cool but it's whatever it's meh I'll keep it for whatever as comment
--- But for prime I'll keep this for whatever reason why not.
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+
 
 -- Scroll next window down
 vim.keymap.set("n", "<M-C-d>", function()
