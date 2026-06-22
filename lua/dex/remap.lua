@@ -1,3 +1,24 @@
+
+
+-- Undo in Insert Mode using Ctrl + /
+-- We use <C-_> because most terminals send Ctrl+/ as Ctrl+_
+-- vim.keymap.set('i', '<C-/>', '<C-o>u', { noremap = true })
+vim.keymap.set('i', '<C-_>', '<C-o>u', { noremap = true })
+
+
+-- Normal Mode mappings
+vim.keymap.set('n', '<M-<>', 'gg', { noremap = true })
+vim.keymap.set('n', '<M->>', 'G', { noremap = true })
+
+
+vim.keymap.set('v', '<M-<>', 'gg', { noremap = true })
+vim.keymap.set('v', '<M->>', 'G', { noremap = true })
+
+-- Insert Mode mappings
+-- <C-o> lets us run a normal command (gg or G) without leaving insert mode
+vim.keymap.set('i', '<M-<>', '<C-o>gg', { noremap = true })
+vim.keymap.set('i', '<M->>', '<C-o>G', { noremap = true })
+
 vim.api.nvim_set_keymap("c", "<Down>", "<C-n>", { noremap = true })
 
 -- Map window navigation in terminal mode
@@ -131,7 +152,6 @@ vim.keymap.set({ "n", "i" }, "<M-u><M-!>", function()
 end, { desc = "Shell command (insert)" })
 
 
-
 -- M-x in insert: enter command mode
 vim.keymap.set("i", "<M-x>", "<C-o>:", { desc = "Emacs M-x" })
 -- M-x in normal: enter command mode
@@ -240,6 +260,7 @@ end
 
 vim.keymap.set("n", "zz", smart_recenter, { desc = "Smart zz: center → top → bottom" })
 vim.keymap.set("i", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
+vim.keymap.set("v", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
 vim.keymap.set("n", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
 
 -- -------------------------------------------------------------
@@ -352,7 +373,7 @@ vim.keymap.set("i", "<C-h>", "<C-w>", { desc = "Delete word backward" })
 vim.keymap.set("i", "<C-x>k", "<C-o>:bd ", { desc = "Kill buffer" })
 vim.keymap.set("n", "<leader>xk", ":bd ", { desc = "Kill buffer" })
 vim.keymap.set("i", "<C-x><C-s>", "<C-o>:w<CR>", { desc = "Save file" })
-vim.keymap.set("n", "<leader>x<C-s>", ":w<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<leader>xs", ":w<CR>", { desc = "Save file" })
 
 -- FIX: was <C-o>gg<C-o>vG (double C-o, fragile).
 -- Leaves insert, selects all in visual-line mode. Select-all implies leaving insert anyway.
