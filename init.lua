@@ -24,7 +24,7 @@ vim.keymap.set('i', '<A-p>', '<Esc>:m .-2<CR>==gi', { silent = true })
 -- vim.keymap.set("n", "<leader><leader>", "v", { silent = true })
 vim.keymap.set("v", "<leader>v", "V", { silent = true })
 -- vim.keymap.set("v", "<leader><leader>", "v", { silent = true })
-vim.keymap.set("v", "<C-Space>", "v")
+vim.keymap.set("v", "<C-Space>", "vv")
 vim.keymap.set("n", "<leader>v", "V", { silent = true })
 
 -- Keep tabs hidden forever
