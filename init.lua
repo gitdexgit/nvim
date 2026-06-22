@@ -2,7 +2,7 @@
 -- This makes ,ee, ,eb, etc. work out of the box
 vim.g.maplocalleader = ","
 vim.g.mapleader = " "
-
+vim.opt.splitbelow = true
 
 require("dex")
 
@@ -21,10 +21,10 @@ vim.keymap.set('i', '<A-n>', '<Esc>:m .+1<CR>==gi', { silent = true })
 vim.keymap.set('i', '<A-p>', '<Esc>:m .-2<CR>==gi', { silent = true })
 
 
-vim.keymap.set("n", "<leader><leader>", "v", { silent = true })
+-- vim.keymap.set("n", "<leader><leader>", "v", { silent = true })
 vim.keymap.set("v", "<leader>v", "V", { silent = true })
-vim.keymap.set("v", "<leader><leader>", "V", { silent = true })
-vim.keymap.set("v", "<C-Space>", "V")
+-- vim.keymap.set("v", "<leader><leader>", "v", { silent = true })
+vim.keymap.set("v", "<C-Space>", "v")
 vim.keymap.set("n", "<leader>v", "V", { silent = true })
 
 -- Keep tabs hidden forever
