@@ -1,23 +1,29 @@
-
+-- vim.keymap.set('n', '<C-k>', function()
+--     -- If at the end of the line, join the next line
+--     if vim.fn.col('.') >= vim.fn.col('$') - 1 then
+--         vim.cmd('normal! gJ')
+--     else
+--         -- Otherwise, kill to the end of the line
+--         vim.cmd('normal! D')
+--     end
+-- end)
 
 -- Undo in Insert Mode using Ctrl + /
 -- We use <C-_> because most terminals send Ctrl+/ as Ctrl+_
 -- vim.keymap.set('i', '<C-/>', '<C-o>u', { noremap = true })
-vim.keymap.set('i', '<C-_>', '<C-o>u', { noremap = true })
-
+vim.keymap.set("i", "<C-_>", "<C-o>u", { noremap = true })
 
 -- Normal Mode mappings
-vim.keymap.set('n', '<M-<>', 'gg', { noremap = true })
-vim.keymap.set('n', '<M->>', 'G', { noremap = true })
+vim.keymap.set("n", "<M-<>", "gg", { noremap = true })
+vim.keymap.set("n", "<M->>", "G", { noremap = true })
 
-
-vim.keymap.set('v', '<M-<>', 'gg', { noremap = true })
-vim.keymap.set('v', '<M->>', 'G', { noremap = true })
+vim.keymap.set("v", "<M-<>", "gg", { noremap = true })
+vim.keymap.set("v", "<M->>", "G", { noremap = true })
 
 -- Insert Mode mappings
 -- <C-o> lets us run a normal command (gg or G) without leaving insert mode
-vim.keymap.set('i', '<M-<>', '<C-o>gg', { noremap = true })
-vim.keymap.set('i', '<M->>', '<C-o>G', { noremap = true })
+vim.keymap.set("i", "<M-<>", "<C-o>gg", { noremap = true })
+vim.keymap.set("i", "<M->>", "<C-o>G", { noremap = true })
 
 vim.api.nvim_set_keymap("c", "<Down>", "<C-n>", { noremap = true })
 
@@ -55,26 +61,23 @@ vim.keymap.set("i", "<C-@>", "<C-o>v") -- Fallback for terminal
 
 --# <leader>pv is in neo-tree it brings a neo-tree float. because :Ex is stupid with jumplist
 
-
-
-
 -- Scroll next window down
 vim.keymap.set("n", "<M-C-d>", function()
-	local next_win = vim.fn.winnr() % vim.fn.winnr("$") + 1
-	vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
+    local next_win = vim.fn.winnr() % vim.fn.winnr("$") + 1
+    vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
 end)
 
 vim.keymap.set("n", "<M-C-v>", function()
-	local next_win = vim.fn.winnr() % vim.fn.winnr("$") + 1
-	vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
+    local next_win = vim.fn.winnr() % vim.fn.winnr("$") + 1
+    vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! \4")
 end)
 
 ---- sadly <M-C-S-v> Doesn't work in the temrinal So it only works on emacs. I guess
 
 vim.keymap.set("n", "<M-C-u>", function()
-	local next_win = vim.fn.winnr() % vim.fn.winnr("$") + 1
-	local scroll_up = vim.api.nvim_replace_termcodes("<C-u>", true, false, true)
-	vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! " .. scroll_up)
+    local next_win = vim.fn.winnr() % vim.fn.winnr("$") + 1
+    local scroll_up = vim.api.nvim_replace_termcodes("<C-u>", true, false, true)
+    vim.fn.win_execute(vim.fn.win_getid(next_win), "normal! " .. scroll_up)
 end)
 
 --# i don't understand this <Plug>.... thing is this a lazynvim ? or is this in packer or what
@@ -103,20 +106,20 @@ vim.keymap.set("i", "<C-^>", "<C-o><C-^>")
 -- =============================================================
 
 _G.emacs_find_file = function()
-	local dir = vim.fn.getcwd()
-	local ok, oil = pcall(require, "oil")
-	if ok then
-		local oil_dir = oil.get_current_dir()
-		if oil_dir then
-			dir = oil_dir:gsub("^oil://", "")
-		end
-	end
-	-- Ensure trailing slash
-	dir = dir:gsub("/+$", "") .. "/"
+    local dir = vim.fn.getcwd()
+    local ok, oil = pcall(require, "oil")
+    if ok then
+        local oil_dir = oil.get_current_dir()
+        if oil_dir then
+            dir = oil_dir:gsub("^oil://", "")
+        end
+    end
+    -- Ensure trailing slash
+    dir = dir:gsub("/+$", "") .. "/"
 
-	-- nvim_input simulates raw user keystrokes
-	-- <C-u> clears any existing range/garbage in cmdline
-	vim.api.nvim_input(":e " .. dir)
+    -- nvim_input simulates raw user keystrokes
+    -- <C-u> clears any existing range/garbage in cmdline
+    vim.api.nvim_input(":e " .. dir)
 end
 
 vim.keymap.set({ "i" }, "<C-x><C-f>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
@@ -138,19 +141,15 @@ vim.keymap.set({ "n", "v" }, "<leader>x2", "<C-w>s", { desc = "Split horizontal"
 vim.keymap.set({ "n", "v" }, "<leader>x3", "<C-w>v", { desc = "Split vertical" })
 vim.keymap.set({ "n", "v" }, "<leader>xo", "<C-w>w", { desc = "Other window" })
 
-
-
-
 -- M-u M-! : Run + Insert (Emacs C-u M-! style)
 vim.keymap.set({ "n", "i" }, "<M-u><M-!>", function()
-	vim.ui.input({ prompt = "Shell command (insert): " }, function(cmd)
-		if cmd and cmd ~= "" then
-			local out = vim.fn.systemlist(cmd)
-			vim.api.nvim_put(out, "c", true, true)
-		end
-	end)
+    vim.ui.input({ prompt = "Shell command (insert): " }, function(cmd)
+        if cmd and cmd ~= "" then
+            local out = vim.fn.systemlist(cmd)
+            vim.api.nvim_put(out, "c", true, true)
+        end
+    end)
 end, { desc = "Shell command (insert)" })
-
 
 -- M-x in insert: enter command mode
 vim.keymap.set("i", "<M-x>", "<C-o>:", { desc = "Emacs M-x" })
@@ -175,10 +174,10 @@ vim.keymap.set("i", "<M-m>", "<C-o>^", { desc = "Back to indentation" })
 -- need this for M-t
 -- Define better `b` that actuall goes to the previous word and skips whitespace. But put it on a fake key:
 vim.keymap.set(
-	"n",
-	"<Plug>(smart-b)",
-	[[col('.') == 1 || col('.') == match(getline('.'), '\S') + 1 ? "?\\S\r" : "b"]],
-	{ expr = true }
+    "n",
+    "<Plug>(smart-b)",
+    [[col('.') == 1 || col('.') == match(getline('.'), '\S') + 1 ? "?\\S\r" : "b"]],
+    { expr = true }
 )
 
 -- TODO:
@@ -186,39 +185,39 @@ vim.keymap.set(
 -- mimic M-t In emacs
 -- Swap 2 words
 vim.keymap.set("i", "<M-t>", function()
-	local col = vim.fn.col(".")
-	local line = vim.api.nvim_get_current_line()
-	local first_char_col = vim.fn.match(line, [[\S]]) + 1
+    local col = vim.fn.col(".")
+    local line = vim.api.nvim_get_current_line()
+    local first_char_col = vim.fn.match(line, [[\S]]) + 1
 
-	local keys = "<Esc><Right>bgsiwwgsiwea"
+    local keys = "<Esc><Right>bgsiwwgsiwea"
 
-	if col == 1 then
-		keys = "<Esc><Plug>(smart-b)gsiweegsiwe<Plug>(smart-b)<Plug>(smart-b)a" -- Start of line: swap first two
-	elseif col > #line then
-		keys = "<Esc>bgsiweegsiwea" -- End of line: swap last two
-	elseif col <= first_char_col then
-		keys = "<Esc>wbgsiwwgsiwea" -- Before first word: swap first two
-	end
+    if col == 1 then
+        keys = "<Esc><Plug>(smart-b)gsiweegsiwe<Plug>(smart-b)<Plug>(smart-b)a" -- Start of line: swap first two
+    elseif col > #line then
+        keys = "<Esc>bgsiweegsiwea" -- End of line: swap last two
+    elseif col <= first_char_col then
+        keys = "<Esc>wbgsiwwgsiwea" -- Before first word: swap first two
+    end
 
-	return keys
+    return keys
 end, { expr = true, remap = true })
 
 vim.keymap.set("n", "<M-t>", function()
-	local col = vim.fn.col(".")
-	local line = vim.api.nvim_get_current_line()
-	local first_char_col = vim.fn.match(line, [[\S]]) + 1
+    local col = vim.fn.col(".")
+    local line = vim.api.nvim_get_current_line()
+    local first_char_col = vim.fn.match(line, [[\S]]) + 1
 
-	local keys = "<Esc>bgsiweegsiwe"
+    local keys = "<Esc>bgsiweegsiwe"
 
-	if col == 1 then
-		keys = "<Esc><Plug>(smart-b)gsiweegsiwe<Plug>(smart-b)<Plug>(smart-b)" -- Start of line: swap first two
-	elseif col > #line then
-		keys = "<Esc>bgsiweegsiwe" -- End of line: swap last two
-	elseif col <= first_char_col then
-		keys = "<Esc>wbgsiweegsiwe" -- Before first word: swap first two
-	end
+    if col == 1 then
+        keys = "<Esc><Plug>(smart-b)gsiweegsiwe<Plug>(smart-b)<Plug>(smart-b)" -- Start of line: swap first two
+    elseif col > #line then
+        keys = "<Esc>bgsiweegsiwe" -- End of line: swap last two
+    elseif col <= first_char_col then
+        keys = "<Esc>wbgsiweegsiwe" -- Before first word: swap first two
+    end
 
-	return keys
+    return keys
 end, { expr = true, remap = true })
 
 -- mimic C-down left up right in emacs
@@ -226,6 +225,9 @@ vim.keymap.set("i", "<C-Down>", "<C-o>}", { desc = "Jump paragraph down" })
 vim.keymap.set("i", "<C-Up>", "<C-o>{", { desc = "Jump paragraph up" })
 vim.keymap.set("n", "<C-Down>", "}", { desc = "Jump paragraph down" })
 vim.keymap.set("n", "<C-Up>", "{", { desc = "Jump paragraph up" })
+vim.keymap.set("v", "<C-Down>", "}", { desc = "Jump paragraph down" })
+vim.keymap.set("v", "<C-Up>", "{", { desc = "Jump paragraph up" })
+
 
 -- -------------------------------------------------------------
 -- Smart zz (Emacs C-l style: center → top → bottom)
@@ -238,24 +240,24 @@ local last_pos = { 0, 0 }
 local zz_state = 0
 
 local function smart_recenter()
-	local curr_pos = vim.api.nvim_win_get_cursor(0)
-	if curr_pos[1] ~= last_pos[1] or curr_pos[2] ~= last_pos[2] then
-		zz_state = 0
-	end
-	local old_scrolloff = vim.opt.scrolloff:get()
-	vim.opt.scrolloff = 0
-	if zz_state == 0 then
-		vim.cmd("normal! zz")
-		zz_state = 1
-	elseif zz_state == 1 then
-		vim.cmd("normal! zt")
-		zz_state = 2
-	else
-		vim.cmd("normal! zb")
-		zz_state = 0
-	end
-	vim.opt.scrolloff = old_scrolloff
-	last_pos = curr_pos
+    local curr_pos = vim.api.nvim_win_get_cursor(0)
+    if curr_pos[1] ~= last_pos[1] or curr_pos[2] ~= last_pos[2] then
+        zz_state = 0
+    end
+    local old_scrolloff = vim.opt.scrolloff:get()
+    vim.opt.scrolloff = 0
+    if zz_state == 0 then
+        vim.cmd("normal! zz")
+        zz_state = 1
+    elseif zz_state == 1 then
+        vim.cmd("normal! zt")
+        zz_state = 2
+    else
+        vim.cmd("normal! zb")
+        zz_state = 0
+    end
+    vim.opt.scrolloff = old_scrolloff
+    last_pos = curr_pos
 end
 
 vim.keymap.set("n", "zz", smart_recenter, { desc = "Smart zz: center → top → bottom" })
@@ -355,7 +357,7 @@ vim.keymap.set("v", "<M-b>", "b", { desc = "Backward word" })
 -- -------------------------------------------------------------
 -- C-g: cancel selection, return to Insert
 -- (Emacs C-g = cancel; returning to Insert fits an insert-centric workflow)
-vim.keymap.set("v", "<C-g>", "<Esc>i", { desc = "Cancel selection, back to Insert" })
+vim.keymap.set("v", "<C-g>", "<Esc>", { desc = "Cancel selection, back to Insert" })
 vim.keymap.set("v", "<C-w>", '"+d', { desc = "Kill region (cut to clipboard)" })
 vim.keymap.set("v", "<M-w>", '"+y', { desc = "Copy region (to clipboard)" })
 
@@ -449,31 +451,31 @@ local ns = vim.api.nvim_create_namespace("emacs_mark")
 local emacs_mark = nil
 
 local function clear_mark()
-	emacs_mark = nil
-	vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+    emacs_mark = nil
+    vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
 end
 
 local function update_hl()
-	if not emacs_mark then
-		return
-	end
-	local cur = vim.api.nvim_win_get_cursor(0)
-	local m = emacs_mark
-	local r1, c1, r2, c2 = m[1] - 1, m[2], cur[1] - 1, cur[2]
-	if r1 > r2 or (r1 == r2 and c1 > c2) then
-		r1, c1, r2, c2 = r2, c2, r1, c1
-	end
-	vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
-	vim.api.nvim_buf_set_extmark(0, ns, r1, c1, { end_row = r2, end_col = c2, hl_group = "Visual" })
+    if not emacs_mark then
+        return
+    end
+    local cur = vim.api.nvim_win_get_cursor(0)
+    local m = emacs_mark
+    local r1, c1, r2, c2 = m[1] - 1, m[2], cur[1] - 1, cur[2]
+    if r1 > r2 or (r1 == r2 and c1 > c2) then
+        r1, c1, r2, c2 = r2, c2, r1, c1
+    end
+    vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+    vim.api.nvim_buf_set_extmark(0, ns, r1, c1, { end_row = r2, end_col = c2, hl_group = "Visual" })
 end
 
 vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, { callback = update_hl })
 
 -- C-Space: Set Mark
 local function set_mark()
-	emacs_mark = vim.api.nvim_win_get_cursor(0)
-	update_hl()
-	print("Mark set")
+    emacs_mark = vim.api.nvim_win_get_cursor(0)
+    update_hl()
+    print("Mark set")
 end
 
 vim.keymap.set("i", "<C-Space>", set_mark)
@@ -481,57 +483,57 @@ vim.keymap.set("i", "<NUL>", set_mark)
 
 -- C-g: Quit
 vim.keymap.set({ "n", "i" }, "<C-g>", function()
-	if emacs_mark then
-		clear_mark()
-		print("Mark cleared")
-		return "<Ignore>"
-	end
-	return "<Esc>"
+    if emacs_mark then
+        clear_mark()
+        print("Mark cleared")
+        return "<Ignore>"
+    end
+    return "<Esc>"
 end, { expr = true })
 
 -- Update helper to return 4 nils for LSP clarity
 local function get_region()
-	if not emacs_mark then
-		return nil, nil, nil, nil
-	end
-	local cur = vim.api.nvim_win_get_cursor(0)
-	local s, e = emacs_mark, cur
-	if s[1] > e[1] or (s[1] == e[1] and s[2] > e[2]) then
-		s, e = e, s
-	end
-	return s[1] - 1, s[2], e[1] - 1, e[2]
+    if not emacs_mark then
+        return nil, nil, nil, nil
+    end
+    local cur = vim.api.nvim_win_get_cursor(0)
+    local s, e = emacs_mark, cur
+    if s[1] > e[1] or (s[1] == e[1] and s[2] > e[2]) then
+        s, e = e, s
+    end
+    return s[1] - 1, s[2], e[1] - 1, e[2]
 end
 
 -- M-w: Copy Region
 vim.keymap.set("i", "<M-w>", function()
-	local r1, c1, r2, c2 = get_region()
-	-- Check all four to satisfy LSP integer requirement
-	if r1 and c1 and r2 and c2 then
-		local lines = vim.api.nvim_buf_get_text(0, r1, c1, r2, c2, {})
-		vim.fn.setreg("+", table.concat(lines, "\n"))
-		clear_mark()
-		print("Region copied")
-	end
+    local r1, c1, r2, c2 = get_region()
+    -- Check all four to satisfy LSP integer requirement
+    if r1 and c1 and r2 and c2 then
+        local lines = vim.api.nvim_buf_get_text(0, r1, c1, r2, c2, {})
+        vim.fn.setreg("+", table.concat(lines, "\n"))
+        clear_mark()
+        print("Region copied")
+    end
 end)
 
 -- C-w: Kill Region
 vim.keymap.set("i", "<C-w>", function()
-	local r1, c1, r2, c2 = get_region()
-	if r1 and c1 and r2 and c2 then
-		vim.api.nvim_buf_set_text(0, r1, c1, r2, c2, {})
-		vim.api.nvim_win_set_cursor(0, { r1 + 1, c1 })
-		clear_mark()
-	else
-		-- Word-backward logic (fallback when no mark)
-		local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-		if col == 0 then
-			return
-		end
-		local line = vim.api.nvim_get_current_line():sub(1, col)
-		local new_col = #(line:reverse():gsub("^%s*%S+", "", 1):reverse())
-		vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
-		vim.api.nvim_win_set_cursor(0, { row, new_col })
-	end
+    local r1, c1, r2, c2 = get_region()
+    if r1 and c1 and r2 and c2 then
+        vim.api.nvim_buf_set_text(0, r1, c1, r2, c2, {})
+        vim.api.nvim_win_set_cursor(0, { r1 + 1, c1 })
+        clear_mark()
+    else
+        -- Word-backward logic (fallback when no mark)
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        if col == 0 then
+            return
+        end
+        local line = vim.api.nvim_get_current_line():sub(1, col)
+        local new_col = #(line:reverse():gsub("^%s*%S+", "", 1):reverse())
+        vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
+        vim.api.nvim_win_set_cursor(0, { row, new_col })
+    end
 end)
 
 -- C-x o: Jump
@@ -689,9 +691,9 @@ vim.keymap.set("n", "<leader>X", "<cmd>!chmod +x %<CR>", { silent = true })
 --- This is stupid use redline this sucks btw
 -- In Insert Mode, map <C-k> to delete to the end of the line
 -- vim.keymap.set("i", "<C-k>", "<C-o>d$", {
--- 	noremap = true,
--- 	silent = true,
--- 	desc = "Delete from cursor to end of line",
+--  noremap = true,
+--  silent = true,
+--  desc = "Delete from cursor to end of line",
 -- })
 
 -- END---- these are mind END-----
@@ -758,7 +760,7 @@ vim.keymap.set("n", "M", ":tab split<CR>", { silent = true, desc = "Zoom window"
 -- THIS IS NICE: But I never really use it I like the idea of harpoon better. So if I had tabs I move to the mmanually ok?
 -- Tab Navigation (Moved to Function Keys)
 -- for i = 1, 9 do
--- 	vim.keymap.set("n", "<leader><F" .. i .. ">", i .. "gt", { desc = "Tab " .. i })
+--  vim.keymap.set("n", "<leader><F" .. i .. ">", i .. "gt", { desc = "Tab " .. i })
 -- end
 
 -- Manual tab switching
@@ -807,8 +809,8 @@ vim.keymap.set("n", "<A-up>", "<c-y>", { desc = "I don't want to hit shift" })
 -- vim.keymap.set("n", "gJ", "mzgJ`z")
 
 vim.keymap.set("n", "<leader>Rls", function()
-	require("luasnip.loaders.from_vscode").lazy_load()
-	print("Snippets reloaded!")
+    require("luasnip.loaders.from_vscode").lazy_load()
+    print("Snippets reloaded!")
 end, { desc = "Reload Luasnip snippets" })
 
 vim.keymap.set("n", "<leader>cwd", "<Cmd>cd %:h<CR>", { desc = "Decrease window height by 5" })
@@ -831,23 +833,23 @@ vim.keymap.set("n", "<leader>cb", "<cmd>cd -<CR>")
 -- ==============================================================================
 
 vim.keymap.set({ "n", "v" }, "j", function()
-	return vim.opt.wrap:get() and "gj" or "j"
+    return vim.opt.wrap:get() and "gj" or "j"
 end, { expr = true, silent = true, desc = "Smart j motion" })
 
 vim.keymap.set({ "n", "v" }, "k", function()
-	return vim.opt.wrap:get() and "gk" or "k"
+    return vim.opt.wrap:get() and "gk" or "k"
 end, { expr = true, silent = true, desc = "Smart k motion" })
 
 vim.keymap.set({ "n", "v", "o" }, "0", function()
-	return vim.opt.wrap:get() and "g0" or "0"
+    return vim.opt.wrap:get() and "g0" or "0"
 end, { expr = true, silent = true, desc = "Smart 0 motion" })
 
 vim.keymap.set({ "n", "v", "o" }, "^", function()
-	return vim.opt.wrap:get() and "g^" or "^"
+    return vim.opt.wrap:get() and "g^" or "^"
 end, { expr = true, silent = true, desc = "Smart ^ motion" })
 
 vim.keymap.set({ "n", "v", "o" }, "$", function()
-	return vim.opt.wrap:get() and "g$" or "$"
+    return vim.opt.wrap:get() and "g$" or "$"
 end, { expr = true, silent = true, desc = "Smart $ motion" })
 
 -- vim.keymap.set("n", "<leader>sh", "<cmd>:sp<cr>", { desc = "Open Quickfix List" })
@@ -873,14 +875,14 @@ vim.keymap.set("i", "<C-e>", "<End>")
 -- Why even have this just :w and enter manually mate I'm too used to this anyway lol
 -- vim.keymap.set("n", "<leader>w", "<cmd>:w<CR>")
 
-vim.keymap.set("n", "<Home>", "^", { desc = "Go to first line" })
+vim.keymap.set("n", "<Home>", "0", { desc = "Go to first line" })
 vim.keymap.set("n", "<End>", "$", { desc = "Go to first line" })
 
 -- SCREW YOU LLM NEVER EVER USING BOTH RAW AND NORMAL HOME AND END...AAAA!!!
 -- vim.keymap.set({ "n", "i", "v" }, "\27[H", "<H-- Map raw codes to internal keys <--- Problamatic never every do that stupid. scew you old me/LLM.ome>")
 -- vim.keymap.set({ "n", "i", "v" }, "\27[F", "<End>")
 
-vim.keymap.set("i", "<Home>", "<C-o>^", { desc = "Go to beginning of line" })
+vim.keymap.set("i", "<Home>", "<C-o>0", { desc = "Go to beginning of line" })
 vim.keymap.set("i", "<End>", "<C-o>$", { desc = "Go to end of line" })
 
 -- and you know nvim is annoying to yeah a man has to do what he has to do
@@ -904,28 +906,36 @@ vim.keymap.set("i", "<End>", "<C-o>$", { desc = "Go to end of line" })
 -- -- Remaps <C-v> to paste over the selected text.
 -- vim.keymap.set('v', '<C-v>', '"+p', { desc = "Paste over selection from system clipboard" })
 
+-- 1. Define the look
+vim.opt.listchars = { tab = "→ ", space = "·", nbsp = "␣", trail = "•"}
+
+-- 2. Toggle with a key (e.g., Space + w
 vim.keymap.set("n", "<leader>wp", function()
-	if vim.opt.wrap:get() then
-		vim.opt.wrap = false
-	else
-		vim.opt.wrap = true
-	end
+    vim.wo.list = not vim.wo.list
+end, { desc = "Toggle Whitespace" })
+
+vim.keymap.set("n", "<leader>ws", function()
+    if vim.opt.wrap:get() then
+        vim.opt.wrap = false
+    else
+        vim.opt.wrap = true
+    end
 end, { desc = "Toggle word wrap" })
 
 vim.keymap.set("n", "<leader>wr", function()
-	if vim.opt.relativenumber:get() then
-		vim.opt.relativenumber = false
-	else
-		vim.opt.relativenumber = true
-	end
+    if vim.opt.relativenumber:get() then
+        vim.opt.relativenumber = false
+    else
+        vim.opt.relativenumber = true
+    end
 end, { desc = "Toggle relative line numbers" })
 
 vim.keymap.set("n", "<leader>wn", function()
-	if vim.opt.number:get() then
-		vim.opt.number = false
-	else
-		vim.opt.number = true
-	end
+    if vim.opt.number:get() then
+        vim.opt.number = false
+    else
+        vim.opt.number = true
+    end
 end, { desc = "Toggle absolute line numbers" })
 
 -- This is for keyd my capslock setup
@@ -943,21 +953,21 @@ vim.keymap.set("n", "<C-w>z", "<C-w>s", { desc = "Horizontal split (replaces clo
 
 -- Toggle between current and last accessed tab
 vim.keymap.set("n", "<leader>`", function()
-	local last_tab = vim.fn.tabpagenr("#")
-	if last_tab > 0 then
-		vim.cmd(last_tab .. "tabnext")
-	else
-		print("No last tab to return to!")
-	end
+    local last_tab = vim.fn.tabpagenr("#")
+    if last_tab > 0 then
+        vim.cmd(last_tab .. "tabnext")
+    else
+        print("No last tab to return to!")
+    end
 end, { desc = "Toggle last tab" })
 
 vim.keymap.set("n", "<leader>$", function()
-	local last_tab = vim.fn.tabpagenr("#")
-	if last_tab > 0 then
-		vim.cmd(last_tab .. "tabnext")
-	else
-		print("No last tab to return to!")
-	end
+    local last_tab = vim.fn.tabpagenr("#")
+    if last_tab > 0 then
+        vim.cmd(last_tab .. "tabnext")
+    else
+        print("No last tab to return to!")
+    end
 end, { desc = "Toggle last tab" })
 
 -- This is just some quality of life so that the K thing the hover pop up thing
@@ -974,17 +984,17 @@ end, { desc = "Toggle last tab" })
 -- end, { desc = "Close floating windows and clear search" })
 
 vim.keymap.set("n", "<Esc>", function()
-	-- 1. Clear search highlights
-	vim.cmd("nohlsearch")
-	-- 2. Get the current window ID so we don't accidentally close it
-	local current_win = vim.api.nvim_get_current_win()
-	-- 3. Only kill "Focusable" floating windows that are NOT the current window
-	for _, win in ipairs(vim.api.nvim_list_wins()) do
-		if vim.api.nvim_win_is_valid(win) and win ~= current_win then
-			local config = vim.api.nvim_win_get_config(win)
-			if config.relative ~= "" and config.focusable then
-				vim.api.nvim_win_close(win, false)
-			end
-		end
-	end
+    -- 1. Clear search highlights
+    vim.cmd("nohlsearch")
+    -- 2. Get the current window ID so we don't accidentally close it
+    local current_win = vim.api.nvim_get_current_win()
+    -- 3. Only kill "Focusable" floating windows that are NOT the current window
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_is_valid(win) and win ~= current_win then
+            local config = vim.api.nvim_win_get_config(win)
+            if config.relative ~= "" and config.focusable then
+                vim.api.nvim_win_close(win, false)
+            end
+        end
+    end
 end, { desc = "Clean Escape: Kill hovers and clear highlights" })
