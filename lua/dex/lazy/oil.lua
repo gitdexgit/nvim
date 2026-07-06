@@ -145,7 +145,7 @@ end
 
 return {
 
-{
+	{
 		"handy-sun/wilder.nvim",
 		dependencies = { "romgrk/fzy-lua-native" },
 		lazy = false,
@@ -187,9 +187,11 @@ return {
 
 			-- Navigation (Only works if Wilder is awake)
 			vim.api.nvim_set_keymap("c", "<C-f>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
+			vim.api.nvim_set_keymap("c", "<leader>f", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
 			vim.api.nvim_set_keymap("c", "<C-b>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
+			vim.api.nvim_set_keymap("c", "<leader>b", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
 
-            -- I still want to move left and right... Umm so just like double tap capslock ok or just hold a and f or b
+			-- I still want to move left and right... Umm so just like double tap capslock ok or just hold a and f or b
 			-- vim.api.nvim_set_keymap("c", "<Right>", 'wilder#in_context() ? wilder#next() : "\\<C-f>"', opts)
 			-- vim.api.nvim_set_keymap("c", "<Left>", 'wilder#in_context() ? wilder#previous() : "\\<C-b>"', opts)
 
@@ -201,12 +203,15 @@ return {
 				),
 			})
 
-			wilder.set_option("renderer", wilder.wildmenu_renderer({
-				highlighter = wilder.lua_fzy_highlighter(),
-				separator = " | ",
-				left = { " ", wilder.wildmenu_spinner(), " " },
-				right = { " ", wilder.wildmenu_index() },
-			}))
+			wilder.set_option(
+				"renderer",
+				wilder.wildmenu_renderer({
+					highlighter = wilder.lua_fzy_highlighter(),
+					separator = " | ",
+					left = { " ", wilder.wildmenu_spinner(), " " },
+					right = { " ", wilder.wildmenu_index() },
+				})
+			)
 		end,
 	},
 	{
@@ -222,10 +227,19 @@ return {
 				return vim.api.nvim_replace_termcodes("<C-u>", true, true, true) .. new
 			end
 
-			vim.keymap.set({ "n", "i" }, "<C-x>d", dired_prompt)
+			-- vim.keymap.set({ "n", "i" }, "<C-x>d", dired_prompt)
+			-- vim.keymap.set("n", "<leader>pv", function()
+			-- 	require("oil").open()
+			-- end)
+
+			vim.keymap.set("n", "<leader>xd", dired_prompt)
+
+			vim.keymap.set("i", "<C-x>d", dired_prompt)
+
 			vim.keymap.set("n", "<leader>pv", function()
 				require("oil").open()
 			end)
+
 			vim.keymap.set("c", "<C-BS>", smart_delete, { expr = true })
 			vim.keymap.set("c", "<C-h>", smart_delete, { expr = true })
 
