@@ -1,3 +1,9 @@
+
+
+vim.keymap.set('n', '<Leader><tab>', '<C-w>', { noremap = true, silent = true })
+
+
+
 -- vim.keymap.set('n', '<C-k>', function()
 --     -- If at the end of the line, join the next line
 --     if vim.fn.col('.') >= vim.fn.col('$') - 1 then
@@ -7,6 +13,10 @@
 --         vim.cmd('normal! D')
 --     end
 -- end)
+
+
+
+
 
 -- Undo in Insert Mode using Ctrl + /
 -- We use <C-_> because most terminals send Ctrl+/ as Ctrl+_
@@ -83,9 +93,13 @@ end)
 --# i don't understand this <Plug>.... thing is this a lazynvim ? or is this in packer or what
 -- vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
 
-vim.keymap.set("n", "<leader>s", "<cmd>setlocal spell!<cr>", { desc = "Toggle spell check" })
+-- I don't need leader>s
+-- vim.keymap.set("n", "<leader>s", "<cmd>setlocal spell!<cr>", { desc = "Toggle spell check" })
+vim.keymap.set("n", "<leader>S", "<cmd>setlocal spell!<cr>", { desc = "Toggle spell check" })
 
-vim.keymap.set("n", "<leader>ss", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+-- I prefer leader s to be this tbh I think this is what the primegen has... he doesn't have leader>ss he just has leader>s
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
 vim.keymap.set("n", "J", "mzJ`z")
 ---just use freaking c-f and c-b
 -- vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -376,6 +390,11 @@ vim.keymap.set("i", "<C-x>k", "<C-o>:bd ", { desc = "Kill buffer" })
 vim.keymap.set("n", "<leader>xk", ":bd ", { desc = "Kill buffer" })
 vim.keymap.set("i", "<C-x><C-s>", "<C-o>:w<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>xs", ":w<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<leader>xc", ":q<CR>", { desc = "Save file" })
+
+-- Don't do this it screws with you know shell coomand thing
+-- vim.keymap.set("n", "<leader>!xs", ":w!<CR>", { desc = "Save file" })
+-- vim.keymap.set("n", "<leader>!xc", ":q!<CR>", { desc = "Save file" })
 
 -- FIX: was <C-o>gg<C-o>vG (double C-o, fragile).
 -- Leaves insert, selects all in visual-line mode. Select-all implies leaving insert anyway.
@@ -808,10 +827,11 @@ vim.keymap.set("n", "<A-up>", "<c-y>", { desc = "I don't want to hit shift" })
 --# I'm not sure to be honest when it's off it's fine
 -- vim.keymap.set("n", "gJ", "mzgJ`z")
 
-vim.keymap.set("n", "<leader>Rls", function()
-    require("luasnip.loaders.from_vscode").lazy_load()
-    print("Snippets reloaded!")
-end, { desc = "Reload Luasnip snippets" })
+-- I don't even know what the heck this is
+-- vim.keymap.set("n", "<leader>Rls", function()
+--     require("luasnip.loaders.from_vscode").lazy_load()
+--     print("Snippets reloaded!")
+-- end, { desc = "Reload Luasnip snippets" })
 
 vim.keymap.set("n", "<leader>cwd", "<Cmd>cd %:h<CR>", { desc = "Decrease window height by 5" })
 vim.keymap.set("n", "<leader>zd", "<cmd>FzfLua zoxide<CR>")
@@ -832,6 +852,26 @@ vim.keymap.set("n", "<leader>cb", "<cmd>cd -<CR>")
 -- ==                      Smart Word Wrap Motions                           ==
 -- ==============================================================================
 
+
+
+
+--- done:
+--- - Never exit insert mode because if you exit it screws up the positioning
+--- - Make it behave like gk and gj but in insert mode with <up> and <down>.
+vim.keymap.set("i", "<Down>", "<C-o>gj")
+vim.keymap.set("i", "<Up>", "<C-o>gk")
+
+
+vim.keymap.set({ "n", "v" }, "<Down>", function()
+    return vim.opt.wrap:get() and "gj" or "j"
+end, { expr = true, silent = true, desc = "Smart j motion" })
+
+vim.keymap.set({ "n", "v" }, "<Up>", function()
+    return vim.opt.wrap:get() and "gk" or "k"
+end, { expr = true, silent = true, desc = "Smart k motion" })
+
+
+
 vim.keymap.set({ "n", "v" }, "j", function()
     return vim.opt.wrap:get() and "gj" or "j"
 end, { expr = true, silent = true, desc = "Smart j motion" })
@@ -851,6 +891,12 @@ end, { expr = true, silent = true, desc = "Smart ^ motion" })
 vim.keymap.set({ "n", "v", "o" }, "$", function()
     return vim.opt.wrap:get() and "g$" or "$"
 end, { expr = true, silent = true, desc = "Smart $ motion" })
+
+
+
+
+
+
 
 -- vim.keymap.set("n", "<leader>sh", "<cmd>:sp<cr>", { desc = "Open Quickfix List" })
 -- vim.keymap.set("n", "<leader>sv", "<cmd>:vsp<cr>", { desc = "Open Quickfix List" })
@@ -911,6 +957,10 @@ vim.opt.listchars = { tab = "→ ", space = "·", nbsp = "␣", trail = "•"}
 
 -- 2. Toggle with a key (e.g., Space + w
 vim.keymap.set("n", "<leader>wp", function()
+    vim.wo.list = not vim.wo.list
+end, { desc = "Toggle Whitespace" })
+
+vim.keymap.set("n", "<leader>W", function()
     vim.wo.list = not vim.wo.list
 end, { desc = "Toggle Whitespace" })
 
