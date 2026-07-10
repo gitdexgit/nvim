@@ -46,13 +46,15 @@ vim.api.nvim_create_autocmd("WinEnter", {
     end,
 })
 
-vim.keymap.set("n", "<leader><Tab>", function()
-    local cur = vim.api.nvim_get_current_win()
-    local target = (win_stack[1] == cur) and win_stack[2] or win_stack[1]
-    if target and vim.api.nvim_win_is_valid(target) then
-        vim.api.nvim_set_current_win(target)
-    end
-end)
+
+-- Noo need for this just use the default which is basically Ctrl-w p
+-- vim.keymap.set("n", "<leader><Tab>", function()
+--     local cur = vim.api.nvim_get_current_win()
+--     local target = (win_stack[1] == cur) and win_stack[2] or win_stack[1]
+--     if target and vim.api.nvim_win_is_valid(target) then
+--         vim.api.nvim_set_current_win(target)
+--     end
+-- end)
 
 
 
@@ -64,6 +66,35 @@ vim.opt.listchars = { tab = "→ ", space = "·", nbsp = "␣", trail = "•" }
 vim.api.nvim_create_user_command("WhitespaceMode", function()
     vim.wo.list = not vim.wo.list
 end, {})
+
+--- Sadly can't do lowercased command man
+-- vim.api.nvim_create_user_command("wh", function()
+--     vim.wo.list = not vim.wo.list
+-- end, {})
+
+-- Sometimes I'm fast at hitting shift that I end up typing :W a lot and if you
+-- have WhitespaceMode command it makes it you know. work instead. so you have to define :W
+vim.api.nvim_create_user_command("W", function()
+    -- vim.wo.list = not vim.wo.list
+    vim.cmd('w')
+end, {})
+
+-- Shorcut for WhitespaceMode also you can do leader wp as well
+vim.api.nvim_create_user_command("Wp", function()
+    vim.wo.list = not vim.wo.list
+end, {})
+
+-- Shorcut for WhitespaceMode also you can do leader wp as well
+vim.api.nvim_create_user_command("WP", function()
+    vim.wo.list = not vim.wo.list
+end, {})
+
+-- Sometimes I'm fast at hitting shift that I end up typing :Q a lot
+vim.api.nvim_create_user_command("Q", function()
+    -- vim.wo.list = not vim.wo.list
+    vim.cmd('q')
+end, {})
+
 
 -- 3. The "Nuclear" Fix: Convert all tabs to spaces on save
 vim.api.nvim_create_autocmd("BufWritePre", {
