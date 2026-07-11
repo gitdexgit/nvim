@@ -96,11 +96,25 @@ vim.api.nvim_create_user_command("Q", function()
 end, {})
 
 
+-- I think the issue here was that it when it saves or when I save it's not restoring the view
 -- 3. The "Nuclear" Fix: Convert all tabs to spaces on save
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--     pattern = "*",
+--     command = "silent! retab",
+-- })
+
+
+-- hopefully this fixes it?
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*",
-    command = "silent! retab",
+    callback = function()
+        local view = vim.fn.winsaveview()
+        vim.cmd("silent! %s/\\s\\+$//e")
+        vim.cmd("silent! retab")
+        vim.fn.winrestview(view)
+    end,
 })
+
 
 -----------------------------------------------------------------------------------------------------------
 --- Cursor movements - Cursor keep location for Copying stuff and duplicating stuff and yanking stuff
@@ -385,11 +399,28 @@ autocmd("TextYankPost", {
     end,
 })
 
-autocmd({ "BufWritePre" }, {
+
+-- I think this causes my cursor jumping around when I have extra spaces on the right and I don't like iwt
+-- autocmd({ "BufWritePre" }, {
+--     group = ThePrimeagenGroup,
+--     pattern = "*",
+--     command = [[%s/\s\+$//e]],
+-- })
+
+autocmd("BufWritePre", {
     group = ThePrimeagenGroup,
     pattern = "*",
-    command = [[%s/\s\+$//e]],
+    callback = function()
+        local view = vim.fn.winsaveview()
+        vim.cmd([[silent! %s/\s\+$//e]])
+        vim.cmd([[silent! retab]])
+        vim.fn.winrestview(view)
+    end,
 })
+
+
+
+
 
 -- autocmd("BufEnter", {
 --  group = ThePrimeagenGroup,
