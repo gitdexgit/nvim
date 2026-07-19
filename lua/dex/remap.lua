@@ -466,62 +466,46 @@ vim.keymap.set("n", "<leader>xh", "ggVG", { desc = "Mark whole buffer (select al
 --   vim.cmd("wincmd w")
 -- end)
 
-local ns = vim.api.nvim_create_namespace("emacs_mark")
-local emacs_mark = nil
+local started_from_insert = false
 
-local function clear_mark()
-    emacs_mark = nil
-    vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
-end
-
-local function update_hl()
-    if not emacs_mark then
-        return
-    end
-    local cur = vim.api.nvim_win_get_cursor(0)
-    local m = emacs_mark
-    local r1, c1, r2, c2 = m[1] - 1, m[2], cur[1] - 1, cur[2]
-    if r1 > r2 or (r1 == r2 and c1 > c2) then
-        r1, c1, r2, c2 = r2, c2, r1, c1
-    end
-    vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
-    vim.api.nvim_buf_set_extmark(0, ns, r1, c1, { end_row = r2, end_col = c2, hl_group = "Visual" })
-end
-
-vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, { callback = update_hl })
-
--- C-Space: Set Mark
-local function set_mark()
-    emacs_mark = vim.api.nvim_win_get_cursor(0)
-    update_hl()
-    print("Mark set")
-end
-
-vim.keymap.set("i", "<C-Space>", set_mark)
-vim.keymap.set("i", "<NUL>", set_mark)
-
--- C-g: Quit
-vim.keymap.set({ "n", "i" }, "<C-g>", function()
-    if emacs_mark then
-        clear_mark()
-        print("Mark cleared")
-        return "<Ignore>"
-    end
-    return "<Esc>"
+-- 1. Trigger Real Visual Mode from Insert
+vim.keymap.set("i", "<C-Space>", function()
+    started_from_insert = true
+    return "<C-o>v"
 end, { expr = true })
 
--- Update helper to return 4 nils for LSP clarity
-local function get_region()
-    if not emacs_mark then
-        return nil, nil, nil, nil
-    end
-    local cur = vim.api.nvim_win_get_cursor(0)
-    local s, e = emacs_mark, cur
-    if s[1] > e[1] or (s[1] == e[1] and s[2] > e[2]) then
-        s, e = e, s
-    end
-    return s[1] - 1, s[2], e[1] - 1, e[2]
-end
+vim.keymap.set("c", "<C-g>", "<C-c>", { desc = "Emacs-style Abort in Command-line" })
+
+
+--
+-- -- 2. C-g: The "Cancel" button
+-- -- In Visual: Returns to Insert if started there, else Normal.
+-- -- In Normal/Insert: Acts as a standard Escape.
+-- vim.keymap.set({ "n", "v" }, "<C-g>", function()
+--     local mode = vim.api.nvim_get_mode().mode
+--     if mode:match("[vV\22]") then
+--         local target = started_from_insert and "<Esc>a" or "<Esc>"
+--         started_from_insert = false
+--         return target
+--     end
+--     return "<Esc>"
+-- end, { expr = true })
+
+-- 3. Auto-Return to Insert after Yank/Delete/Action
+vim.api.nvim_create_autocmd("ModeChanged", {
+    pattern = "[vV\22]:n", -- From any Visual to Normal
+    callback = function()
+        if started_from_insert then
+            started_from_insert = false
+            vim.schedule(function()
+                vim.cmd("startinsert")
+            end)
+        end
+    end,
+})
+
+
+
 
 -- M-w: Copy Region
 vim.keymap.set("i", "<M-w>", function()
