@@ -8,6 +8,23 @@ require("dex.lazy_init")
 
 
 
+vim.cmd("cnoreabbrev Q! q!")
+vim.cmd("cnoreabbrev Q q")
+vim.cmd("cnoreabbrev W! w!")
+vim.cmd("cnoreabbrev W w")
+vim.cmd("cnoreabbrev Wp WhitespaceMode")
+vim.cmd("cnoreabbrev WP WhitespaceMode")
+
+
+-- whitespace stuff
+vim.opt.listchars = { tab = "→ ", space = "·", nbsp = "␣", trail = "•" }
+
+-- whitespace command
+vim.api.nvim_create_user_command("WhitespaceMode", function()
+    vim.wo.list = not vim.wo.list
+end, {})
+
+
 
 
 
@@ -59,41 +76,6 @@ vim.api.nvim_create_autocmd("WinEnter", {
 
 
 
--- 1. Define the look
-vim.opt.listchars = { tab = "→ ", space = "·", nbsp = "␣", trail = "•" }
-
--- 2. Create the command (MUST be Uppercase)
-vim.api.nvim_create_user_command("WhitespaceMode", function()
-    vim.wo.list = not vim.wo.list
-end, {})
-
---- Sadly can't do lowercased command man
--- vim.api.nvim_create_user_command("wh", function()
---     vim.wo.list = not vim.wo.list
--- end, {})
-
--- Sometimes I'm fast at hitting shift that I end up typing :W a lot and if you
--- have WhitespaceMode command it makes it you know. work instead. so you have to define :W
-vim.api.nvim_create_user_command("W", function()
-    -- vim.wo.list = not vim.wo.list
-    vim.cmd('w')
-end, {})
-
--- Shorcut for WhitespaceMode also you can do leader wp as well
-vim.api.nvim_create_user_command("Wp", function()
-    vim.wo.list = not vim.wo.list
-end, {})
-
--- Shorcut for WhitespaceMode also you can do leader wp as well
-vim.api.nvim_create_user_command("WP", function()
-    vim.wo.list = not vim.wo.list
-end, {})
-
--- Sometimes I'm fast at hitting shift that I end up typing :Q a lot
-vim.api.nvim_create_user_command("Q", function()
-    -- vim.wo.list = not vim.wo.list
-    vim.cmd('q')
-end, {})
 
 
 -- I think the issue here was that it when it saves or when I save it's not restoring the view
