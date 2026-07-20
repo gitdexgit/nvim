@@ -3,6 +3,14 @@
 vim.keymap.set('n', '<Leader><tab>', '<C-w>', { noremap = true, silent = true })
 
 
+-- Normal & Visual
+vim.keymap.set({'n', 'v'}, '<C-Home>', 'gg')
+vim.keymap.set({'n', 'v'}, '<C-End>', 'G')
+
+-- Insert
+vim.keymap.set('i', '<C-Home>', '<C-o>gg')
+vim.keymap.set('i', '<C-End>', '<C-o>G')
+
 
 -- vim.keymap.set('n', '<C-k>', function()
 --     -- If at the end of the line, join the next line
