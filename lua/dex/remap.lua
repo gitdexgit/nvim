@@ -7,6 +7,8 @@ vim.keymap.set('n', '<Leader><tab>', '<C-w>', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v'}, '<C-Home>', 'gg')
 vim.keymap.set({'n', 'v'}, '<C-End>', 'G')
 
+
+
 -- Insert
 vim.keymap.set('i', '<C-Home>', '<C-o>gg')
 vim.keymap.set('i', '<C-End>', '<C-o>G')
@@ -913,15 +915,19 @@ vim.keymap.set("i", "<C-e>", "<End>")
 -- Why even have this just :w and enter manually mate I'm too used to this anyway lol
 -- vim.keymap.set("n", "<leader>w", "<cmd>:w<CR>")
 
-vim.keymap.set("n", "<Home>", "0", { desc = "Go to first line" })
-vim.keymap.set("n", "<End>", "$", { desc = "Go to first line" })
+vim.keymap.set("n", "<Home>", "g0", { desc = "Go to first line" })
+vim.keymap.set("n", "<End>", "g$", { desc = "Go to first line" })
+
+vim.keymap.set("v", "<Home>", "g0", { desc = "Go to first line" })
+vim.keymap.set("v", "<End>", "g$", { desc = "Go to first line" })
+
 
 -- SCREW YOU LLM NEVER EVER USING BOTH RAW AND NORMAL HOME AND END...AAAA!!!
 -- vim.keymap.set({ "n", "i", "v" }, "\27[H", "<H-- Map raw codes to internal keys <--- Problamatic never every do that stupid. scew you old me/LLM.ome>")
 -- vim.keymap.set({ "n", "i", "v" }, "\27[F", "<End>")
 
-vim.keymap.set("i", "<Home>", "<C-o>0", { desc = "Go to beginning of line" })
-vim.keymap.set("i", "<End>", "<C-o>$", { desc = "Go to end of line" })
+vim.keymap.set("i", "<Home>", "<C-o>g0", { desc = "Go to beginning of line" })
+vim.keymap.set("i", "<End>", "<C-o>g$", { desc = "Go to end of line" })
 
 -- and you know nvim is annoying to yeah a man has to do what he has to do
 -- Yes yes... sadly my terminal is C-S-v to past and you know my .zshrc is C-V for zi-vi-mode (gotta get that xclip)
