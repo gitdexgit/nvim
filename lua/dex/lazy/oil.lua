@@ -285,6 +285,34 @@ return {
                     return false
                 end,
             },
+
+            keymaps = {
+                -- yp: Copy relative path (from project root)
+                ["yp"] = function()
+                    local oil = require("oil")
+                    local entry = oil.get_cursor_entry()
+                    local dir = oil.get_current_dir()
+                    if entry and dir then
+                        local abs_path = dir .. entry.name
+                        -- ":." makes the path relative to the current working directory
+                        local rel_path = vim.fn.fnamemodify(abs_path, ":.")
+                        vim.fn.setreg("+", rel_path)
+                        print("Copied Rel: " .. rel_path)
+                    end
+                end,
+
+                -- yP: Copy absolute path
+                ["yP"] = function()
+                    local oil = require("oil")
+                    local entry = oil.get_cursor_entry()
+                    local dir = oil.get_current_dir()
+                    if entry and dir then
+                        local abs_path = dir .. entry.name
+                        vim.fn.setreg("+", abs_path)
+                        print("Copied Abs: " .. abs_path)
+                    end
+                end,
+            },
         },
     },
 }
