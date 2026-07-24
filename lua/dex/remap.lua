@@ -279,23 +279,35 @@ vim.keymap.set("v", "<C-Down>", "}", { desc = "Jump paragraph down" })
 vim.keymap.set("v", "<C-Up>", "{", { desc = "Jump paragraph up" })
 
 
--- -------------------------------------------------------------
--- Smart zz (Emacs C-l style: center → top → bottom)
--- -------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- -------------------------------------------------------------
 -- Smart recenter (Emacs C-l: center → top → bottom)
--- Shared fn so both zz and insert-mode C-l use same state
+-- Resets cycle if any movement or edit occurs between presses
 -- -------------------------------------------------------------
-local last_pos = { 0, 0 }
 local zz_state = 0
+local is_recentering = false -- Flag to prevent the function from resetting itself
 
 local function smart_recenter()
-    local curr_pos = vim.api.nvim_win_get_cursor(0)
-    if curr_pos[1] ~= last_pos[1] or curr_pos[2] ~= last_pos[2] then
-        zz_state = 0
-    end
+    is_recentering = true
+
     local old_scrolloff = vim.opt.scrolloff:get()
     vim.opt.scrolloff = 0
+
     if zz_state == 0 then
         vim.cmd("normal! zz")
         zz_state = 1
@@ -306,14 +318,45 @@ local function smart_recenter()
         vim.cmd("normal! zb")
         zz_state = 0
     end
+
     vim.opt.scrolloff = old_scrolloff
-    last_pos = curr_pos
+
+    -- Allow a tiny delay before allowing the reset-listener to work again.
+    -- This ensures the scroll itself doesn't trigger the reset.
+    vim.schedule(function()
+        is_recentering = false
+    end)
 end
+
+-- Reset the cycle if the cursor moves or text changes
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "TextChanged", "TextChangedI" }, {
+    callback = function()
+        if not is_recentering then
+            zz_state = 0
+        end
+    end,
+})
 
 vim.keymap.set("n", "zz", smart_recenter, { desc = "Smart zz: center → top → bottom" })
 vim.keymap.set("i", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
 vim.keymap.set("v", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
 vim.keymap.set("n", "<C-l>", smart_recenter, { desc = "Recenter (Emacs C-l)" })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- -------------------------------------------------------------
 -- Basic Movement (Insert)
