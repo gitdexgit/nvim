@@ -1,5 +1,31 @@
 
 
+
+vim.keymap.set("v", "<C-Space>", "vv")
+
+
+
+
+-- I used to find this cool but it's whatever it's meh I'll keep it for whatever as comment
+-- But for prime I'll keep this for whatever reason why not.
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+
+vim.keymap.set("v", "<A-n>", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "<A-p>", ":m '<-2<CR>gv=gv")
+
+
+-- Normal Mode
+vim.keymap.set('n', '<A-n>', ':m .+1<CR>==', { silent = true })
+vim.keymap.set('n', '<A-p>', ':m .-2<CR>==', { silent = true })
+
+-- Insert Mode
+vim.keymap.set('i', '<A-n>', '<Esc>:m .+1<CR>==gi', { silent = true })
+vim.keymap.set('i', '<A-p>', '<Esc>:m .-2<CR>==gi', { silent = true })
+
+
+
 vim.keymap.set('n', '<Leader><tab>', '<C-w>', { noremap = true, silent = true })
 
 
@@ -623,14 +649,19 @@ vim.keymap.set("n", "<A-C-l>", ":tabmove +1<CR>", { silent = true, desc = "Move 
 -- also have the advantage of autocommenting. So gotta sacrifice A-o and A-O
 
 ------ I can't do C-o that would brick nvim and C-o in nvim the concept of jumps is so nice So we use M-o and M-S-o
--- Below
-vim.keymap.set("n", "<A-o>", "o<Esc>S", { desc = "Open new blank line below" })
-vim.keymap.set("i", "<A-O>", "<C-o>o<Esc>S", { desc = "Open new blank line below" })
+-- -- Below
+-- vim.keymap.set("n", "<A-o>", "o<Esc>S", { desc = "Open new blank line below" })
+-- vim.keymap.set("i", "<A-O>", "<C-o>o<Esc>S", { desc = "Open new blank line below" })
+--
+-- -- Above
+-- vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above" })
+-- vim.keymap.set("i", "<A-o>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
 
--- Above
+vim.keymap.set("n", "<A-o>", "<C-w><C-w>", { desc = "Open new blank line below" })
+vim.keymap.set("n", "<C-w>1", "<C-w>o", { desc = "Open new blank line below" })
+vim.keymap.set("n", "<C-w>2", "<C-w>s", { desc = "Open new blank line below" })
+vim.keymap.set("n", "<C-w>3", "<C-w>v", { desc = "Open new blank line below" })
 
-vim.keymap.set("n", "<A-O>", "O<Esc>S", { desc = "Open new blank line above" })
-vim.keymap.set("i", "<A-o>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
 
 -- Remap Ctrl+f to scroll up
 -- vim.keymap.set("n", "<C-f>", "<C-f>zz")
