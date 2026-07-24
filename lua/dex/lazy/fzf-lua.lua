@@ -62,6 +62,12 @@ return {
                 require("fzf-lua").files,
                 { noremap = true, silent = true, desc = "FZF-Lua: Find Files" }
             )
+            vim.keymap.set(
+                "n",
+                "<leader>fl",
+                require("fzf-lua").loclist,
+                { noremap = true, silent = true, desc = "FZF-Lua: Find Files" }
+            )
 
             -- Searches only .git files being tracked. So .gitignores is useful to exclude files you don't want to see.
             vim.keymap.set(
