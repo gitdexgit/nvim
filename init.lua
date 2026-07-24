@@ -6,26 +6,7 @@ vim.opt.splitbelow = true
 
 require("dex")
 
--- I used to find this cool but it's whatever it's meh I'll keep it for whatever as comment
--- But for prime I'll keep this for whatever reason why not.
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
-
--- Normal Mode
-vim.keymap.set('n', '<A-n>', ':m .+1<CR>==', { silent = true })
-vim.keymap.set('n', '<A-p>', ':m .-2<CR>==', { silent = true })
-
--- Insert Mode
-vim.keymap.set('i', '<A-n>', '<Esc>:m .+1<CR>==gi', { silent = true })
-vim.keymap.set('i', '<A-p>', '<Esc>:m .-2<CR>==gi', { silent = true })
-
-
--- vim.keymap.set("n", "<leader><leader>", "v", { silent = true })
-vim.keymap.set("v", "<leader>v", "V", { silent = true })
--- vim.keymap.set("v", "<leader><leader>", "v", { silent = true })
-vim.keymap.set("v", "<C-Space>", "vv")
-vim.keymap.set("n", "<leader>v", "V", { silent = true })
 
 -- Keep tabs hidden forever
 vim.opt.showtabline = 0
@@ -78,6 +59,7 @@ function _G.toggle_bars()
     end
 end
 
+-- hide and unhide status bar bellow
 vim.keymap.set("n", "<leader>z", _G.toggle_bars)
 
 -- vim.opt.title = true
