@@ -1,9 +1,9 @@
 require("dex.set")
 -- require("dex.tab_line")
 require("dex.clipboard")
-require("dex.remap")
 require("dex.bottom-bar-modes")
 require("dex.lazy_init")
+require("dex.remap")
 
 
 
