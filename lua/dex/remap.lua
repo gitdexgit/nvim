@@ -4,6 +4,12 @@
 vim.keymap.set("v", "<C-Space>", "vv")
 
 
+-- Next buffer (Emacs-style)
+vim.keymap.set('n', '<C-x><Down>', ':bnext<CR>', { silent = true })
+
+-- Previous buffer (Smart/Listed only)
+vim.keymap.set('n', '<C-x><Left>', ':bprevious<CR>', { silent = true })
+
 
 
 -- I used to find this cool but it's whatever it's meh I'll keep it for whatever as comment
@@ -58,6 +64,7 @@ vim.keymap.set('i', '<C-End>', '<C-o>G')
 -- We use <C-_> because most terminals send Ctrl+/ as Ctrl+_
 -- vim.keymap.set('i', '<C-/>', '<C-o>u', { noremap = true })
 vim.keymap.set("i", "<C-_>", "<C-o>u", { noremap = true })
+vim.keymap.set("n", "<C-_>", "<C-o>u", { noremap = true })
 
 -- Normal Mode mappings
 vim.keymap.set("n", "<M-<>", "gg", { noremap = true })
@@ -598,25 +605,12 @@ vim.keymap.set("i", "<M-w>", function()
     end
 end)
 
--- C-w: Kill Region
-vim.keymap.set("i", "<C-w>", function()
-    local r1, c1, r2, c2 = get_region()
-    if r1 and c1 and r2 and c2 then
-        vim.api.nvim_buf_set_text(0, r1, c1, r2, c2, {})
-        vim.api.nvim_win_set_cursor(0, { r1 + 1, c1 })
-        clear_mark()
-    else
-        -- Word-backward logic (fallback when no mark)
-        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        if col == 0 then
-            return
-        end
-        local line = vim.api.nvim_get_current_line():sub(1, col)
-        local new_col = #(line:reverse():gsub("^%s*%S+", "", 1):reverse())
-        vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
-        vim.api.nvim_win_set_cursor(0, { row, new_col })
-    end
-end)
+
+-- 1. In Insert Mode: C-w behaves like a standard terminal (Delete Word Backward)
+-- vim.keymap.set("i", "<C-w>", "<C-w>", { noremap = true, desc = "Delete word backward (Terminal style)" })
+
+
+
 
 -- C-x o: Jump
 -- vim.keymap.set({ "n", "i", "v" }, "<C-x>o", function()
