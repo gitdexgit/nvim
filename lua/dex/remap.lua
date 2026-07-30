@@ -378,6 +378,8 @@ vim.keymap.set("i", "<C-p>", "<Up>", { desc = "Previous line" })
 vim.keymap.set("i", "<C-a>", "<Home>", { desc = "Beginning of line" })
 vim.keymap.set("i", "<C-e>", "<End>", { desc = "End of line" })
 
+vim.keymap.set("n", "<C-e>", "<End>", { desc = "End of line" })
+
 -- M-f/b: word forward/backward
 -- FIX: was <C-o>w (start of next word). M-f in Emacs → end of word → use e
 vim.keymap.set("i", "<M-f>", "<C-o>e", { desc = "Forward word" })
