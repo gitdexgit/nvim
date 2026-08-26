@@ -219,7 +219,13 @@ return {
                 require("fzf-lua").oldfiles,
                 { noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
             )
-
+            -- Normal Mode
+            vim.keymap.set(
+                "n",
+                "<C-x>b",
+                require("fzf-lua").buffers,
+                { noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+            )
             -- Normal Mode
             vim.keymap.set(
                 "n",
@@ -230,6 +236,12 @@ return {
             vim.keymap.set(
                 "v",
                 "<leader>xb",
+                require("fzf-lua").buffers,
+                { noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
+            )
+            vim.keymap.set(
+                "v",
+                "<C-x>b",
                 require("fzf-lua").buffers,
                 { noremap = true, silent = true, desc = "FZF-Lua: Buffers" }
             )
