@@ -496,7 +496,10 @@ vim.keymap.set("i", "<C-h>", "<C-w>", { desc = "Delete word backward" })
 -- -------------------------------------------------------------
 vim.keymap.set("i", "<C-x>k", "<C-o>:bd ", { desc = "Kill buffer" })
 vim.keymap.set("n", "<leader>xk", ":bd ", { desc = "Kill buffer" })
-vim.keymap.set("i", "<C-x><C-s>", "<C-o>:w<CR>", { desc = "Save file" })
+vim.keymap.set("i", "<C-x>s", "<C-o>:w<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<C-x>s", ":w<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<C-x>c", ":q<CR>", { desc = "Save file" })
+vim.keymap.set("i", "<C-x>c", "<C-o>:q<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>xs", ":w<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>xc", ":q<CR>", { desc = "Save file" })
 
@@ -507,6 +510,7 @@ vim.keymap.set("n", "<leader>xc", ":q<CR>", { desc = "Save file" })
 -- FIX: was <C-o>gg<C-o>vG (double C-o, fragile).
 -- Leaves insert, selects all in visual-line mode. Select-all implies leaving insert anyway.
 vim.keymap.set("i", "<C-x>h", "<Esc>ggVG", { desc = "Mark whole buffer (select all)" })
+vim.keymap.set("n", "<C-x>h", "ggVG", { desc = "Mark whole buffer (select all)" })
 vim.keymap.set("n", "<leader>xh", "ggVG", { desc = "Mark whole buffer (select all)" })
 
 ---- Ok this scruffed thing actually kinda works but meh but it's fine as a started maybe idk
