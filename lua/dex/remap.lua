@@ -164,6 +164,7 @@ vim.keymap.set("i", "<C-^>", "<C-o><C-^>")
 
 _G.emacs_find_file = function()
     local dir = vim.fn.getcwd()
+
     local ok, oil = pcall(require, "oil")
     if ok then
         local oil_dir = oil.get_current_dir()
@@ -171,18 +172,29 @@ _G.emacs_find_file = function()
             dir = oil_dir:gsub("^oil://", "")
         end
     end
-    -- Ensure trailing slash
+
     dir = dir:gsub("/+$", "") .. "/"
 
-    -- nvim_input simulates raw user keystrokes
-    -- <C-u> clears any existing range/garbage in cmdline
-    vim.api.nvim_input(":e " .. dir)
+    if vim.fn.mode() == "i" then
+        vim.api.nvim_input("<C-o>:e " .. dir)
+    else
+        vim.api.nvim_input(":e " .. dir)
+    end
 end
 
-vim.keymap.set({ "i" }, "<C-x><C-f>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
-vim.keymap.set({ "n" }, "<leader>xf", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
-vim.keymap.set({ "i" }, "<C-x><Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
-vim.keymap.set({ "n" }, "<leader>x<Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+vim.keymap.set("i", "<C-x>f", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+vim.keymap.set("i", "<C-x><Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+
+vim.keymap.set("n", "<leader>xf", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+vim.keymap.set("n", "<leader>x<Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+
+vim.keymap.set("n", "<C-x>f", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+vim.keymap.set("n", "<C-x><Right>", "<cmd>lua _G.emacs_find_file()<CR>", { silent = true })
+
+
+
+
+
 
 -- Insert mode
 vim.keymap.set("i", "<C-x>0", "<C-o><C-w>c", { desc = "Close window" })
@@ -190,6 +202,14 @@ vim.keymap.set("i", "<C-x>1", "<C-o><C-w>o", { desc = "Only window" })
 vim.keymap.set("i", "<C-x>2", "<C-o><C-w>s", { desc = "Split horizontal" })
 vim.keymap.set("i", "<C-x>3", "<C-o><C-w>v", { desc = "Split vertical" })
 vim.keymap.set("i", "<C-x>o", "<C-o><C-w>w", { desc = "Other window" })
+
+
+vim.keymap.set({ "n", "v" }, "<C-x>0", "<C-o><C-w>c", { desc = "Close window" })
+vim.keymap.set({ "n", "v" }, "<C-x>1", "<C-o><C-w>o", { desc = "Only window" })
+vim.keymap.set({ "n", "v" }, "<C-x>2", "<C-o><C-w>s", { desc = "Split horizontal" })
+vim.keymap.set({ "n", "v" }, "<C-x>3", "<C-o><C-w>v", { desc = "Split vertical" })
+vim.keymap.set({ "n", "v" }, "<C-x>o", "<C-o><C-w>w", { desc = "Other window" })
+
 
 -- Normal & Visual mode
 vim.keymap.set({ "n", "v" }, "<leader>x0", "<C-w>c", { desc = "Close window" })
@@ -697,9 +717,19 @@ vim.keymap.set("n", "<A-C-l>", ":tabmove +1<CR>", { silent = true, desc = "Move 
 -- vim.keymap.set("i", "<A-o>", "<C-o>O<Esc>S", { desc = "Open new blank line above" })
 
 vim.keymap.set("n", "<A-o>", "<C-w><C-w>", { desc = "Open new blank line below" })
+
 vim.keymap.set("n", "<C-w>1", "<C-w>o", { desc = "Open new blank line below" })
 vim.keymap.set("n", "<C-w>2", "<C-w>s", { desc = "Open new blank line below" })
 vim.keymap.set("n", "<C-w>3", "<C-w>v", { desc = "Open new blank line below" })
+
+
+
+
+
+
+
+
+
 
 
 -- Remap Ctrl+f to scroll up
