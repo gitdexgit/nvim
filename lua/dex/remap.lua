@@ -1,4 +1,7 @@
 
+--- better indent in visual mode
+vim.keymap.set("x", "<", "<gv")
+vim.keymap.set("x", ">", ">gv")
 
 
 vim.keymap.set("v", "<C-Space>", "vv")
