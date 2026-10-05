@@ -973,13 +973,28 @@ end, { expr = true, silent = true, desc = "Smart k motion" })
 
 
 
+-----------------------------
+
+-- vim.keymap.set({ "n", "v" }, "j", function()
+--     return vim.opt.wrap:get() and "gj" or "j"
+-- end, { expr = true, silent = true, desc = "Smart j motion" })
+--
+-- vim.keymap.set({ "n", "v" }, "k", function()
+--     return vim.opt.wrap:get() and "gk" or "k"
+-- end, { expr = true, silent = true, desc = "Smart k motion" })
+
 vim.keymap.set({ "n", "v" }, "j", function()
-    return vim.opt.wrap:get() and "gj" or "j"
+    return (vim.v.count == 0 and vim.wo.wrap) and "gj" or "j"
 end, { expr = true, silent = true, desc = "Smart j motion" })
 
 vim.keymap.set({ "n", "v" }, "k", function()
-    return vim.opt.wrap:get() and "gk" or "k"
+    return (vim.v.count == 0 and vim.wo.wrap) and "gk" or "k"
 end, { expr = true, silent = true, desc = "Smart k motion" })
+
+--- =======================================
+
+
+
 
 vim.keymap.set({ "n", "v", "o" }, "0", function()
     return vim.opt.wrap:get() and "g0" or "0"
